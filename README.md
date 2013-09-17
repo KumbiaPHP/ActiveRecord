@@ -32,4 +32,7 @@ Query listo para consultas preparadas  de un golpe (posible opción de especific
 
 $this->query($sql, $data)
 
+Clases: SqlRecord (básico sólo SQL), ActRecord (con generador de consultas, extenderá SqlRecord) y ActiveRecord (compatible con el actual, extenderá SqlRecord)
+
+
 
