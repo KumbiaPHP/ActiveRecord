@@ -34,5 +34,6 @@ $this->query($sql, $data)
 
 Clases: SqlRecord (básico sólo SQL), ActRecord (con generador de consultas, extenderá SqlRecord) y ActiveRecord (compatible con el actual, extenderá SqlRecord)
 
+No usar la clase Util, para desacoplar mejor.
 
 
