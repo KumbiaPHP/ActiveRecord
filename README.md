@@ -13,6 +13,10 @@ Para manejar toda la metadata, su cache, info de bd, alias,...
 
 Tendrá adapters para las diferentes bd (aunque tendriamos que probar getColumnMeta()
 
+Clase Validate
+--------------
+Clase externa para validar cualquier modelo, aunque no extienda de ActiveRecord
+
 
 Base de datos por defecto
 -------------------
