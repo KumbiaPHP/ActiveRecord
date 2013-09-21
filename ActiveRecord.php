@@ -132,8 +132,8 @@ class ActiveRecord
 		if(!isset($this->$pk) && \in_array($pk, $autoFields)) {
 			// Obtiene los metadatos de los campos de tabla
 			$type = self::getDatabaseType();
-			require_once CORE_PATH . "libs/ActiveRecord/$type/last_insert_id.php";
-			$this->$pk = \call_user_func("\\ActiveRecord\\$type\\last_insert_id", self::_dbh(), $pk, self::getTable(), self::getSchema());
+			require_once CORE_PATH . "libs/ActiveRecord/Query/{$type}_last_insert_id.php";
+			$this->$pk = \call_user_func("\\ActiveRecord\\Query\\{$type}_last_insert_id", self::_dbh(), $pk, self::getTable(), self::getSchema());
 		}
 		
 		// Callback despues de crear
@@ -499,8 +499,8 @@ class ActiveRecord
 		if($where !== null) $sql .= " WHERE $where";
 		
 		$type = self::getDatabaseType();
-		require_once CORE_PATH . "libs/ActiveRecord/$type/limit.php";
-		$sql = \call_user_func("\\ActiveRecord\\$type\\limit", $sql, 1);
+		require_once CORE_PATH . "libs/ActiveRecord/Query/{$type}_limit.php";
+		$sql = \call_user_func("\\ActiveRecord\\Query\\{$type}_limit", $sql, 1);
 		
 		$sth = self::prepare($sql);
 		$sth->execute($values);
@@ -530,8 +530,8 @@ class ActiveRecord
 		
 		if($limit !== null || $offset !== null) {
 			$type = self::getDatabaseType();
-			require_once CORE_PATH . "libs/ActiveRecord/$type/limit.php";
-			$sql = \call_user_func("\\ActiveRecord\\$type\\limit", $sql, $limit, $offset);
+			require_once CORE_PATH . "libs/ActiveRecord/Query/{$type}_limit.php";
+			$sql = \call_user_func("\\ActiveRecord\\Query\\{$type}_limit", $sql, $limit, $offset);
 		}
 		
 		$sth = self::prepare($sql);
