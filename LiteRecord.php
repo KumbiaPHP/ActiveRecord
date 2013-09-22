@@ -145,7 +145,7 @@ class LiteRecord
 		$set = array();
 		
 		// Preparar consulta
-		foreach(self::metadata()->FieldsList() as $field) {
+		foreach(self::metadata()->getFieldsList() as $field) {
 			if(isset($this->$field) && $this->$field != '') {
 				$data[":$field"] = $this->$field;
 				if($field != $pk) $set[] = "$field = :$field";
