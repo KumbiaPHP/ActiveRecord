@@ -4,7 +4,7 @@ ActiveRecord
 Nuevo ActiveRecord, requiere PHP 5.3
 
 
-Cambios
+Cambios (tachado lo que ya está listo)
 =======
 
 Clase Metadata
