@@ -46,5 +46,6 @@ Añadir método para limpiar la cache de metadata
 
 Metadata info de la bd, version, driver, ....
 
+Métodos findByXxxx() y allByXxxx() en LiteRecord
 
 
