@@ -40,4 +40,11 @@ Clases: LiteRecord (básico sólo SQL), ActRecord (con generador de consultas, e
 
 No usar la clase Util, para desacoplar mejor.
 
+En producción usará cache de metadata indefinido, posible uso de APC si esta disponible, sino nixfile
+
+Añadir método para limpiar la cache de metadata
+
+Metadata info de la bd, version, driver, ....
+
+
 
