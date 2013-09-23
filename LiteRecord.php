@@ -203,7 +203,7 @@ class LiteRecord
 	 */
 	public static function delete($pk)
 	{
-		$ource = self::getSource();
+		$source = self::getSource();
 		$pkField = self::metadata()->getPK();
 		
 		return self::query("DELETE FROM $source WHERE $pkField = ?", $pk)->rowCount() > 0;
