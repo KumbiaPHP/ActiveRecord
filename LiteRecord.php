@@ -326,9 +326,6 @@ class LiteRecord
 		
 		$sql = "SELECT $fields FROM $source WHERE $pkField = ?";
 		
-		require_once __DIR__ . '/Query/query_exec.php';
-		$sql = Query\query_exec(self::getDatabase(), 'limit', $sql, 1);
-		
 		return self::query($sql, $pk)->fetch();
 	}
 	
