@@ -46,6 +46,6 @@ Añadir método para limpiar la cache de metadata
 
 Metadata info de la bd, version, driver, ....
 
-Métodos findByXxxx() y allByXxxx() en LiteRecord
+Métodos firstByXxxx() y allByXxxx() en LiteRecord
 
 Posibilidad de añadir prefijo al getTable()
