@@ -216,7 +216,7 @@ class LiteRecord
 	 */
 	public static function getTable()
 	{
-		return \Util::smallcase(\get_called_class());
+		return self::smallcase(\get_called_class());
 	}
 	
 	/**
@@ -359,4 +359,14 @@ class LiteRecord
         require_once __DIR__ . '/Paginator.php';
         return new Paginator(\get_called_class(), $sql, $page, $perPage, $values);
 	}
+	
+	/**
+     * Convierte la cadena CamelCase en notacion smallcase
+     * @param string $s cadena a convertir
+     * @return string
+     * */
+    public static function smallcase($s)
+    {
+        return strtolower(preg_replace('/([A-Z])/', "_\\1", $s));
+    }
 }

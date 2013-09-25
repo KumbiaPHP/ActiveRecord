@@ -38,7 +38,7 @@ Para saber el tipo de base de datos usará: $name = $conn->getAttribute(PDO::ATT
 
 Clases: LiteRecord (básico sólo SQL), ActRecord (con generador de consultas, extenderá SqlRecord) y ActiveRecord (compatible con el actual, extenderá SqlRecord)
 
-No usar la clase Util, para desacoplar mejor.
+~~No usar la clase Util, para desacoplar mejor.~~
 
 En producción usará cache de metadata indefinido, posible uso de APC si esta disponible, sino nixfile
 
