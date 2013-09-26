@@ -52,6 +52,17 @@ class LiteRecord
 	}
 	
 	/**
+	* Obtener objeto por clave primaria, $var = $modelo($id)
+	* 
+	* @param string $pk valor para clave primaria
+	* @return ActiveRecord
+	*/
+	public function __invoke($id)
+	{
+		self::get($id);
+	}
+	
+	/**
 	 * Alias de los campos
 	 * 
 	 * @return array
