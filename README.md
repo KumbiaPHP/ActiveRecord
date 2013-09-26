@@ -36,6 +36,8 @@ Para saber el tipo de base de datos usará: $name = $conn->getAttribute(PDO::ATT
 
 ~~$this->query($sql, $data)~~
 
+~~No usar las constantes APP_PATH ni CORE PATH para desacoplar la lib~~
+
 Clases: LiteRecord (básico sólo SQL), ActRecord (con generador de consultas, extenderá SqlRecord) y ActiveRecord (compatible con el actual, extenderá SqlRecord)
 
 ~~No usar la clase Util, para desacoplar mejor.~~
