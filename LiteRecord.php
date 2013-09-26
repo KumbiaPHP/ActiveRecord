@@ -59,7 +59,7 @@ class LiteRecord
 	*/
 	public function __invoke($id)
 	{
-		self::get($id);
+		return self::get($id);
 	}
 	
 	/**
