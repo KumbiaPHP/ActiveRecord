@@ -30,6 +30,23 @@ require_once __DIR__ . '/Db.php';
 class LiteRecord
 {
 	/**
+	 * PK por defecto, si no existe mira en metadata
+	 * 
+	 * @var string
+	 */
+	static public $pk = 'id';
+	
+	/**
+	 * Prefijo para el nombre de tabla
+	 * 
+	 * @var string
+	 */
+	static public $prefix;
+	
+	
+	
+	
+	/**
 	 * Constructor
 	 * 
 	 * @param array $data
