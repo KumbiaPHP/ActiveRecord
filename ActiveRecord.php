@@ -47,7 +47,7 @@ class ActiveRecord extends LiteRecord
 		}
 		$data = \implode(', ', $data);
 	
-		$source = self::getSource();
+		$source = static::getSource();
 		
 		$sql = "UPDATE $source SET $data";
 		
@@ -71,7 +71,7 @@ class ActiveRecord extends LiteRecord
 	 */
 	public static function deleteAll($where = null, $values = null)
 	{
-		$source = self::getSource();
+		$source = static::getSource();
 		
 		$sql = "DELETE FROM $source";
 		if($where !== null) $sql .= " WHERE $where";
@@ -167,7 +167,7 @@ class ActiveRecord extends LiteRecord
 	public static function all($params = null, $values = null)
 	{
 		if($params === null) {
-			$source = self::getSource();
+			$source = static::getSource();
 			$sql = "SELECT * FROM $source";
 		} else {
 			$sql = self::_buildSelect($params);
@@ -198,7 +198,7 @@ class ActiveRecord extends LiteRecord
 	 */
 	protected static function _buildSelect($params)
 	{
-		$source = self::getSource();
+		$source = static::getSource();
 		
 		if(!isset($params['fields'])) $params['fields'] = '*';
 		
@@ -215,7 +215,7 @@ class ActiveRecord extends LiteRecord
 		
 		if($limit !== null || $offset !== null) {
 			require_once __DIR__ . '/Query/query_exec.php';
-			$sql = Query\query_exec(self::getDatabase(), 'limit', $sql, $limit, $offset);
+			$sql = Query\query_exec(static::getDatabase(), 'limit', $sql, $limit, $offset);
 		}
 		
 		return $sql;
@@ -252,7 +252,7 @@ class ActiveRecord extends LiteRecord
 	 */
 	public static function count($where = null, $values = null)
 	{		
-		$source = self::getSource();
+		$source = static::getSource();
 		
 		$sql = "SELECT COUNT(*) AS count FROM $source";
 		if($where !== null) $sql .= " WHERE $where";
