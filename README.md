@@ -2,7 +2,7 @@
 ActiveRecord
 ============
 
-Nuevo ActiveRecord, requiere PHP 5.3
+Nuevo ActiveRecord en desarrollo, requiere PHP 5.3
 
 
 Cambios (tachado lo que ya está listo)
