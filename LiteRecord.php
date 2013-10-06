@@ -141,7 +141,7 @@ class LiteRecord
 		if(!self::prepare($sql)->execute($data)) return false;
 		
 		// Verifica si la PK es autogenerada
-		$pk = self::metadata()->getPK();
+		$pk = static::getPK();
 		if(!isset($this->$pk) && \in_array($pk, $autoFields)) {
 			require_once __DIR__ . '/Query/query_exec.php';
 			$this->$pk = Query\query_exec(static::getDatabase(), 'last_insert_id', self::_dbh(), $pk, static::getTable(), static::getSchema());
@@ -166,7 +166,7 @@ class LiteRecord
 		// Callback antes de actualizar
 		if($this->_callback('_beforeUpdate') === false) return false; 
 		
-		$pk = self::metadata()->getPK();
+		$pk = static::getPK();
 		if(!isset($this->$pk) || $this->$pk == '') throw new \KumbiaException('No se ha especificado valor para la clave primaria');
 		
 		$data = array();
@@ -207,7 +207,7 @@ class LiteRecord
 		
 		if($this->_callback('_beforeSave') === false) return false; 
 		
-		$pk = self::metadata()->getPK();
+		$pk = static::getPK();
 		$ource = static::getSource();
 		
 		if(!isset($this->$pk) || $this->$pk == '' || !self::exists($this->$pk)) {
@@ -232,9 +232,20 @@ class LiteRecord
 	public static function delete($pk)
 	{
 		$source = static::getSource();
-		$pkField = self::metadata()->getPK();
+		$pkField = static::getPK();
 		
 		return self::query("DELETE FROM $source WHERE $pkField = ?", $pk)->rowCount() > 0;
+	}
+	
+	/**
+	 * Obtiene la llave primaria
+	 * 
+	 * @return string
+	 */
+	public static function getPK()
+	{
+		if(static::pk) return static::pk;
+		return self::metadata()->getPK();
 	}
 	 
 	/**
@@ -350,7 +361,7 @@ class LiteRecord
     public static function get($pk, $fields = '*')
     {
 		$source = static::getSource();
-		$pkField = self::metadata()->getPK();
+		$pkField = static::getPK();
 		
 		$sql = "SELECT $fields FROM $source WHERE $pkField = ?";
 		
@@ -366,7 +377,7 @@ class LiteRecord
     public static function exists($pk)
     {
 		$source = static::getSource();
-		$pkField = self::metadata()->getPK();
+		$pkField = static::getPK();
 		return self::query("SELECT COUNT(*) AS count FROM $source WHERE $pkField = ?", $pk)->fetch()->count > 0;
 	}
 	
