@@ -17,6 +17,15 @@ Clase Validate
 --------------
 Clase externa para validar cualquier modelo, aunque no extienda de ActiveRecord
 
+Clase DB
+--------------
+En el config: 
+
+enviar directo el dsn, y no crearlo en la clase (ya que usa siempre PDO)
+
+Mejor mirar el tipo de base de datos una vez conectado usando ATTR_DRIVER_NAME
+
+Posibilidad de pasar via config, parámetros opcionales a la conexión PDO
 
 Base de datos por defecto
 -------------------
