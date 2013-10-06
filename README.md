@@ -29,11 +29,11 @@ Posibilidad de pasar via config, parámetros opcionales a la conexión PDO
 
 Base de datos por defecto
 -------------------
-Por defecto, usará default (no es necesario mirar el config.ini)
+~~Por defecto, usará default (no es necesario mirar el config.ini)~~
 
 Es el mismo trabajo, cambiar el config.ini o el databases.ini
 
-Otra forma será cambiarla directamente en app/libs/ActRecord.php. Tanto el atributo o dinámicamente en el initialize().
+Para cambiarla directamente en app/libs/ActRecord.php o en el modelo, en getDatabase().
 
 Varios
 ------
