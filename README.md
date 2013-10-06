@@ -1,3 +1,4 @@
+![KumbiaPHP](http://proto.kumbiaphp.com/img/kumbiaphp.png)
 ActiveRecord
 ============
 
