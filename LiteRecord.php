@@ -135,7 +135,7 @@ class LiteRecord
 		$columns = \implode(',', $columns);
 		$values = \implode(',', $values);
 		
-		$source = self::getSource();
+		$source = static::getSource();
 		$sql = "INSERT INTO $source ($columns) VALUES ($values)";
 		
 		if(!self::prepare($sql)->execute($data)) return false;
@@ -144,7 +144,7 @@ class LiteRecord
 		$pk = self::metadata()->getPK();
 		if(!isset($this->$pk) && \in_array($pk, $autoFields)) {
 			require_once __DIR__ . '/Query/query_exec.php';
-			$this->$pk = Query\query_exec(self::getDatabase(), 'last_insert_id', self::_dbh(), $pk, self::getTable(), self::getSchema());
+			$this->$pk = Query\query_exec(static::getDatabase(), 'last_insert_id', self::_dbh(), $pk, static::getTable(), static::getSchema());
 		}
 		
 		// Callback despues de crear
@@ -183,7 +183,7 @@ class LiteRecord
 		}
 		$set = \implode(', ', $set);
 		
-		$ource = self::getSource();
+		$ource = static::getSource();
 		
 		$sql = "UPDATE $source SET $set WHERE $pk = :$pk";
 		
@@ -208,7 +208,7 @@ class LiteRecord
 		if($this->_callback('_beforeSave') === false) return false; 
 		
 		$pk = self::metadata()->getPK();
-		$ource = self::getSource();
+		$ource = static::getSource();
 		
 		if(!isset($this->$pk) || $this->$pk == '' || !self::exists($this->$pk)) {
 			$result = $this->create();
@@ -231,7 +231,7 @@ class LiteRecord
 	 */
 	public static function delete($pk)
 	{
-		$source = self::getSource();
+		$source = static::getSource();
 		$pkField = self::metadata()->getPK();
 		
 		return self::query("DELETE FROM $source WHERE $pkField = ?", $pk)->rowCount() > 0;
@@ -264,8 +264,8 @@ class LiteRecord
 	 */
 	public static function getSource()
 	{
-		$source = self::getTable();
-		if($schema = self::getSchema()) $source = "$schema.$table";
+		$source = static::getTable();
+		if($schema = static::getSchema()) $source = "$schema.$table";
 		return $source;
 	}
 	
@@ -291,7 +291,7 @@ class LiteRecord
 		require_once __DIR__ . '/Metadata/Metadata.php';
 		
 		// Obtiene metadata
-		return Metadata\Metadata::get(self::getDatabase(), self::getTable(), self::getSchema());
+		return Metadata\Metadata::get(static::getDatabase(), static::getTable(), static::getSchema());
 	}
 	
 	/**
@@ -302,7 +302,7 @@ class LiteRecord
 	 */
 	protected static function _dbh($force = false) 
 	{		
-		return Db::get(self::getDatabase(), $force);
+		return Db::get(static::getDatabase(), $force);
 	}
 	
 	/**
@@ -349,7 +349,7 @@ class LiteRecord
      */
     public static function get($pk, $fields = '*')
     {
-		$source = self::getSource();
+		$source = static::getSource();
 		$pkField = self::metadata()->getPK();
 		
 		$sql = "SELECT $fields FROM $source WHERE $pkField = ?";
@@ -365,7 +365,7 @@ class LiteRecord
      */
     public static function exists($pk)
     {
-		$source = self::getSource();
+		$source = static::getSource();
 		$pkField = self::metadata()->getPK();
 		return self::query("SELECT COUNT(*) AS count FROM $source WHERE $pkField = ?", $pk)->fetch()->count > 0;
 	}
