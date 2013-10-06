@@ -284,6 +284,6 @@ class ActiveRecord extends LiteRecord
         if($values !== null && !\is_array($values)) $values = \array_slice(func_get_args(), 3);
         
         require_once __DIR__ . '/Paginator.php';
-        return new Paginator(\get_called_class(), $sql, $page, $perPage, $values);
+        return new Paginator(\get_called_class(), $sql, (int)$page, (int)$perPage, $values);
 	}
 }
