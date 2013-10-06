@@ -276,8 +276,8 @@ class LiteRecord
 	 */
 	public static function getDatabase()
 	{
-		$core = \Config::read('config');
-		return $core['application']['database'];
+		
+		return 'default';
 	}
 	
 	/**
