@@ -54,25 +54,14 @@ abstract class Db
         $config = $databases[$database];
 
         // carga los valores por defecto para la conexión, si no existen
-        $default = array('port' => 0, 'dsn' => NULL, 'dbname' => NULL, 'host' => 'localhost', 'username' => NULL, 'password' => NULL);
+        $default = array('dsn' => NULL, 'username' => NULL, 'password' => NULL, 'params' => array());
         $config = $config + $default;
 
-		if (!extension_loaded('pdo')) throw new KumbiaException('Debe cargar la extensión de PHP llamada php_pdo');
+		//if (!extension_loaded('pdo')) throw new KumbiaException('Debe cargar la extensión de PHP llamada php_pdo');
 
         try {
-            $dbh = new \PDO($config['type'] . ":" . $config['dsn'], $config['username'], $config['password']);
-            if (!$dbh) throw new KumbiaException("No se pudo realizar la conexion con {$config['type']}");
-            
-            if ($config['type'] != 'odbc') {
-                $dbh->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-                $dbh->setAttribute(\PDO::ATTR_CASE, \PDO::CASE_LOWER);
-                $dbh->setAttribute(\PDO::ATTR_CURSOR, \PDO::CURSOR_FWDONLY);
-            }
-            
-            //Selecciona charset
-            if ($config['type'] == 'mysql' && isset($config['charset'])) {
-                $dbh->exec('set character set ' . $config['charset']);
-            }
+            $dbh = new \PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
+            if (!$dbh) throw new KumbiaException("No se pudo realizar la conexión con $database");
             
             // Si no se forzó una nueva conexión, entonces se almacena en el pool de conexiones
             if(!$force) self::$_pool[$database] = $dbh;
