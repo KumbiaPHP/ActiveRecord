@@ -244,7 +244,7 @@ class LiteRecord
 	 */
 	public static function getPK()
 	{
-		if(static::pk) return static::pk;
+		if(static::$pk) return static::$pk;
 		return self::metadata()->getPK();
 	}
 	 
@@ -338,11 +338,11 @@ class LiteRecord
 	 * @param array | string $values valores
 	 * @return PDOStatement
 	 */
-	public static function query($sql, $values = null)
+	public static function query($sql, $values = NULL)
 	{
 		$sth = self::prepare($sql);
 		
-		if($values !== null && !is_array($values)) {
+		if($values !== NULL && !is_array($values)) {
 			$values = \array_slice(\func_get_args(), 1);
 		}
 		
@@ -366,6 +366,22 @@ class LiteRecord
 		$sql = "SELECT $fields FROM $source WHERE $pkField = ?";
 		
 		return self::query($sql, $pk)->fetch();
+	}
+	
+	/**
+     * Listar todos los registros
+     * 
+     * @param string $fields campos que se desean obtener separados por coma
+     * @return ActiveRecord
+     */
+    public static function all($fields = '*')
+    {
+		$source = static::getSource();
+		$pkField = static::getPK();
+		
+		$sql = "SELECT $fields FROM $source";
+		
+		return self::query($sql);
 	}
 	
     /**
@@ -406,6 +422,7 @@ class LiteRecord
      * */
     public static function smallcase($s)
     {
+        $s[0] = strtolower($s[0]);
         return strtolower(preg_replace('/([A-Z])/', "_\\1", $s));
     }
 }
