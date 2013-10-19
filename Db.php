@@ -54,7 +54,7 @@ abstract class Db
         $config = $databases[$database];
 
         // carga los valores por defecto para la conexión, si no existen
-        $default = array('dsn' => NULL, 'username' => NULL, 'password' => NULL, 'params' => array());
+        $default = array('username' => NULL, 'password' => NULL, 'params' => array());
         $config = $config + $default;
 
 		//if (!extension_loaded('pdo')) throw new KumbiaException('Debe cargar la extensión de PHP llamada php_pdo');
