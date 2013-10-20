@@ -332,6 +332,21 @@ class LiteRecord
 	}
 	
 	/**
+	 * Consulta sql
+	 * 
+	 * @param string $sql
+	 * @return PDOStatement
+	 * @throw PDOException
+	 */
+	public static function sql($sql)
+	{
+		$sth = self::_dbh()->query($sql);
+		$class = \get_called_class();
+		$sth->setFetchMode(\PDO::FETCH_INTO, new $class);
+		return $sth;
+	}
+	
+	/**
 	 * Ejecuta consulta sql
 	 * 
 	 * @param string $sql
@@ -340,15 +355,15 @@ class LiteRecord
 	 */
 	public static function query($sql, $values = NULL)
 	{
+		if (func_num_args() == 1) return self::sql($sql);
+		
 		$sth = self::prepare($sql);
 		
-		if($values !== NULL && !is_array($values)) {
+		if(!is_array($values)) {
 			$values = \array_slice(\func_get_args(), 1);
 		}
+		return $sth->execute($values);
 		
-		$sth->execute($values);
-		
-		return $sth;
 	}
 	    
     /**
@@ -380,7 +395,7 @@ class LiteRecord
 		
 		$sql = "SELECT $fields FROM $source";
 		
-		return self::query($sql);
+		return self::sql($sql);
 	}
 	
     /**
