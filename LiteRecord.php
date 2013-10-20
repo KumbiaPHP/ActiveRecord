@@ -354,12 +354,11 @@ class LiteRecord
 		if (func_num_args() === 1) return self::sql($sql);
 		
 		$sth = self::prepare($sql);
-		
 		if(!is_array($values)) {
 			$values = \array_slice(\func_get_args(), 1);
 		}
-		return $sth->execute($values);
 		
+		return $sth->execute($values) ? $sth : FALSE;
 	}
 	    
     /**
