@@ -372,12 +372,11 @@ class LiteRecord
      * Listar todos los registros
      * 
      * @param string $fields campos que se desean obtener separados por coma
-     * @return ActiveRecord
+     * @return PDOStatement
      */
     public static function all($fields = '*')
     {
 		$source = static::getSource();
-		$pkField = static::getPK();
 		
 		$sql = "SELECT $fields FROM $source";
 		
