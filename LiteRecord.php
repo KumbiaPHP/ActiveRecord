@@ -43,9 +43,6 @@ class LiteRecord
 	 */
 	static public $prefix;
 	
-	
-	
-	
 	/**
 	 * Constructor
 	 * 
@@ -224,9 +221,9 @@ class LiteRecord
 	}
 	
 	/**
-	 * Eliminar registro
+	 * Eliminar registro por pk
 	 * 
-	 * @param string $pk valor para clave primaria
+	 * @param int $pk valor para clave primaria
 	 * @return boolean
 	 */
 	public static function delete($pk)
@@ -234,7 +231,7 @@ class LiteRecord
 		$source = static::getSource();
 		$pkField = static::getPK();
 		
-		return self::query("DELETE FROM $source WHERE $pkField = ?", $pk)->rowCount() > 0;
+		return self::query("DELETE FROM $source WHERE $pkField = ?", (int)$pk)->rowCount() > 0;
 	}
 	
 	/**
@@ -287,7 +284,6 @@ class LiteRecord
 	 */
 	public static function getDatabase()
 	{
-		
 		return 'default';
 	}
 	
