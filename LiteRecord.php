@@ -355,7 +355,7 @@ class LiteRecord
 	 */
 	public static function query($sql, $values = NULL)
 	{
-		if (func_num_args() == 1) return self::sql($sql);
+		if (func_num_args() === 1) return self::sql($sql);
 		
 		$sth = self::prepare($sql);
 		
@@ -420,10 +420,10 @@ class LiteRecord
      * @param array $values valores
      * @return Paginator
 	 */
-	public static function paginateQuery($sql, $page, $perPage, $values = null)
+	public static function paginateQuery($sql, $page, $perPage, $values = NULL)
 	{
 		// Valores para consulta
-        if($values !== null && !\is_array($values)) $values = \array_slice(func_get_args(), 3);
+        if(func_num_args() > 3 && !\is_array($values)) $values = \array_slice(func_get_args(), 3);
         
         require_once __DIR__ . '/Paginator.php';
         return new Paginator(\get_called_class(), $sql, (int)$page, (int)$perPage, $values);
