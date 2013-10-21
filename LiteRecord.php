@@ -431,7 +431,6 @@ class LiteRecord
      * */
     public static function smallcase($s)
     {
-        $s[0] = strtolower($s[0]);
-        return strtolower(preg_replace('/([A-Z])/', "_\\1", $s));
+        return strtolower(preg_replace('/([A-Z])/', "_\\1", lcfirst($s)));
     }
 }
