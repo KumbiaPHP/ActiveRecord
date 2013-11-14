@@ -33,7 +33,7 @@ abstract class Db
 	 * @var array
 	 */
 	private static $_pool = array();
-
+	
 	/**
 	 * Obtiene manejador de conexion a la base de datos
 	 *
@@ -46,26 +46,26 @@ abstract class Db
 	{
 		// Verifica el singleton
 		if(!$force && isset(self::$_pool[$database])) return self::$_pool[$database];
-
+		
 		// Leer la configuración de conexión
 		$config = require_once(APP_PATH.'config/databases.php');
-
+		
 		if(!isset($config[$database])) throw new \KumbiaException("No existen datos de conexión para '$database' en config/databases.php");
-
-        $config = $config[$database];
-
+		
+		$config = $config[$database];
+		
 		// carga los valores por defecto para la conexión, si no existen
 		$config = $config + array('username' => NULL, 'password' => NULL, 'params' => array());
-
+		
 		try {
-            $dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
-        } catch (PDOException $e) { //TODO: comprobar
-			if (!extension_loaded('pdo')) throw new KumbiaException('Debe cargar la extensión de PHP llamada php_pdo');
+			$dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
+		} catch (PDOException $e) { //TODO: comprobar
+			if (!extension_loaded('pdo')) throw new \KumbiaException('Debe cargar la extensión de PHP llamada php_pdo');
 			throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
-        }
-
-        if(!$force) self::$_pool[$database] = $dbh;
-
-        return $dbh;
+		}
+		
+		if(!$force) self::$_pool[$database] = $dbh;
+		
+		return $dbh;
 	}
 }
