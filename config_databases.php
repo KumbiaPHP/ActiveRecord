@@ -1,4 +1,5 @@
 <?php
+//Copiar en app/config/databases.php
 //Conexión a Mysql
 $databases['default'] = array(
         'dsn' => 'mysql:host=127.0.0.1;dbname=midatabase;charset=utf8',
@@ -30,4 +31,7 @@ $databses['database3'] = array(
         )
 );
 
-return $databases; //No tocar
+//Más conexiones
+
+
+return $databases; //Siempre al final
