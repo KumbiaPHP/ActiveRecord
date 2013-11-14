@@ -22,11 +22,13 @@ Clase DB
 --------------
 En el config: 
 
-enviar directo el dsn, y no crearlo en la clase (ya que usa siempre PDO)
+~~enviar directo el dsn, y no crearlo en la clase (ya que usa siempre PDO)~~
 
-Mejor mirar el tipo de base de datos una vez conectado usando ATTR_DRIVER_NAME
+~~Mejor mirar el tipo de base de datos una vez conectado usando ATTR_DRIVER_NAME~~
 
-Posibilidad de pasar via config, parámetros opcionales a la conexión PDO
+~~Posibilidad de pasar via config, parámetros opcionales a la conexión PDO~~
+
+~~usar php para app/config/databases.php~~
 
 Base de datos por defecto
 -------------------
