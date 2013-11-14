@@ -21,6 +21,7 @@
 namespace ActiveRecord;
 
 use PDO;
+
 /**
  * Manejador de conexiones de base de datos
  *
@@ -60,7 +61,6 @@ abstract class Db
 		try {
 			$dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
 		} catch (PDOException $e) { //TODO: comprobar
-			if (!extension_loaded('pdo')) throw new \KumbiaException('Debe cargar la extensión de PHP llamada php_pdo');
 			throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
 		}
 		
