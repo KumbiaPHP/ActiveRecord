@@ -6,6 +6,7 @@ $databases['default'] = array(
         'username' => 'user',
         'password' => 'pass',
         'params' => array(
+            //PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', //UTF8 en PHP < 5.3.6
             PDO::ATTR_PERSISTENT => true, //conexión persistente
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         )
@@ -34,4 +35,4 @@ $databses['database3'] = array(
 //Más conexiones
 
 
-return $databases; //Siempre al final
+//return $databases; //Siempre al final
