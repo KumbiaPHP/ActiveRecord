@@ -180,7 +180,7 @@ class LiteRecord
 		}
 		$set = \implode(', ', $set);
 		
-		$ource = static::getSource();
+		$source = static::getSource();
 		
 		$sql = "UPDATE $source SET $set WHERE $pk = :$pk";
 		
@@ -273,7 +273,7 @@ class LiteRecord
 	public static function getSource()
 	{
 		$source = static::getTable();
-		if($schema = static::getSchema()) $source = "$schema.$table";
+		if($schema = static::getSchema()) $source = "$schema.$source";
 		return $source;
 	}
 	
