@@ -98,6 +98,25 @@ class Paginator implements \Iterator
     private $_rowCount = 0;
 
     /**
+     * Nombre del modelo a usar
+     * @var string
+     */
+    protected $_model;
+
+    /**
+     * Cadena SQL a ejecutar
+     * @var String
+     */
+    protected $_sql;
+
+    /**
+     * Valores de los parametros de la consulta
+     * @var array
+     */
+    protected $_values;
+
+
+    /**
      * Constructor
      *
      * @param string $model   nombre de clase de modelo
@@ -109,7 +128,7 @@ class Paginator implements \Iterator
     public function __construct($model, $sql, $page, $perPage, $values = null)
     {
         $this->per_page = $perPage;
-        $this->page = $page;
+        $this->current = $page;
         $this->_values = $values;
         $this->_model = $model;
         $this->_sql = $sql;
@@ -126,11 +145,11 @@ class Paginator implements \Iterator
         $model = $this->_model;
         $values = $this->_values;
         //Si la página o por página es menor de 1 (0 o negativo)
-        if ($this->page < 1 || $this->per_page < 1) {
-            throw new KumbiaException("La página $this->page no existe en el páginador");
+        if ($this->current < 1 || $this->per_page < 1) {
+            throw new KumbiaException("La página $this->current no existe en el páginador");
         }
 
-        $start = $this->per_page * ($this->page - 1);
+        $start = $this->per_page * ($this->current - 1);
 
         // Valores para consulta
         if($values !== null && !is_array($values)) $values = array_slice(func_get_args(), 4);
@@ -140,7 +159,7 @@ class Paginator implements \Iterator
 
         //si el inicio es superior o igual al conteo de elementos,
         //entonces la página no existe, exceptuando cuando es la página 1
-        if ($this->page > 1 && $start >= $n) throw new \KumbiaException("La página $this->page no existe en el páginador");
+        if ($this->current > 1 && $start >= $n) throw new \KumbiaException("La página $this->current no existe en el páginador");
 
         // Establece el limit y offset
         require_once __DIR__ . '/Query/query_exec.php';
@@ -150,9 +169,8 @@ class Paginator implements \Iterator
         $this->_rowCount = $this->items->rowCount();
 
         //Se efectuan los calculos para las páginas
-        $this->next = ($start + $this->per_page) < $n ? ($this->page + 1) : null;
-        $this->prev = ($this->page > 1) ? ($this->page - 1) : null;
-        $this->current = $this->page;
+        $this->next = ($start + $this->per_page) < $n ? ($this->current + 1) : null;
+        $this->prev = ($this->current > 1) ? ($this->current - 1) : null;
         $this->total = ceil($n / $this->per_page);
         $this->count = $n;
         /*muve el cursor al primer item*/
