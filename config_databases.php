@@ -14,10 +14,10 @@ $databases['default'] = array(
 
 //Conexión a sqlite ejemplo
 $databases['database2'] = array(
-	'dsn' => "sqlite:{APP_PATH}/temp/mydb.sq3",
-	'username' => NULL,
-	'password' => NULL,
-	'params' => array(PDO::ATTR_PERSISTENT => true)
+    'dsn' => "sqlite:{APP_PATH}/temp/mydb.sq3",
+    'username' => NULL,
+    'password' => NULL,
+    'params' => array(PDO::ATTR_PERSISTENT => true)
 );
 
 //Conexión a ODBC ejemplo
@@ -33,6 +33,5 @@ $databses['database3'] = array(
 );
 
 //Más conexiones
-
 
 //return $databases; //Siempre al final

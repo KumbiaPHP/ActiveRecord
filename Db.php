@@ -28,44 +28,44 @@ use PDO;
  */
 abstract class Db
 {
-	/**
-	 * Pool de conexiones
-	 *
-	 * @var array
-	 */
-	private static $_pool = array();
-	
-	/**
-	 * Obtiene manejador de conexion a la base de datos
-	 *
-	 * @param string $database base de datos a conectar
-	 * @param boolean $force forzar nueva conexion PDO
-	 * @return PDO
-	 * @throw KumbiaException
-	 */
-	public static function get($database = 'default', $force = false)
-	{
-		// Verifica el singleton
-		if(!$force && isset(self::$_pool[$database])) return self::$_pool[$database];
-		
-		// Leer la configuración de conexión
-		$config = require_once(APP_PATH.'config/databases.php');
-		
-		if(!isset($config[$database])) throw new \KumbiaException("No existen datos de conexión para '$database' en config/databases.php");
-		
-		$config = $config[$database];
-		
-		// carga los valores por defecto para la conexión, si no existen
-		$config = $config + array('username' => NULL, 'password' => NULL, 'params' => array());
-		
-		try {
-			$dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
-		} catch (\PDOException $e) { //TODO: comprobar
-			throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
-		}
-		
-		if(!$force) self::$_pool[$database] = $dbh;
-		
-		return $dbh;
-	}
+    /**
+     * Pool de conexiones
+     *
+     * @var array
+     */
+    private static $pool = array();
+
+    /**
+     * Obtiene manejador de conexion a la base de datos
+     *
+     * @param  string  $database base de datos a conectar
+     * @param  boolean $force    forzar nueva conexion PDO
+     * @return PDO
+     * @throw KumbiaException
+     */
+    public static function get($database = 'default', $force = false)
+    {
+        // Verifica el singleton
+        if(!$force && isset(self::$pool[$database])) return self::$pool[$database];
+
+        // Leer la configuración de conexión
+        $config = require_once(APP_PATH.'config/databases.php');
+
+        if(!isset($config[$database])) throw new \KumbiaException("No existen datos de conexión para '$database' en config/databases.php");
+
+        $config = $config[$database];
+
+        // carga los valores por defecto para la conexión, si no existen
+        $config = $config + array('username' => NULL, 'password' => NULL, 'params' => array());
+
+        try {
+            $dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
+        } catch (\PDOException $e) { //TODO: comprobar
+            throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
+        }
+
+        if(!$force) self::$pool[$database] = $dbh;
+
+        return $dbh;
+    }
 }

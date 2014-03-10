@@ -23,22 +23,23 @@ namespace ActiveRecord\Query;
 
 /**
  * Adiciona limit y offset a la consulta sql en pgsql
- * 
+ *
  * @param string $sql consulta select
  * @param string $limit valor limit
  * @param string $offset valor offset
  * @return string
  */
-function pgsql_limit($sql, $limit = null, $offset = null) {
-	if($limit !== null) {
-		$limit = (int) $limit;
-		$sql .= " LIMIT $limit";
-	}
-	
-	if($offset !== null) {
-		$offset = (int) $offset;
-		$sql .= " OFFSET $offset";
-	}
-	
-	return $sql;
+function pgsql_limit($sql, $limit = null, $offset = null)
+{
+    if ($limit !== null) {
+        $limit = (int) $limit;
+        $sql .= " LIMIT $limit";
+    }
+
+    if ($offset !== null) {
+        $offset = (int) $offset;
+        $sql .= " OFFSET $offset";
+    }
+
+    return $sql;
 }
