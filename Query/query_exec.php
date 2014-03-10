@@ -24,20 +24,13 @@ namespace ActiveRecord\Query;
 /**
  * Ejecuta una consulta
  * 
- * @param string $database nombre de base de datos
+ * @param string $type tipo de driver
  * @param string $query_function nombre de funcion
  * @param mixed $args argumentos
  * @return mixed
  * @thow KumbiaException
  */
-function query_exec($database, $query_function, $args = null) {
-	// Leer la especificación de conexión
-	$databases = \Config::read('databases');
-
-	if(!isset($databases[$database])) throw new \KumbiaException("No existe la especificación '$database' para conexión a base de datos en databases.ini");
-	
-	$type = $databases[$database]['type'];
-	
+function query_exec($type, $query_function, $args = null) {
 	$query_function = "{$type}_{$query_function}";
 	
 	require_once __DIR__ . "/{$query_function}.php";
