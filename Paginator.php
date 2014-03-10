@@ -129,9 +129,14 @@ class Paginator implements \Iterator
     {
         $this->per_page = $perPage;
         $this->current = $page;
-        $this->_values = $values;
+        
         $this->_model = $model;
         $this->_sql = $sql;
+
+        // Valores para consulta
+        $this->_values = ($values !== null && !is_array($values)) ?
+                    array_slice(func_get_args(), 4) : $values;
+
         /*el código fue movido a rewind*/
     }
 
@@ -151,9 +156,6 @@ class Paginator implements \Iterator
 
         $start = $this->per_page * ($this->current - 1);
 
-        // Valores para consulta
-        if($values !== null && !is_array($values)) $values = array_slice(func_get_args(), 4);
-
         //Cuento las apariciones atraves de una tabla derivada
         $n = $model::query("SELECT COUNT(*) AS count FROM ($this->_sql) AS t", $values)->fetch()->count;
 
@@ -167,7 +169,6 @@ class Paginator implements \Iterator
         $this->_sql = Query\query_exec($type, 'limit', $this->_sql, $this->per_page, $start);
         $this->items = $model::query($this->_sql, $values);
         $this->_rowCount = $this->items->rowCount();
-
         //Se efectuan los calculos para las páginas
         $this->next = ($start + $this->per_page) < $n ? ($this->current + 1) : null;
         $this->prev = ($this->current > 1) ? ($this->current - 1) : null;
