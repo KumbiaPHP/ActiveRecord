@@ -32,6 +32,12 @@ class Paginator implements \Iterator
 	 * @var PDOStatement
 	 */
 	public $items;
+
+    /**
+     * Item actual
+     * @var Object 
+     */
+    protected $_cItem;
 	
 	/**
 	 * Numero de página siguiente
@@ -82,7 +88,7 @@ class Paginator implements \Iterator
      * 
      * @var int
      */
-    private $_position = 0;
+    private $_position = -1;
     
     /**
      * Cantidad de items ha recorrer
@@ -102,40 +108,55 @@ class Paginator implements \Iterator
      */
     public function __construct($model, $sql, $page, $perPage, $values = null)
     {
+        $this->per_page = $perPage;
+        $this->page = $page;
+        $this->_values = $values;
+        $this->_model = $model;
+        $this->_sql = $sql;
+        /*el código fue movido a rewind*/
+	}
+	
+    /**
+     * Implementa el retroceso de cursor en la iteración
+     * @todo Mover este procedimiento a otro metodo y usar cursores iterables, ya se volveria a hacer la cnsulta
+     * @return void
+     */
+	public function rewind(){
+        $model = $this->_model;
+        $values = $this->_values;
         //Si la página o por página es menor de 1 (0 o negativo)
-        if ($page < 1 || $perPage < 1) {
-            throw new KumbiaException("La página $page no existe en el páginador");
+        if ($this->page < 1 || $this->per_page < 1) {
+            throw new KumbiaException("La página $this->page no existe en el páginador");
         }
-        $start = $perPage * ($page - 1);
+
+        $start = $this->per_page * ($this->page - 1);
         
         // Valores para consulta
         if($values !== null && !is_array($values)) $values = array_slice(func_get_args(), 4);
         
         //Cuento las apariciones atraves de una tabla derivada
-        $n = $model::query("SELECT COUNT(*) AS count FROM ($sql) AS t", $values)->fetch()->count;
+        $n = $model::query("SELECT COUNT(*) AS count FROM ($this->_sql) AS t", $values)->fetch()->count;
         
         //si el inicio es superior o igual al conteo de elementos,
         //entonces la página no existe, exceptuando cuando es la página 1
-        if ($page > 1 && $start >= $n) throw new \KumbiaException("La página $page no existe en el páginador");
+        if ($this->page > 1 && $start >= $n) throw new \KumbiaException("La página $this->page no existe en el páginador");
         
         // Establece el limit y offset
         require_once __DIR__ . '/Query/query_exec.php';
-		$sql = Query\query_exec($model::getDatabase(), 'limit', $sql, $perPage, $start);
-        
-        $this->items = $model::query($sql, $values);
+        $type = Db::get($model::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $this->_sql = Query\query_exec($type, 'limit', $this->_sql, $this->per_page, $start);
+        $this->items = $model::query($this->_sql, $values);
         $this->_rowCount = $this->items->rowCount();
         
         //Se efectuan los calculos para las páginas
-        $this->next = ($start + $perPage) < $n ? ($page + 1) : null;
-        $this->prev = ($page > 1) ? ($page - 1) : null;
-        $this->current = $page;
-        $this->total = ceil($n / $perPage);
+        $this->next = ($start + $this->per_page) < $n ? ($this->page + 1) : null;
+        $this->prev = ($this->page > 1) ? ($this->page - 1) : null;
+        $this->current = $this->page;
+        $this->total = ceil($n / $this->per_page);
         $this->count = $n;
-        $this->per_page = $perPage;
-	}
-	
-	public function rewind() 
-	{}
+        /*muve el cursor al primer item*/
+        $this->next();
+    }
 
 	/**
 	 * Obtiene el item actual
@@ -144,7 +165,7 @@ class Paginator implements \Iterator
 	 */
     public function current() 
     {
-        return $this->items->fetch();
+        return $this->_cItem;
     }
 
 	/**
@@ -165,6 +186,7 @@ class Paginator implements \Iterator
     public function next() 
     {
 		$this->_position++;
+        $this->_cItem = $this->items->fetch(\PDO::FETCH_ORI_NEXT);
     }
 
 	/**
