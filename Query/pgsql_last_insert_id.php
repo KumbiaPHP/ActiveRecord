@@ -23,15 +23,17 @@ namespace ActiveRecord\Query;
 
 /**
  * Obtiene el último id generado en pgsql
- * 
+ *
  * @param PDO $dbh conexion pdo
  * @param string $pk campo clave primaria
  * @param string $table nombre de tabla
  * @param string $schema esquema
  * @return int
  */
-function pgsql_last_insert_id($dbh, $pk, $table, $schema = null) {
-	$seq = "{$table}_{$pk}_seq";
-	if($schema) $seq = "$schema.$seq";
-	return $dbh->lastInsertId($seq);
+function pgsql_last_insert_id($dbh, $pk, $table, $schema = null)
+{
+    $seq = "{$table}_{$pk}_seq";
+    if($schema) $seq = "$schema.$seq";
+
+    return $dbh->lastInsertId($seq);
 }

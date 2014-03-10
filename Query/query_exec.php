@@ -23,19 +23,20 @@ namespace ActiveRecord\Query;
 
 /**
  * Ejecuta una consulta
- * 
+ *
  * @param string $type tipo de driver
  * @param string $query_function nombre de funcion
  * @param mixed $args argumentos
  * @return mixed
  * @thow KumbiaException
  */
-function query_exec($type, $query_function, $args = null) {
-	$query_function = "{$type}_{$query_function}";
-	
-	require_once __DIR__ . "/{$query_function}.php";
-	
-	$args = \array_slice(\func_get_args(), 2);
-	
-	return call_user_func_array(__NAMESPACE__ . "\\$query_function", $args);
+function query_exec($type, $query_function, $args = null)
+{
+    $query_function = "{$type}_{$query_function}";
+
+    require_once __DIR__ . "/{$query_function}.php";
+
+    $args = \array_slice(\func_get_args(), 2);
+
+    return call_user_func_array(__NAMESPACE__ . "\\$query_function", $args);
 }

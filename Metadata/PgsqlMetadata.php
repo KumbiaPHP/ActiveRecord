@@ -18,57 +18,57 @@
  * @copyright  Copyright (c) 2005-2013 Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
- 
+
 namespace ActiveRecord\Metadata;
 
 /**
  * Adaptador de Metadata para Pgsql
- * 
+ *
  */
 class PgsqlMetadata extends Metadata
 {
-	/**
-	 * Consultar los campos de la tabla en la base de datos
-	 *
-	 * @param string $database base de datos
-	 * @param string $table tabla
-	 * @param string $schema squema 
-	 * @return array
-	 */
-	protected function _queryFields($database, $table, $schema = null) 
-	{			
-		if(!$schema) $schema = 'public';
-		
-		// Nota: Se excluyen claves compuestas
-		$describe = \ActiveRecord\Db::get($database)->query("
-			SELECT DISTINCT
-				c.column_name AS field,
-				c.udt_name AS type,
-				tc.constraint_type AS key,
-				c.column_default AS default,
-				c.is_nullable AS null
-			FROM information_schema.columns c
-			LEFT OUTER JOIN information_schema.key_column_usage cu ON (
-				cu.column_name = c.column_name AND cu.table_name = c.table_name AND (
-					SELECT COUNT(*) FROM information_schema.key_column_usage
-					WHERE constraint_name = cu.constraint_name
-				) = 1)
-			LEFT OUTER JOIN information_schema.table_constraints tc ON (cu.constraint_name = tc.constraint_name AND tc.constraint_type IN ('PRIMARY KEY', 'UNIQUE'))
-			WHERE c.table_name = '$table' AND c.table_schema = '$schema';
-		");
-		
-		$fields = array();
-		foreach ($describe as $value) {	
-			
-			$fields[$value['field']] = array(
-				'Type' => $value['type'],
-				'Null' => $value['null'] != 'NO',
-				'Default' => $value['default'] != '',
-				'Key' => \substr($value['key'], 0, 3),
-				'Auto' => \preg_match('/^nextval\(/', $value['default'])
-			);
-		}
-		
-		return $fields;
-	}
+    /**
+     * Consultar los campos de la tabla en la base de datos
+     *
+     * @param  string $database base de datos
+     * @param  string $table    tabla
+     * @param  string $schema   squema
+     * @return array
+     */
+    protected function queryFields($database, $table, $schema = null)
+    {
+        if(!$schema) $schema = 'public';
+
+        // Nota: Se excluyen claves compuestas
+        $describe = \ActiveRecord\Db::get($database)->query("
+            SELECT DISTINCT
+                c.column_name AS field,
+                c.udt_name AS type,
+                tc.constraint_type AS key,
+                c.column_default AS default,
+                c.is_nullable AS null
+            FROM information_schema.columns c
+            LEFT OUTER JOIN information_schema.key_column_usage cu ON (
+                cu.column_name = c.column_name AND cu.table_name = c.table_name AND (
+                    SELECT COUNT(*) FROM information_schema.key_column_usage
+                    WHERE constraint_name = cu.constraint_name
+                ) = 1)
+            LEFT OUTER JOIN information_schema.table_constraints tc ON (cu.constraint_name = tc.constraint_name AND tc.constraint_type IN ('PRIMARY KEY', 'UNIQUE'))
+            WHERE c.table_name = '$table' AND c.table_schema = '$schema';
+        ");
+
+        $fields = array();
+        foreach ($describe as $value) {
+
+            $fields[$value['field']] = array(
+                'Type' => $value['type'],
+                'Null' => $value['null'] != 'NO',
+                'Default' => $value['default'] != '',
+                'Key' => \substr($value['key'], 0, 3),
+                'Auto' => \preg_match('/^nextval\(/', $value['default'])
+            );
+        }
+
+        return $fields;
+    }
 }
