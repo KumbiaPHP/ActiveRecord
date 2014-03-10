@@ -113,7 +113,7 @@ abstract class Metadata
      */
     private function __construct($database, $table, $schema = null)
     {
-        $this->fields = $this->_queryFields($database, $table, $schema);
+        $this->fields = $this->queryFields($database, $table, $schema);
         $this->fieldsList = \array_keys($this->fields);
 
         foreach ($this->fields as $field => $m) {
