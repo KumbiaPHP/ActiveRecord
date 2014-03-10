@@ -26,11 +26,10 @@ namespace ActiveRecord\Query;
  *
  * @param string $type tipo de driver
  * @param string $query_function nombre de funcion
- * @param mixed $args argumentos
  * @return mixed
  * @thow KumbiaException
  */
-function query_exec($type, $query_function, $args = null)
+function query_exec($type, $query_function)
 {
     $query_function = "{$type}_{$query_function}";
 
