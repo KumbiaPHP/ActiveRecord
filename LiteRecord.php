@@ -301,7 +301,8 @@ class LiteRecord
         require_once __DIR__ . '/Metadata/Metadata.php';
 
         // Obtiene metadata
-        return Metadata\Metadata::get(static::getDatabase(), static::getTable(), static::getSchema());
+        $type = Db::get(static::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        return Metadata\Metadata::get($type,static::getDatabase(), static::getTable(), static::getSchema());
     }
 
     /**
