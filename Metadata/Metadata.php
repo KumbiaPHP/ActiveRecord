@@ -74,21 +74,16 @@ abstract class Metadata
     /**
      * Obtiene la metadata de la tabla
      *
+     * @param  string   $type tipo de controlador
      * @param  string   $database
      * @param  string   $table
      * @param  string   $schema
      * @return Metadata
      */
-    public static function get($database, $table, $schema = null)
+    public static function get($type, $database, $table, $schema = null)
     {
         if (!isset(self::$instances["$database.$table.$schema"]) || (PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata')))) {
-
-            $databases = \Config::read('databases');
-
-            if (!isset($databases[$database]))
-                throw new \KumbiaException("No existe la especificación '$database' para conexión a base de datos en databases.ini");
-
-            $class = ucwords($databases[$database]['type']) . 'Metadata';
+            $class = ucwords($type) . 'Metadata';
 
             require_once __DIR__ . "/$class.php";
 

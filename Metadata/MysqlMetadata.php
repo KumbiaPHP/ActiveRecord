@@ -46,16 +46,15 @@ class MysqlMetadata extends Metadata
         }
 
         $fields = array();
-        foreach ($describe as $value) {
-            $fields[$value['field']] = array(
-                'Type' => $value['type'],
-                'Null' => $value['null'] != 'NO',
-                'Key' => $value['key'],
-                'Default' => $value['default'] != '',
-                'Auto' => $value['extra'] == 'auto_increment'
+        while(( $value = $describe->fetch(\PDO::FETCH_OBJ))) {
+            $fields[$value->Field] = array(
+                'Type' => $value->Type,
+                'Null' => $value->Null != 'NO',
+                'Key' => $value->Key,
+                'Default' => $value->Default != '',
+                'Auto' => $value->Extra == 'auto_increment'
             );
         }
-
         return $fields;
     }
 
