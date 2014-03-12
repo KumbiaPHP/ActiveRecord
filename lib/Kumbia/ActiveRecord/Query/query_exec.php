@@ -19,7 +19,7 @@
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
-namespace ActiveRecord\Query;
+namespace Kumbia\ActiveRecord\Query;
 
 /**
  * Ejecuta una consulta

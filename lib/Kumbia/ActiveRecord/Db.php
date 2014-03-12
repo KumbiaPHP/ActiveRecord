@@ -18,7 +18,7 @@
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
-namespace ActiveRecord;
+namespace Kumbia\ActiveRecord;
 
 use PDO;
 

@@ -18,7 +18,7 @@
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
-namespace ActiveRecord;
+namespace Kumbia\ActiveRecord;
 
 // @see LiteRecord
 require_once __DIR__ . '/LiteRecord.php';
