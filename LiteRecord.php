@@ -142,7 +142,8 @@ class LiteRecord
         $pk = static::getPK();
         if (!isset($this->$pk) && \in_array($pk, $autoFields)) {
             require_once __DIR__ . '/Query/query_exec.php';
-            $this->$pk = Query\query_exec(static::getDatabase(), 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
+            $type = Db::get(static::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
+            $this->$pk = Query\query_exec($type, 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
         }
 
         // Callback despues de crear
