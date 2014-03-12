@@ -280,7 +280,7 @@ class ActiveRecord extends LiteRecord
      * @param  array     $values  valores
      * @return Paginator
      */
-    public static function paginate($params, $page, $perPage, $values = null)
+    public static function paginate(Array $params, $page, $perPage, $values = null)
     {
         unset($params['limit'], $params['offset']);
         $sql = self::buildSelect($params);
