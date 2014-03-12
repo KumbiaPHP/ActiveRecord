@@ -336,7 +336,7 @@ class LiteRecord
      * Consulta sql
      *
      * @param  string       $sql
-     * @return PDOStatement
+     * @return LiteRecord
      * @throw PDOException
      */
     public static function sql($sql)
@@ -372,7 +372,7 @@ class LiteRecord
      *
      * @param  string       $pk     valor para clave primaria
      * @param  string       $fields campos que se desean obtener separados por coma
-     * @return ActiveRecord
+     * @return LiteRecord
      */
     public static function get($pk, $fields = '*')
     {
@@ -388,7 +388,7 @@ class LiteRecord
      * Listar todos los registros
      *
      * @param  string       $fields campos que se desean obtener separados por coma
-     * @return PDOStatement
+     * @return LiteRecord
      */
     public static function all($fields = '*')
     {
