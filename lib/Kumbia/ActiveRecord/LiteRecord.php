@@ -166,7 +166,7 @@ class LiteRecord
         if($this->callback('_beforeUpdate') === false) return false;
 
         $pk = static::getPK();
-        if(!isset($this->$pk) || $this->$pk == '') throw new \KumbiaException('No se ha especificado valor para la clave primaria');
+        if(!isset($this->$pk) || $this->$pk === '') throw new \KumbiaException('No se ha especificado valor para la clave primaria');
 
         $data = array();
         $set = array();
@@ -208,7 +208,7 @@ class LiteRecord
 
         $pk = static::getPK();
 
-        if (!isset($this->$pk) || $this->$pk == '' || !self::exists($this->$pk)) {
+        if (!isset($this->$pk) || $this->$pk === '' || !self::exists($this->$pk)) {
             $result = $this->create();
         } else {
             $result = $this->update();
@@ -394,7 +394,7 @@ class LiteRecord
 
         $sql = "SELECT $fields FROM $source";
 
-        return self::sql($sql);
+        return self::sql($sql)->fetchAll();
     }
 
     /**
@@ -420,11 +420,8 @@ class LiteRecord
      * @param  array     $values  valores
      * @return Paginator
      */
-    public static function paginateQuery($sql, $page, $perPage, $values = NULL)
+    public static function paginateQuery($sql, $page, $perPage, $values = array())
     {
-        // Valores para consulta
-        if(func_num_args() > 3 && !\is_array($values)) $values = \array_slice(func_get_args(), 3);
-
         require_once __DIR__ . '/Paginator.php';
 
         return new Paginator(\get_called_class(), $sql, (int) $page, (int) $perPage, $values);
