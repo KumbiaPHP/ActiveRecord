@@ -206,7 +206,6 @@ class LiteRecord
         if($this->callback('_beforeSave') === false) return false;
 
         $pk = static::getPK();
-        $ource = static::getSource();
 
         if (!isset($this->$pk) || $this->$pk == '' || !self::exists($this->$pk)) {
             $result = $this->create();
