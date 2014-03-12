@@ -325,8 +325,7 @@ class LiteRecord
     public static function prepare($sql)
     {
         $sth = self::dbh()->prepare($sql);
-        $class = \get_called_class();
-        $sth->setFetchMode(\PDO::FETCH_INTO, new $class);
+        $sth->setFetchMode(\PDO::FETCH_CLASS, \get_called_class());
 
         return $sth;
     }
@@ -341,8 +340,7 @@ class LiteRecord
     public static function sql($sql)
     {
         $sth = self::dbh()->query($sql);
-        $class = \get_called_class();
-        $sth->setFetchMode(\PDO::FETCH_INTO, new $class);
+        $sth->setFetchMode(\PDO::FETCH_CLASS, \get_called_class());
 
         return $sth;
     }
