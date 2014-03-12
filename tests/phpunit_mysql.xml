@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="bootstrap.php" colors="true">
+    <php>
+        <var name="config_database" value="default"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="main">
+            <directory>.</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
