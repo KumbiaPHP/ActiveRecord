@@ -19,7 +19,9 @@
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
-namespace ActiveRecord\Metadata;
+namespace Kumbia\ActiveRecord\Metadata;
+
+use Kumbia\ActiveRecord\Db;
 
 /**
  * Adaptador de Metadata para Pgsql
@@ -40,7 +42,7 @@ class PgsqlMetadata extends Metadata
         if(!$schema) $schema = 'public';
 
         // Nota: Se excluyen claves compuestas
-        $describe = \ActiveRecord\Db::get($database)->query("
+        $describe = Db::get($database)->query("
             SELECT DISTINCT
                 c.column_name AS field,
                 c.udt_name AS type,

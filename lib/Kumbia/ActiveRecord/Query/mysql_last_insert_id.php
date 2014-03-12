@@ -19,27 +19,18 @@
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
-namespace ActiveRecord\Query;
+namespace Kumbia\ActiveRecord\Query;
 
 /**
- * Adiciona limit y offset a la consulta sql en mysql
+ * Obtiene el último id generado en mysql
  *
- * @param string $sql consulta select
- * @param string $limit valor limit
- * @param string $offset valor offset
- * @return string
+ * @param PDO $dbh conexion pdo
+ * @param string $pk campo clave primaria
+ * @param string $table nombre de tabla
+ * @param string $schema esquema
+ * @return int
  */
-function mysql_limit($sql, $limit = null, $offset = null)
+function mysql_last_insert_id($dbh, $pk, $table, $schema = null)
 {
-    if ($limit !== null) {
-        $limit = (int) $limit;
-        $sql .= " LIMIT $limit";
-    }
-
-    if ($offset !== null) {
-        $offset = (int) $offset;
-        $sql .= " OFFSET $offset";
-    }
-
-    return $sql;
+    return $dbh->lastInsertId();
 }

@@ -20,7 +20,10 @@
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
-namespace ActiveRecord\Metadata;
+namespace Kumbia\ActiveRecord\Metadata;
+
+use Kumbia\ActiveRecord\Db;
+use PDO;
 
 /**
  * Adaptador de Metadata para Mysql
@@ -40,13 +43,13 @@ class MysqlMetadata extends Metadata
     protected function queryFields($database, $table, $schema = null)
     {
         if (!$schema) {
-            $describe = \ActiveRecord\Db::get($database)->query("DESCRIBE `$table`");
+            $describe = Db::get($database)->query("DESCRIBE `$table`");
         } else {
-            $describe = \ActiveRecord\Db::get($database)->query("DESCRIBE `$schema`.`$table`");
+            $describe = Db::get($database)->query("DESCRIBE `$schema`.`$table`");
         }
 
         $fields = array();
-        while(( $value = $describe->fetch(\PDO::FETCH_OBJ))) {
+        while(( $value = $describe->fetch(PDO::FETCH_OBJ))) {
             $fields[$value->Field] = array(
                 'Type' => $value->Type,
                 'Null' => $value->Null != 'NO',
