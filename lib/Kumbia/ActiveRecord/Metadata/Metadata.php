@@ -20,7 +20,7 @@
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 
-namespace ActiveRecord\Metadata;
+namespace Kumbia\ActiveRecord\Metadata;
 
 /**
  * Metadata de tabla
