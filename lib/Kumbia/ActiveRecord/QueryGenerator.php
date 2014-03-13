@@ -109,4 +109,30 @@ class QueryGenerator
     protected static function order($order){
         return empty($order)  ? '': "ORDER BY $order";
     }
+
+
+    public static function insert(\Kumbia\ActiveRecord\LiteRecord $model, &$data){
+        $meta = $model::metadata();
+        $data = array();
+        $columns = array();
+        $values = array();
+        $withDefault =  $meta->getWithDefault();
+        $autoFields =   $meta->getAutoFields();
+
+        // Preparar consulta
+        foreach ($meta->getFieldsList() as $field) {
+            if (!empty($model->$field)) {
+                $data[":$field"] = $model->$field;
+                $columns[] = $field;
+                $values[] = ":$field";
+            } elseif (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
+                $columns[] = $field;
+                $values[] = 'NULL';
+            }
+        }
+        $columns = \implode(',', $columns);
+        $values = \implode(',', $values);
+        $source = $model::getSource();
+        return "INSERT INTO $source ($columns) VALUES ($values)";
+    }
 }
