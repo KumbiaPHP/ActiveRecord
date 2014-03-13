@@ -51,8 +51,7 @@ class Autoloader
         }
 
         $fileName = str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $className) . '.php';
-        $file = self::$folder . $fileName;
-        require $file;
+        require self::$folder . $fileName;
     }
 
 }
