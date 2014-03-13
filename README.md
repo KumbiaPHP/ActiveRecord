@@ -4,6 +4,7 @@ ActiveRecord
 
 Nuevo ActiveRecord en desarrollo, requiere PHP 5.3
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/badges/quality-score.png?s=f7230602070a9e9605d46544197bcdac46166612)](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/)
 
 Cambios (tachado lo que ya está listo)
 =======
