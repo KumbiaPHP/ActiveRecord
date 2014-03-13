@@ -170,7 +170,7 @@ class ActiveRecord extends LiteRecord
             $source = static::getSource();
             $sql = "SELECT * FROM $source";
         } else {
-            $sql = self::buildSelect($params);
+            $sql = QueryGenerator::select(static::getSource(), $params);
         }
 
         $sth = self::prepare($sql);
@@ -182,43 +182,6 @@ class ActiveRecord extends LiteRecord
         return $sth;
     }
 
-    /**
-     * Construye una consulta select desde una lista de parametros
-     *
-     * @param  array  $params parametros de consulta select
-     *                        where: condiciones where
-     *                        order: criterio de ordenamiento
-     *                        fields: lista de campos
-     *                        join: joins de tablas
-     *                        group: agrupar campos
-     *                        having: condiciones de grupo
-     *                        limit: valor limit
-     *                        offset: valor offset
-     * @return string
-     */
-    protected static function buildSelect($params)
-    {
-        $source = static::getSource();
-        $params = array_merge(array(
-            'fields' => '*',
-            'join'   => '',
-            'limit'  => null,
-            'offset' => null
-        ), $params);
-
-        $where  = isset($params['where'])  ? "WHERE {$params['where']}"   : '';
-        $group  = isset($params['group'])  ? "GROUP BY {$params['group']}": '';
-        $having = isset($params['having'])  ? "HAVING {$params['having']}" : '';
-        $order  = isset($params['order'])  ? "ORDER BY {$params['order']}": '';
-
-        $sql = "SELECT {$params['fields']} FROM $source {$params['join']} $where $group $having $order";
-
-        if (!is_null($params['limit']) || !is_null($params['offset'])) {
-            $type = self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
-            $sql = Query\query_exec($type, 'limit', $sql, $params['limit'], $params['offset']);
-        }
-        return $sql;
-    }
 
     /**
      * Obtener todas las coincidencias por el campo indicado
@@ -278,7 +241,7 @@ class ActiveRecord extends LiteRecord
     public static function paginate(Array $params, $page, $perPage, $values = null)
     {
         unset($params['limit'], $params['offset']);
-        $sql = self::buildSelect($params);
+        $sql = QueryGenerator::select(static::getSource(), $params);
 
         // Valores para consulta
         if($values !== null && !\is_array($values)) $values = \array_slice(func_get_args(), 3);
