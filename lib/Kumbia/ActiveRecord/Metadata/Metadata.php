@@ -114,9 +114,9 @@ abstract class Metadata
         foreach ($this->fields as $field => $m) {
             if ($m['Key'] == 'PRI')
                 $this->pk = $field;
-            if ($m['Default'])
+            elseif ($m['Default'])
                 $this->withDefault[] = $field;
-            if ($m['Auto'])
+            elseif ($m['Auto'])
                 $this->autoFields[] = $field;
         }
     }
