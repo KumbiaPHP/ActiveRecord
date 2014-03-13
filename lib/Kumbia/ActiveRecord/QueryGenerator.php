@@ -38,6 +38,8 @@ class QueryGenerator
      *                        having: condiciones de grupo
      *                        limit: valor limit
      *                        offset: valor offset
+     * @param string $source
+     * @param string $type
      * @return string
      */
     public static function select($source, $type, Array $params)
@@ -65,7 +67,7 @@ class QueryGenerator
      /**
       * Permite construir el WHERE, GROUP BY, HAVING y ORDER BY de una cosnulta SQL
       * en base a los parametros $param
-      * @param Array  $param 
+      * @param Array  $params
       */
     protected static function prepareParam(Array $params){
         return array(

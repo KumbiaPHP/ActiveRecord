@@ -312,7 +312,7 @@ class LiteRecord
      * Consulta sql preparada
      *
      * @param  string       $sql
-     * @return PDOStatement
+     * @return \PDOStatement
      * @throw \PDOException
      */
     public static function prepare($sql)
