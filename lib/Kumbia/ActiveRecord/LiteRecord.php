@@ -256,11 +256,11 @@ class LiteRecord
     /**
      * Obtiene el schema al que pertenece
      *
-     * @return string|null
+     * @return string
      */
     public static function getSchema()
     {
-        return null;
+        return '';
     }
 
     /**
