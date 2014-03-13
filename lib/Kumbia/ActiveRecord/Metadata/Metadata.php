@@ -101,16 +101,17 @@ abstract class Metadata
     private static function getMetadata($type, $database, $table, $schema)
     {
         if(PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
-            $class = ucwords($type) . 'Metadata';
-
-            $class = __NAMESPACE__ . "\\$class";
-
-            self::$instances["$database.$table.$schema"] = new $class($database, $table, $schema);
-
-            // Cachea los metadatos
-            if (PRODUCTION)
-                \Cache::driver()->save(self::$instances["$database.$table.$schema"], \Config::get('config.application.metadata_lifetime'), "$database.$table.$schema", 'ActiveRecord.Metadata');
+            return self::$instances["$database.$table.$schema"];
         }
+        $class = ucwords($type) . 'Metadata';
+
+        $class = __NAMESPACE__ . "\\$class";
+
+        self::$instances["$database.$table.$schema"] = new $class($database, $table, $schema);
+
+         // Cachea los metadatos
+        if (PRODUCTION)
+            \Cache::driver()->save(self::$instances["$database.$table.$schema"], \Config::get('config.application.metadata_lifetime'), "$database.$table.$schema", 'ActiveRecord.Metadata');
 
         return self::$instances["$database.$table.$schema"];
     }
