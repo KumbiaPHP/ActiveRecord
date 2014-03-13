@@ -215,7 +215,7 @@ class ActiveRecord extends LiteRecord
 
         if (!is_null($params['limit']) || !is_null($params['offset'])) {
             $type = self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
-            $sql = Query\query_exec($type, 'limit', $sql, $limit, $offset);
+            $sql = Query\query_exec($type, 'limit', $sql, $params['limit'], $params['offset']);
         }
         return $sql;
     }
