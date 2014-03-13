@@ -34,4 +34,4 @@ $databses['database3'] = array(
 
 //Más conexiones
 
-//return $databases; //Siempre al final
+return $databases; //Siempre al final
