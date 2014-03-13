@@ -199,19 +199,21 @@ class ActiveRecord extends LiteRecord
     protected static function buildSelect($params)
     {
         $source = static::getSource();
-        $cols   = isset($params['fields']) ? $params['fields']            : '*';
-        $join   = isset($params['join'])   ? $params['join']              : '';
+        $params = array_merge(array(
+            'fields' => '*',
+            'join'   => '',
+            'limit'  => null,
+            'offset' => null
+        ), $params);
+
         $where  = isset($params['where'])  ? "WHERE {$params['where']}"   : '';
         $group  = isset($params['group'])  ? "GROUP BY {$params['group']}": '';
         $having = isset($params['having'])  ? "HAVING {$params['having']}" : '';
         $order  = isset($params['order'])  ? "ORDER BY {$params['order']}": '';
 
-        $sql = "SELECT $cols FROM $source $join $where $group $having $order";
+        $sql = "SELECT {$params['fields']} FROM $source {$params['join']} $where $group $having $order";
 
-        $limit = isset($params['limit']) ? $params['limit'] : null;
-        $offset = isset($params['offset']) ? $params['offset'] : null;
-
-        if ($limit !== null || $offset !== null) {
+        if (!is_null($params['limit']) || !is_null($params['offset'])) {
             $type = self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
             $sql = Query\query_exec($type, 'limit', $sql, $limit, $offset);
         }
