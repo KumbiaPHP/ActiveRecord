@@ -20,9 +20,6 @@
 
 namespace Kumbia\ActiveRecord;
 
-// @see LiteRecord
-require_once __DIR__ . '/LiteRecord.php';
-
 /**
  * Implementación de patrón ActiveRecord con ayudantes de consultas sql
  *
@@ -217,7 +214,6 @@ class ActiveRecord extends LiteRecord
         $offset = isset($params['offset']) ? $params['offset'] : null;
 
         if ($limit !== null || $offset !== null) {
-            require_once __DIR__ . '/Query/query_exec.php';
             $type = self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
             $sql = Query\query_exec($type, 'limit', $sql, $limit, $offset);
         }
@@ -287,8 +283,6 @@ class ActiveRecord extends LiteRecord
 
         // Valores para consulta
         if($values !== null && !\is_array($values)) $values = \array_slice(func_get_args(), 3);
-
-        require_once __DIR__ . '/Paginator.php';
 
         return new Paginator(\get_called_class(), $sql, (int) $page, (int) $perPage, $values);
     }

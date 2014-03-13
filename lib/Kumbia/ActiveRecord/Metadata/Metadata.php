@@ -85,8 +85,6 @@ abstract class Metadata
         if (!isset(self::$instances["$database.$table.$schema"]) || (PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata')))) {
             $class = ucwords($type) . 'Metadata';
 
-            require_once __DIR__ . "/$class.php";
-
             $class = __NAMESPACE__ . "\\$class";
 
             self::$instances["$database.$table.$schema"] = new $class($database, $table, $schema);
