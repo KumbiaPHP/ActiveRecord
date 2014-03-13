@@ -63,7 +63,7 @@ class LiteRecord
     }
 
     /**
-    * Obtener objeto por clave primaria, $var = $modelo($id)
+    * Obtener objeto por clave primaria, $var = $Modelo($id)
     *
     * @param string $pk valor para clave primaria
     * @return ActiveRecord
@@ -162,7 +162,7 @@ class LiteRecord
         if($this->callback('_beforeUpdate') === false) return false;
 
         $pk = static::getPK();
-        if(!isset($this->$pk) || $this->$pk === '') throw new \KumbiaException('No se ha especificado valor para la clave primaria');
+        if(!isset($this->$pk) || $this->$pk === '') throw new \KumbiaException(__('No se ha especificado valor para la clave primaria'));
 
         $data = array();
         $set = array();
@@ -256,7 +256,7 @@ class LiteRecord
     /**
      * Obtiene el schema al que pertenece
      *
-     * @return string
+     * @return string|null
      */
     public static function getSchema()
     {
