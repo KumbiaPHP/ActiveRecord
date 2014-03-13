@@ -40,7 +40,7 @@ class QueryGenerator
      *                        offset: valor offset
      * @return string
      */
-    public static function select($source, $params)
+    public static function select($source, Array $params)
     {
         $params = array_merge(array(
             'fields' => '*',
@@ -49,10 +49,7 @@ class QueryGenerator
             'offset' => null
         ), $params);
 
-        $where  = isset($params['where'])  ? "WHERE {$params['where']}"   : '';
-        $group  = isset($params['group'])  ? "GROUP BY {$params['group']}": '';
-        $having = isset($params['having'])  ? "HAVING {$params['having']}" : '';
-        $order  = isset($params['order'])  ? "ORDER BY {$params['order']}": '';
+        list($where, $group, $having, $order) = static::prepareParam($params);
 
         $sql = "SELECT {$params['fields']} FROM $source {$params['join']} $where $group $having $order";
 
@@ -61,6 +58,19 @@ class QueryGenerator
             $sql = Query\query_exec($type, 'limit', $sql, $params['limit'], $params['offset']);
         }
         return $sql;
+    }
+
+    /**
+     * Permite construir el WHERE, GROUP BY, HAVING y ORDER BY de una cosnulta SQL
+     * en base a los parametros $param
+     * @param Array  $param 
+     */
+    protected static function prepareParam(Array $param){
+        $where  = empty($params['where'])  ? '': "WHERE {$params['where']}"   ;
+        $group  = empty($params['group'])  ? '': "GROUP BY {$params['group']}";
+        $having = empty($params['having']) ? '': "HAVING {$params['having']}" ;
+        $order  = empty($params['order'])  ? '': "ORDER BY {$params['order']}";
+        return array($where, $group, $having, $order);
     }
   
 }
