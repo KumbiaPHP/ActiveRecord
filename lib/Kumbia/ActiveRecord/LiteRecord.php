@@ -20,9 +20,6 @@
 
 namespace Kumbia\ActiveRecord;
 
-// @see Db
-require_once __DIR__ . '/Db.php';
-
 /**
  * Implementación de patrón ActiveRecord sin ayudantes de consultas SQL
  *
@@ -141,7 +138,6 @@ class LiteRecord
         // Verifica si la PK es autogenerada
         $pk = static::getPK();
         if (!isset($this->$pk) && \in_array($pk, $autoFields)) {
-            require_once __DIR__ . '/Query/query_exec.php';
             $type = Db::get(static::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
             $this->$pk = Query\query_exec($type, 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
         }
@@ -297,9 +293,6 @@ class LiteRecord
      */
     public static function metadata()
     {
-        // @see Metadata
-        require_once __DIR__ . '/Metadata/Metadata.php';
-
         // Obtiene metadata
         $type = Db::get(static::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
         return Metadata\Metadata::get($type,static::getDatabase(), static::getTable(), static::getSchema());
@@ -422,8 +415,6 @@ class LiteRecord
      */
     public static function paginateQuery($sql, $page, $perPage, $values = array())
     {
-        require_once __DIR__ . '/Paginator.php';
-
         return new Paginator(\get_called_class(), $sql, (int) $page, (int) $perPage, $values);
     }
 
