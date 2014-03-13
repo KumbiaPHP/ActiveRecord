@@ -138,8 +138,7 @@ class LiteRecord
         // Verifica si la PK es autogenerada
         $pk = static::getPK();
         if (!isset($this->$pk) && \in_array($pk, $autoFields)) {
-            $type = Db::get(static::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
-            $this->$pk = Query\query_exec($type, 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
+            $this->$pk = Query\query_exec(static::getDriver(), 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
         }
 
         // Callback despues de crear
@@ -294,8 +293,8 @@ class LiteRecord
     public static function metadata()
     {
         // Obtiene metadata
-        $type = Db::get(static::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
-        return Metadata\Metadata::get($type,static::getDatabase(), static::getTable(), static::getSchema());
+       
+        return Metadata\Metadata::get(static::getDriver(),static::getDatabase(), static::getTable(), static::getSchema());
     }
 
     /**
@@ -426,5 +425,13 @@ class LiteRecord
     public static function smallcase($s)
     {
         return strtolower(preg_replace('/([A-Z])/', "_\\1", lcfirst($s)));
+    }
+
+    /**
+     * Devuelve el nombre del drive PDO utilizado
+     * @return string
+     */
+    public static function getDriver(){
+        return Db::get(static::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
     }
 }

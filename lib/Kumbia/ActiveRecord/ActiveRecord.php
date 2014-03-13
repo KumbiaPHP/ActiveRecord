@@ -170,7 +170,7 @@ class ActiveRecord extends LiteRecord
             $source = static::getSource();
             $sql = "SELECT * FROM $source";
         } else {
-            $sql = QueryGenerator::select(static::getSource(), $params);
+            $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
         }
 
         $sth = self::prepare($sql);
@@ -241,7 +241,7 @@ class ActiveRecord extends LiteRecord
     public static function paginate(Array $params, $page, $perPage, $values = null)
     {
         unset($params['limit'], $params['offset']);
-        $sql = QueryGenerator::select(static::getSource(), $params);
+        $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
 
         // Valores para consulta
         if($values !== null && !\is_array($values)) $values = \array_slice(func_get_args(), 3);

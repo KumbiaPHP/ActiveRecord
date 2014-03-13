@@ -164,8 +164,7 @@ class Paginator implements \Iterator
         if ($this->current > 1 && $start >= $n) throw new \KumbiaException("La página $this->current no existe en el páginador");
 
         // Establece el limit y offset
-        $type = Db::get($model::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
-        $this->_sql = Query\query_exec($type, 'limit', $this->_sql, $this->per_page, $start);
+        $this->_sql = Query\query_exec($model::getDriver(), 'limit', $this->_sql, $this->per_page, $start);
         $this->items = $model::query($this->_sql, $values);
         $this->_rowCount = $this->items->rowCount();
         //Se efectuan los calculos para las páginas
