@@ -46,7 +46,11 @@ class QueryGenerator
             'fields' => '*',
             'join'   => '',
             'limit'  => null,
-            'offset' => null
+            'offset' => null,
+            'where'  => null,
+            'group'  => null,
+            'having' => null,
+            'order'  => null,
         ), $params);
 
         list($where, $group, $having, $order) = static::prepareParam($params);
@@ -64,10 +68,43 @@ class QueryGenerator
       * @param Array  $param 
       */
     protected static function prepareParam(Array $params){
-        $where  = empty($params['where'])  ? '': "WHERE {$params['where']}"   ;
-        $group  = empty($params['group'])  ? '': "GROUP BY {$params['group']}";
-        $having = empty($params['having']) ? '': "HAVING {$params['having']}" ;
-        $order  = empty($params['order'])  ? '': "ORDER BY {$params['order']}";
-        return array($where, $group, $having, $order);
+        return array(
+            static::where($params['where']),
+            static::group($params['group']),
+            static::having($params['having']),
+            static::order($params['order']),
+        );
+    }
+
+    /**
+     * Genera una sentencia where
+     * @return string 
+     */
+    protected static function where($where){
+        return empty($where)  ? '': "WHERE $where";
+    }
+
+    /**
+     * Genera una sentencia GROUP
+     * @return string 
+     */
+    protected static function group($group){
+        return empty($group)  ? '': "GROUP BY $group";
+    }
+
+    /**
+     * Genera una sentencia HAVING
+     * @return string 
+     */
+    protected static function having($having){
+        return empty($having)  ? '': "HAVING $having";
+    }
+
+     /**
+     * Genera una sentencia ORDER BY
+     * @return string 
+     */
+    protected static function order($order){
+        return empty($order)  ? '': "ORDER BY $order";
     }
 }
