@@ -110,40 +110,17 @@ class LiteRecord
         // Callback antes de crear
         if($this->callback('_beforeCreate') === false) return false;
 
-        $data = array();
-        $columns = array();
-        $values = array();
-        $withDefault = self::metadata()->getWithDefault();
-        $autoFields = self::metadata()->getAutoFields();
-
-        // Preparar consulta
-        foreach (self::metadata()->getFieldsList() as $field) {
-            if (isset($this->$field) && $this->$field != '') {
-                $data[":$field"] = $this->$field;
-                $columns[] = $field;
-                $values[] = ":$field";
-            } elseif (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
-                $columns[] = $field;
-                $values[] = 'NULL';
-            }
-        }
-        $columns = \implode(',', $columns);
-        $values = \implode(',', $values);
-
-        $source = static::getSource();
-        $sql = "INSERT INTO $source ($columns) VALUES ($values)";
+        $sql = QueryGenerator::insert($this, $data);
 
         if(!self::prepare($sql)->execute($data)) return false;
 
         // Verifica si la PK es autogenerada
         $pk = static::getPK();
-        if (!isset($this->$pk) && \in_array($pk, $autoFields)) {
+        if (!isset($this->$pk)) {
             $this->$pk = Query\query_exec(static::getDriver(), 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
         }
-
         // Callback despues de crear
         $this->callback('_afterCreate');
-
         return true;
     }
 
