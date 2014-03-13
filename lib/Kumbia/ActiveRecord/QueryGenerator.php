@@ -63,7 +63,7 @@ class QueryGenerator
       * en base a los parametros $param
       * @param Array  $param 
       */
-    protected static function prepareParam(Array $param){
+    protected static function prepareParam(Array $params){
         $where  = empty($params['where'])  ? '': "WHERE {$params['where']}"   ;
         $group  = empty($params['group'])  ? '': "GROUP BY {$params['group']}";
         $having = empty($params['having']) ? '': "HAVING {$params['having']}" ;
