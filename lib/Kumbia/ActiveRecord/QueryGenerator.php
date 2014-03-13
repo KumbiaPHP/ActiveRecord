@@ -40,7 +40,7 @@ class QueryGenerator
      *                        offset: valor offset
      * @return string
      */
-    public static function select($source, Array $params)
+    public static function select($source, $type, Array $params)
     {
         $params = array_merge(array(
             'fields' => '*',
@@ -53,7 +53,6 @@ class QueryGenerator
         $sql = "SELECT {$params['fields']} FROM $source {$params['join']} $where $group $having $order";
 
         if (!is_null($params['limit']) || !is_null($params['offset'])) {
-            $type = self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
             $sql = Query\query_exec($type, 'limit', $sql, $params['limit'], $params['offset']);
         }
         return $sql;
@@ -64,7 +63,7 @@ class QueryGenerator
       * en base a los parametros $param
       * @param Array  $param 
       */
-    protected static function prepareParam(Array $param){
+    protected static function prepareParam(Array $params){
         $where  = empty($params['where'])  ? '': "WHERE {$params['where']}"   ;
         $group  = empty($params['group'])  ? '': "GROUP BY {$params['group']}";
         $having = empty($params['having']) ? '': "HAVING {$params['having']}" ;
