@@ -140,23 +140,7 @@ class LiteRecord
         $pk = static::getPK();
         if(!isset($this->$pk) || $this->$pk === '') throw new \KumbiaException(__('No se ha especificado valor para la clave primaria'));
 
-        $data = array();
-        $set = array();
-
-        // Preparar consulta
-        foreach (self::metadata()->getFieldsList() as $field) {
-            if (isset($this->$field) && $this->$field != '') {
-                $data[":$field"] = $this->$field;
-                if($field != $pk) $set[] = "$field = :$field";
-            } else {
-                $set[] = "$field = NULL";
-            }
-        }
-        $set = \implode(', ', $set);
-
-        $source = static::getSource();
-
-        $sql = "UPDATE $source SET $set WHERE $pk = :$pk";
+         $sql = QueryGenerator::update($this, $data);
 
         if(!self::prepare($sql)->execute($data)) return false;
 
