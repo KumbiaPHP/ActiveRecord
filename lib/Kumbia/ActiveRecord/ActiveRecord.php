@@ -141,7 +141,7 @@ class ActiveRecord extends LiteRecord
      * @param  array        $values valores de busqueda
      * @return ActiveRecord
      */
-    public static function first($params = array(), $values = null)
+    public static function first($params = array(), $values = array())
     {
         if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
         $params['limit'] = 1;
@@ -162,7 +162,7 @@ class ActiveRecord extends LiteRecord
      *                              limit: valor limit
      *                              offset: valor offset
      * @param  array        $values valores de busqueda
-     * @return PDOStatement
+     * @return \PDOStatement
      */
     public static function all($params = null, $values = null)
     {
@@ -233,7 +233,7 @@ class ActiveRecord extends LiteRecord
      *                              having: condiciones de grupo
      *                              limit: valor limit
      *                              offset: valor offset
-     * @return PDOStatement
+     * @return \PDOStatement
      */
     public static function allBy($field, $value, $params = array())
     {

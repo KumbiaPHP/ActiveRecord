@@ -65,7 +65,7 @@ class LiteRecord
     /**
     * Obtener objeto por clave primaria, $var = $Modelo($id)
     *
-    * @param string $pk valor para clave primaria
+    * @param string $id valor para clave primaria
     * @return ActiveRecord
     */
     public function __invoke($id)
@@ -289,7 +289,7 @@ class LiteRecord
     /**
      * Obtiene metadatos
      *
-     * @return Metadata
+     * @return Metadata\Metadata
      */
     public static function metadata()
     {
@@ -302,7 +302,7 @@ class LiteRecord
      * Obtiene manejador de conexion a la base de datos
      *
      * @param  boolean $force forzar nueva conexion PDO
-     * @return PDO
+     * @return \PDO
      */
     protected static function dbh($force = false)
     {
@@ -314,7 +314,7 @@ class LiteRecord
      *
      * @param  string       $sql
      * @return PDOStatement
-     * @throw PDOException
+     * @throw \PDOException
      */
     public static function prepare($sql)
     {
@@ -328,7 +328,7 @@ class LiteRecord
      * Consulta sql
      *
      * @param  string       $sql
-     * @return LiteRecord
+     * @return \PDOStatement
      * @throw PDOException
      */
     public static function sql($sql)

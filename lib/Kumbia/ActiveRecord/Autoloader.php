@@ -42,7 +42,7 @@ class Autoloader
     }
 
     /**
-     * @param string $class
+     * @param string $className
      */
     public static function autoload($className)
     {
@@ -63,9 +63,9 @@ class Autoloader
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 
         $file = self::$folder . DIRECTORY_SEPARATOR . $fileName;
-        if (file_exists($file)) {
+        //if (file_exists($file)) {
             require $file;
-        }
+        //}
     }
 
 }
