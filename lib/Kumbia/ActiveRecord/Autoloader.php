@@ -69,3 +69,8 @@ class Autoloader
     }
 
 }
+/**
+ * @TODO remover esto luego
+ * No funciona la autocarga ya que no es una clase
+ */
+require(__DIR__.'/Query/query_exec.php');
