@@ -199,16 +199,14 @@ class ActiveRecord extends LiteRecord
     protected static function buildSelect($params)
     {
         $source = static::getSource();
+        $cols   = isset($params['fields']) ? $params['fields']            : '*';
+        $join   = isset($params['join'])   ? $params['join']              : '';
+        $where  = isset($params['where'])  ? "WHERE {$params['where']}"   : '';
+        $group  = isset($params['group'])  ? "GROUP BY {$params['group']}": '';
+        $having = isset($params['having'])  ? "HAVING {$params['having']}" : '';
+        $order  = isset($params['order'])  ? "ORDER BY {$params['order']}": '';
 
-        if(!isset($params['fields'])) $params['fields'] = '*';
-
-        $sql = "SELECT {$params['fields']} FROM $source";
-
-        if(isset($params['join'])) $sql .= " {$params['join']}";
-        if(isset($params['where'])) $sql .= " WHERE {$params['where']}";
-        if(isset($params['group'])) $sql .= " GROUP BY {$params['group']}";
-        if(isset($params['having'])) $sql .= " HAVING {$params['having']}";
-        if(isset($params['order'])) $sql .= " ORDER BY {$params['order']}";
+        $sql = "SELECT $cols FROM $source $join $where $group $having $order";
 
         $limit = isset($params['limit']) ? $params['limit'] : null;
         $offset = isset($params['offset']) ? $params['offset'] : null;
@@ -217,7 +215,6 @@ class ActiveRecord extends LiteRecord
             $type = self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
             $sql = Query\query_exec($type, 'limit', $sql, $limit, $offset);
         }
-
         return $sql;
     }
 
