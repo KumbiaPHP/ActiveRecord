@@ -46,26 +46,13 @@ class Autoloader
      */
     public static function autoload($className)
     {
-        $className = ltrim($className, '\\');
-
         if (0 !== strpos($className, 'Kumbia\\ActiveRecord')) {
             return;
         }
 
-        $className = ltrim($className, '\\');
-        $fileName = '';
-        $namespace = '';
-        if ($lastNsPos = strrpos($className, '\\')) {
-            $namespace = substr($className, 0, $lastNsPos);
-            $className = substr($className, $lastNsPos + 1);
-            $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-        }
-        $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-
-        $file = self::$folder . DIRECTORY_SEPARATOR . $fileName;
-        //if (file_exists($file)) {
-            require $file;
-        //}
+        $fileName = str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $className) . '.php';
+        $file = self::$folder . $fileName;
+        require $file;
     }
 
 }
