@@ -72,7 +72,7 @@ abstract class Metadata
     protected $autoFields = array();
 
     /**
-     * Obtiene la metadata de la tabla
+     * Metadata de la tabla
      *
      * @param  string   $type tipo de controlador
      * @param  string   $database
@@ -82,7 +82,25 @@ abstract class Metadata
      */
     public static function get($type, $database, $table, $schema = null)
     {
-        if (!isset(self::$instances["$database.$table.$schema"]) || (PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata')))) {
+        if (isset(self::$instances["$database.$table.$schema"])) {
+            return self::$instances["$database.$table.$schema"];
+        }
+
+        return self::getMetadata($type, $database, $table, $schema);
+    }
+    /**
+     * Obtiene la metadata de la tabla
+     * Y la cachea si esta en producción
+     *
+     * @param  string   $type tipo de controlador
+     * @param  string   $database
+     * @param  string   $table
+     * @param  string   $schema
+     * @return Metadata
+     */
+    private static function getMetadata($type, $database, $table, $schema)
+    {
+        if(PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
             $class = ucwords($type) . 'Metadata';
 
             $class = __NAMESPACE__ . "\\$class";
