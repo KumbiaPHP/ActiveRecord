@@ -110,7 +110,12 @@ class QueryGenerator
         return empty($order)  ? '': "ORDER BY $order";
     }
 
-
+     /**
+     * Construye una consulta INSERT
+     * @param \Kumbia\ActiveRecord\LiteRecord $model Modelo a actualizar
+     * @param Array $data Datos pasados a la consulta preparada
+     * @return string
+     */
     public static function insert(\Kumbia\ActiveRecord\LiteRecord $model, &$data){
         $meta = $model::metadata();
         $data = array();
@@ -135,4 +140,32 @@ class QueryGenerator
         $source = $model::getSource();
         return "INSERT INTO $source ($columns) VALUES ($values)";
     }
+
+    /**
+     * Construye una consulta UPDATE 
+     * @param \Kumbia\ActiveRecord\LiteRecord $model Modelo a actualizar
+     * @param Array $data Datos pasados a la consulta preparada
+     * @return string
+     */
+    public static function update(\Kumbia\ActiveRecord\LiteRecord $model, &$data){
+        $data = array();
+        $set = array();
+        $pk = $model::getPK();
+        // Preparar consulta
+        foreach ($model::metadata()->getFieldsList() as $field) {
+            if (!empty($model->$field)) {
+                $data[":$field"] = $model->$field;
+                if($field != $pk) $set[] = "$field = :$field";
+            } else {
+                $set[] = "$field = NULL";
+            }
+        }
+        $set = \implode(', ', $set);
+
+        $source = $model::getSource();
+
+        return "UPDATE $source SET $set WHERE $pk = :$pk";
+    }
+
+
 }
