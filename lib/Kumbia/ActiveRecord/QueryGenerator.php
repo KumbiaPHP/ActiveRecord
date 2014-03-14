@@ -121,24 +121,36 @@ class QueryGenerator
         $data = array();
         $columns = array();
         $values = array();
-        $withDefault =  $meta->getWithDefault();
-        $autoFields =   $meta->getAutoFields();
-
+       
         // Preparar consulta
         foreach ($meta->getFieldsList() as $field) {
-            if (!empty($model->$field)) {
-                $data[":$field"] = $model->$field;
-                $columns[] = $field;
-                $values[] = ":$field";
-            } elseif (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
-                $columns[] = $field;
-                $values[] = 'NULL';
-            }
+            $columns[] = $field;
+            static::insertField($field, $model, $data, $values);
         }
         $columns = \implode(',', $columns);
         $values = \implode(',', $values);
         $source = $model::getSource();
         return "INSERT INTO $source ($columns) VALUES ($values)";
+    }
+
+    /**
+     * Agrega un campo a para generar una consulta preparada para un INSERT
+     * @param string $field Nombre del campo
+     * @param LiveRecord  $model valor del campo
+     * @param Array  $data array de datos
+     * @param Array  $values array de valores
+     * @return void
+     */
+    protected static function insertField($field, LiteRecord $model, Array &$data, Array &$values){
+        $meta = $model::metadata();
+        $withDefault =  $meta->getWithDefault();
+        $autoFields =   $meta->getAutoFields();
+        if (!empty($model->$field)) {
+            $data[":$field"] = $model->$field;
+            $values[] = ":$field";
+        } elseif (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
+            $values[] = 'NULL';
+        }
     }
 
     /**
