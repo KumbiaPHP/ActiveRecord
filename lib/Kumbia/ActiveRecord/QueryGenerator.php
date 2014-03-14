@@ -201,7 +201,7 @@ class QueryGenerator
      */
     public static function updateAll(\Kumbia\ActiveRecord\LiteRecord $model,  Array $fields, Array &$data, $where){
         $set = array();
-        $pk = $model::getPK();
+        //$pk = $model::getPK();
         /*elimina la clave primaria*/
         foreach ($fields as $field => $value) {
             static::updateField($field, $value, $data, $set);
