@@ -29,33 +29,17 @@ class ActiveRecord extends LiteRecord
     /**
      * Actualizar registros
      *
-     * @param  array          $values
+     * @param  array          $field
      * @param  string         $where  condiciones
-     * @param  array | string $values valores para condiciones
+     * @param  array          $values valores para condiciones
      * @return int            numero de registros actualizados
      */
-    public static function updateAll($fields, $where = null, $values = null)
+    public static function updateAll(Array $fields, $where = null, Array $values = array())
     {
-        $dbh = self::dbh();
-        $data = array();
-        foreach ($fields as $k => $v) {
-            $k = self::sqlItemSanitize($k);
-            $data[] = "$k=" . $dbh->quote($v);
-        }
-        $data = \implode(', ', $data);
-
-        $source = static::getSource();
-
-        $sql = "UPDATE $source SET $data";
-
-        if($where !== null) $sql .= " WHERE $where";
-
+        if($values !== null && !is_array($values))$values = \array_slice(\func_get_args(), 2);
+        $sql = QueryGenerator::updateAll(\get_called_class(), $fields, $values, $where);
         $sth = self::prepare($sql);
-
-        if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 2);
-
         $sth->execute($values);
-
         return $sth->rowCount();
     }
 
