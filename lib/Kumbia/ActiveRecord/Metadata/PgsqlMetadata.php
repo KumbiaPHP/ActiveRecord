@@ -64,7 +64,7 @@ class PgsqlMetadata extends Metadata
     /**
      * Genera la metadata
      *
-     * @param  PDOStatement $describe
+     * @param  \PDOStatement $describe
      * @return array
      */
     private static function describe($describe)
