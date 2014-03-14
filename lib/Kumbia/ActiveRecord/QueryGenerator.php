@@ -193,13 +193,13 @@ class QueryGenerator
 
      /**
      * Construye una consulta UPDATE 
-     * @param \Kumbia\ActiveRecord\LiteRecord $model Modelo a actualizar
+     * @param string $model nombre del modelo a actualizar
      * @param Array $fields campos a actualizar
      * @param Array $data Datos pasados a la consulta preparada
      * @todo ¿Hay que escapar los nombres de los campos?
      * @return string
      */
-    public static function updateAll(\Kumbia\ActiveRecord\LiteRecord $model,  Array $fields, Array &$data, $where){
+    public static function updateAll($model,  Array $fields, Array &$data, $where){
         $set = array();
         //$pk = $model::getPK();
         /*elimina la clave primaria*/
