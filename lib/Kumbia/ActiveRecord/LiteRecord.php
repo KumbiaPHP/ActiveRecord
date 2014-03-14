@@ -103,7 +103,7 @@ class LiteRecord
      * @return boolean
      * @throw PDOException
      */
-    public function create($data = null)
+    public function create(Array $data = array())
     {
         if($data) $this->dump($data);
 
@@ -130,10 +130,9 @@ class LiteRecord
      * @param  array   $data
      * @return boolean
      */
-    public function update($data = null)
+    public function update(Array $data = array())
     {
         if($data) $this->dump($data);
-
         // Callback antes de actualizar
         if($this->callback('_beforeUpdate') === false) return false;
 
