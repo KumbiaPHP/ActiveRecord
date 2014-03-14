@@ -159,25 +159,56 @@ class QueryGenerator
      * @param Array $data Datos pasados a la consulta preparada
      * @return string
      */
-    public static function update(\Kumbia\ActiveRecord\LiteRecord $model, &$data){
-        $data = array();
+    public static function update(\Kumbia\ActiveRecord\LiteRecord $model, Array &$data){
         $set = array();
         $pk = $model::getPK();
-        // Preparar consulta
-        foreach ($model::metadata()->getFieldsList() as $field) {
-            if (!empty($model->$field)) {
-                $data[":$field"] = $model->$field;
-                if($field != $pk) $set[] = "$field = :$field";
-            } else {
-                $set[] = "$field = NULL";
-            }
+        /*elimina la clave primaria*/
+        $list = array_diff($model::metadata()->getFieldsList(), array($pk));
+        foreach ($list as $field) {
+            $value = isset($model->$field)?$model->$field:null;
+            static::updateField($field, $value, $data, $set);
         }
         $set = \implode(', ', $set);
-
         $source = $model::getSource();
-
+        $data[":$pk"] = $model->$pk;
         return "UPDATE $source SET $set WHERE $pk = :$pk";
     }
 
+    /**
+     * Agrega un campo a para generar una consulta preparada para un UPDATE
+     * @param string $field Nombre del campo
+     * @param mixed $value valor
+     * @param Array  $data array de datos
+     * @param Array  $set array de valores
+     * @return void
+     */
+    protected static function updateField($field, $value, Array &$data, Array &$set){
+        if (!empty($value)) {
+            $data[":$field"] = $value;
+            $set[] = "$field = :$field";
+        } else {
+            $set[] = "$field = NULL";
+        }
+    }
 
+     /**
+     * Construye una consulta UPDATE 
+     * @param \Kumbia\ActiveRecord\LiteRecord $model Modelo a actualizar
+     * @param Array $fields campos a actualizar
+     * @param Array $data Datos pasados a la consulta preparada
+     * @todo ¿Hay que escapar los nombres de los campos?
+     * @return string
+     */
+    public static function updateAll(\Kumbia\ActiveRecord\LiteRecord $model,  Array $fields, Array &$data, $where){
+        $set = array();
+        $pk = $model::getPK();
+        /*elimina la clave primaria*/
+        foreach ($fields as $field => $value) {
+            static::updateField($field, $value, $data, $set);
+        }
+        $set = \implode(', ', $set);
+        $source = $model::getSource();
+        $where = static::where(array('where'=>$where));
+        return "UPDATE $source SET $set $where";
+    }
 }
