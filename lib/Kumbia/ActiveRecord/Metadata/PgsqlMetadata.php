@@ -37,9 +37,8 @@ class PgsqlMetadata extends Metadata
      * @param  string $schema   squema
      * @return array
      */
-    protected function queryFields($database, $table, $schema = null)
+    protected function queryFields($database, $table, $schema = 'public')
     {
-        if(!$schema) $schema = 'public';
 
         // Nota: Se excluyen claves compuestas
         $describe = Db::get($database)->query("
@@ -59,6 +58,17 @@ class PgsqlMetadata extends Metadata
             WHERE c.table_name = '$table' AND c.table_schema = '$schema';
         ");
 
+        return self::describe($fields);
+    }
+    
+    /**
+     * Genera la metadata
+     *
+     * @param  PDOStatement $describe
+     * @return array
+     */
+    private static function describe($describe)
+    {
         $fields = array();
         foreach ($describe as $value) {
 
@@ -73,4 +83,5 @@ class PgsqlMetadata extends Metadata
 
         return $fields;
     }
+
 }
