@@ -125,10 +125,13 @@ class Paginator implements \Iterator
      * @param int    $perPage cantidad de items por pagina
      * @param array  $values  valores
      */
-    public function __construct($model, $sql, $page, $perPage, $values = null)
+    public function __construct(LiteRecord $model, $sql, $page, $perPage, $values = null)
     {
         $this->per_page = $perPage;
         $this->current = $page;
+
+        /*validacion*/
+        $this->validPage();
         
         $this->_model = $model;
         $this->_sql = $sql;
@@ -136,12 +139,29 @@ class Paginator implements \Iterator
         // Valores para consulta
         $this->_values = ($values !== null && !is_array($values)) ?
                     array_slice(func_get_args(), 4) : $values;
+    }
 
+    /**
+     * Verifica que la pagina sea válida
+     */
+    protected function validPage(){
         //Si la página o por página es menor de 1 (0 o negativo)
         if ($this->current < 1 || $this->per_page < 1) {
             throw new KumbiaException("La página $this->current no existe en el páginador");
         }
     }
+
+    /**
+     * Valida que la pagina actual sea válida
+     * @param int comienzo
+     */
+    protected function validCurrent($start){
+        //si el inicio es superior o igual al conteo de elementos,
+        //entonces la página no existe, exceptuando cuando es la página 1
+        if ($this->current > 1 && $start >= $this->count)
+            throw new \KumbiaException("La página $this->current no existe en el páginador");
+    }
+
 
     /**
      * Implementa el retroceso de cursor en la iteración
@@ -154,13 +174,9 @@ class Paginator implements \Iterator
 
         $start = $this->per_page * ($this->current - 1);
 
-        //Cuento las apariciones atraves de una tabla derivada
-        $this->count = $model::query("SELECT COUNT(*) AS count FROM ($this->_sql) AS t", $this->_values)->fetch()->count;
-
-        //si el inicio es superior o igual al conteo de elementos,
-        //entonces la página no existe, exceptuando cuando es la página 1
-        if ($this->current > 1 && $start >= $this->count) throw new \KumbiaException("La página $this->current no existe en el páginador");
-
+        $this->count = $this->countQuery();
+        //valida
+        $this->validCurrent($start);
         // Establece el limit y offset
         $this->_sql = Query\query_exec($model::getDriver(), 'limit', $this->_sql, $this->per_page, $start);
         $this->items = $model::query($this->_sql, $this->_values);
@@ -171,6 +187,17 @@ class Paginator implements \Iterator
         $this->total = ceil($this->count / $this->per_page);
         /*mueve el cursor al primer item*/
         $this->next();
+    }
+
+    /**
+     * Cuenta el número de resultados totales
+     * @return int total de resultados
+     */
+    protected function countQuery(){
+        //Cuento las apariciones atraves de una tabla derivada
+        $model = $this->_model;
+        $query = $model::query("SELECT COUNT(*) AS count FROM ($this->_sql) AS t", $this->_values)->fetch();
+        return (int)$query->count;
     }
 
     /**
