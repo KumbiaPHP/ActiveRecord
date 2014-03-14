@@ -161,19 +161,24 @@ class LiteRecord
 
         if($this->callback('_beforeSave') === false) return false;
 
-        $pk = static::getPK();
-
-        if (!isset($this->$pk) || $this->$pk === '' || !self::exists($this->$pk)) {
-            $result = $this->create();
-        } else {
-            $result = $this->update();
-        }
+        $method = $this->saveMethod();
+        $result = $this->$method();
 
         if(!$result) return false;
 
         $this->callback('_afterSave');
 
         return true;
+    }
+
+    /**
+     * Retorna el nombre del metodo a llamar durante un save (create o update)
+     * @return string
+     */
+    protected function saveMethod(){
+        $pk = static::getPK();
+        return (empty($this->$pk) || !static::exists($this->$pk)) ?
+            'create' : 'update';
     }
 
     /**
