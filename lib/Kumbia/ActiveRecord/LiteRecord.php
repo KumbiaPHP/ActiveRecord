@@ -135,7 +135,7 @@ class LiteRecord
         $this->dump($data);
         // Callback antes de actualizar
         if($this->callback('_beforeUpdate') === false) return false;
-        $this->isValidUpdate();
+        $this->hasPK();
         $values = array();
         $sql = QueryGenerator::update($this, $values);
         //var_dump($values);var_dump($sql);die;
@@ -147,9 +147,10 @@ class LiteRecord
     }
 
     /**
-     * Verifica que un update sea valido
+     * Verifica que PK este seteado
+     * @throw \KumbiaException
      */
-    protected function isValidUpdate(){
+    protected function hasPK(){
         $pk = static::getPK();
         if(empty($this->$pk))
             throw new \KumbiaException(__('No se ha especificado valor para la clave primaria'));
@@ -403,6 +404,6 @@ class LiteRecord
      * @return string
      */
     public static function getDriver(){
-        return Db::get(static::getDatabase())->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        return self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
     }
 }
