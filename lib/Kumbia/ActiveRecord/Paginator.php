@@ -125,7 +125,7 @@ class Paginator implements \Iterator
      * @param int    $perPage cantidad de items por pagina
      * @param array  $values  valores
      */
-    public function __construct(LiteRecord $model, $sql, $page, $perPage, $values = null)
+    public function __construct($model, $sql, $page, $perPage, $values = null)
     {
         $this->per_page = $perPage;
         $this->current = $page;
