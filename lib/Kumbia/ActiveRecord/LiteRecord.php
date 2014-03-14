@@ -255,7 +255,7 @@ class LiteRecord
     }
 
     /**
-     * Obtiene la conexión que se utilizará (contenidas en databases.ini)
+     * Obtiene la conexión que se utilizará (contenidas en databases.php)
      *
      * @return string
      */
@@ -271,8 +271,6 @@ class LiteRecord
      */
     public static function metadata()
     {
-        // Obtiene metadata
-       
         return Metadata\Metadata::get(static::getDriver(),static::getDatabase(), static::getTable(), static::getSchema());
     }
 
