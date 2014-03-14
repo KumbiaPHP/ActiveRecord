@@ -137,7 +137,10 @@ class Paginator implements \Iterator
         $this->_values = ($values !== null && !is_array($values)) ?
                     array_slice(func_get_args(), 4) : $values;
 
-        /*el código fue movido a rewind*/
+        //Si la página o por página es menor de 1 (0 o negativo)
+        if ($this->current < 1 || $this->per_page < 1) {
+            throw new KumbiaException("La página $this->current no existe en el páginador");
+        }
     }
 
     /**
@@ -149,10 +152,6 @@ class Paginator implements \Iterator
     {
         $model = $this->_model;
         $values = $this->_values;
-        //Si la página o por página es menor de 1 (0 o negativo)
-        if ($this->current < 1 || $this->per_page < 1) {
-            throw new KumbiaException("La página $this->current no existe en el páginador");
-        }
 
         $start = $this->per_page * ($this->current - 1);
 
@@ -216,4 +215,6 @@ class Paginator implements \Iterator
     {
         return $this->_position < $this->_rowCount;
     }
+
+    protected 
 }
