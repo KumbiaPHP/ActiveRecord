@@ -135,18 +135,24 @@ class LiteRecord
         $this->dump($data);
         // Callback antes de actualizar
         if($this->callback('_beforeUpdate') === false) return false;
-
-        $pk = static::getPK();
-        if(!isset($this->$pk) || $this->$pk === '') throw new \KumbiaException(__('No se ha especificado valor para la clave primaria'));
-
-         $sql = QueryGenerator::update($this, $data);
-
-        if(!self::prepare($sql)->execute($data)) return false;
-
+        $this->isValidUpdate();
+        $values = array();
+        $sql = QueryGenerator::update($this, $values);
+        //var_dump($values);var_dump($sql);die;
+        if(!self::prepare($sql)->execute($values)) return false;
         // Callback despues de actualizar
         $this->callback('_afterUpdate');
 
         return true;
+    }
+
+    /**
+     * Verifica que un update sea valido
+     */
+    protected function isValidUpdate(){
+        $pk = static::getPK();
+        if(empty($this->$pk))
+            throw new \KumbiaException(__('No se ha especificado valor para la clave primaria'));
     }
 
     /**
