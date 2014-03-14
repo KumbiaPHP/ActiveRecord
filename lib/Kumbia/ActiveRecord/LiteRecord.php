@@ -45,9 +45,9 @@ class LiteRecord
      *
      * @param array $data
      */
-    public function __construct($data = null)
+    public function __construct(Array $data = array())
     {
-        if($data) $this->dump($data);
+         $this->dump($data);
     }
 
     /**
@@ -55,8 +55,8 @@ class LiteRecord
      *
      * @param array $data
      */
-    protected function dump($data)
-    {
+    protected function dump(Array $data = array())
+    {   
         foreach ($data as $k => $v) {
             $this->$k = $v;
         }
@@ -105,7 +105,7 @@ class LiteRecord
      */
     public function create(Array $data = array())
     {
-        if($data) $this->dump($data);
+        $this->dump($data);
 
         // Callback antes de crear
         if($this->callback('_beforeCreate') === false) return false;
@@ -132,7 +132,7 @@ class LiteRecord
      */
     public function update(Array $data = array())
     {
-        if($data) $this->dump($data);
+        $this->dump($data);
         // Callback antes de actualizar
         if($this->callback('_beforeUpdate') === false) return false;
 
@@ -155,25 +155,30 @@ class LiteRecord
      * @param  array   $data
      * @return boolean
      */
-    public function save($data = null)
+    public function save(Array $data = array())
     {
-        if($data) $this->dump($data);
+        $this->dump($data);
 
         if($this->callback('_beforeSave') === false) return false;
 
-        $pk = static::getPK();
-
-        if (!isset($this->$pk) || $this->$pk === '' || !self::exists($this->$pk)) {
-            $result = $this->create();
-        } else {
-            $result = $this->update();
-        }
+        $method = $this->saveMethod();
+        $result = $this->$method();
 
         if(!$result) return false;
 
         $this->callback('_afterSave');
 
         return true;
+    }
+
+    /**
+     * Retorna el nombre del metodo a llamar durante un save (create o update)
+     * @return string
+     */
+    protected function saveMethod(){
+        $pk = static::getPK();
+        return (empty($this->$pk) || !static::exists($this->$pk)) ?
+            'create' : 'update';
     }
 
     /**
