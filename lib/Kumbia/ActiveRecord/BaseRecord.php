@@ -102,13 +102,13 @@ class BaseRecord
     }
 
     /**
-     * Obtiene nombre de tabla
+     * Obtiene nombre de tabla en la bd
      *
-     * @return string
+     * @return string smallcase del nombre de la clase
      */
     public static function getTable()
     {
-        return self::smallcase(\get_called_class());
+        return strtolower(preg_replace('/([A-Z])/', "_\\1", lcfirst(\get_called_class())));
     }
 
     /**
@@ -240,16 +240,6 @@ class BaseRecord
     public static function paginateQuery($sql, $page, $perPage, $values = array())
     {
         return new Paginator(\get_called_class(), $sql, (int) $page, (int) $perPage, $values);
-    }
-
-    /**
-     * Convierte la cadena CamelCase en notacion smallcase
-     * @param  string $s cadena a convertir
-     * @return string
-     *                  */
-    public static function smallcase($s)
-    {
-        return strtolower(preg_replace('/([A-Z])/', "_\\1", lcfirst($s)));
     }
 
     /**
