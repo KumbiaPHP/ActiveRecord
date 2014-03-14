@@ -127,15 +127,20 @@ abstract class Metadata
     {
         $this->fields = $this->queryFields($database, $table, $schema);
         $this->fieldsList = \array_keys($this->fields);
+    }
 
-        foreach ($this->fields as $field => $m) {
-            if ($m['Key'] == 'PRI')
-                $this->pk = $field;
-            elseif ($m['Default'])
-                $this->withDefault[] = $field;
-            elseif ($m['Auto'])
-                $this->autoFields[] = $field;
-        }
+    /**
+     * Permite el filtrado de columna en PK, por Defecto y Autogenerado
+     * @param $m información de la columna
+     * @param $field nombre de la columna
+     */
+    protected function filterCol($m, $field){
+        if ($m['Key'] == 'PRI')
+            $this->pk = $field;
+        elseif ($m['Default'])
+            $this->withDefault[] = $field;
+        elseif ($m['Auto'])
+            $this->autoFields[] = $field;
     }
 
     /**

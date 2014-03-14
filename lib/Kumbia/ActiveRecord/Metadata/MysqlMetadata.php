@@ -57,6 +57,7 @@ class MysqlMetadata extends Metadata
                 'Default' => $value->Default != '',
                 'Auto' => $value->Extra == 'auto_increment'
             );
+            $this->filterCol($fields[$value->Field], $value->Field);
         }
         return $fields;
     }
