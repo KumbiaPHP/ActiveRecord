@@ -58,7 +58,7 @@ class PgsqlMetadata extends Metadata
             WHERE c.table_name = '$table' AND c.table_schema = '$schema';
         ");
 
-        return self::describe($fields);
+        return self::describe($describe);
     }
     
     /**
