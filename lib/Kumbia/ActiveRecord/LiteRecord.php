@@ -27,6 +27,13 @@ namespace Kumbia\ActiveRecord;
 class LiteRecord
 {
     /**
+     * Database por defecto usa default
+     *
+     * @var string
+     */
+    public static $database = 'default';
+
+    /**
      * PK por defecto, si no existe mira en metadata
      *
      * @var string
@@ -254,7 +261,7 @@ class LiteRecord
      */
     public static function getDatabase()
     {
-        return 'default';
+        return static::$database;
     }
 
     /**
