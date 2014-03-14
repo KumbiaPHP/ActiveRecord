@@ -67,7 +67,7 @@ class PgsqlMetadata extends Metadata
      * @param  \PDOStatement $describe
      * @return array
      */
-    private static function describe($describe)
+    private static function describe(\PDOStatement $describe)
     {
         $fields = array();
         foreach ($describe as $value) {
