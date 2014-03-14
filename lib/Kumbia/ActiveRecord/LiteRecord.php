@@ -45,9 +45,9 @@ class LiteRecord
      *
      * @param array $data
      */
-    public function __construct($data = null)
+    public function __construct(Array $data = array())
     {
-        if($data) $this->dump($data);
+         $this->dump($data);
     }
 
     /**
@@ -55,8 +55,8 @@ class LiteRecord
      *
      * @param array $data
      */
-    protected function dump($data)
-    {
+    protected function dump(Array $data = array())
+    {   
         foreach ($data as $k => $v) {
             $this->$k = $v;
         }
@@ -105,7 +105,7 @@ class LiteRecord
      */
     public function create(Array $data = array())
     {
-        if($data) $this->dump($data);
+        $this->dump($data);
 
         // Callback antes de crear
         if($this->callback('_beforeCreate') === false) return false;
@@ -132,7 +132,7 @@ class LiteRecord
      */
     public function update(Array $data = array())
     {
-        if($data) $this->dump($data);
+        $this->dump($data);
         // Callback antes de actualizar
         if($this->callback('_beforeUpdate') === false) return false;
 
@@ -155,9 +155,9 @@ class LiteRecord
      * @param  array   $data
      * @return boolean
      */
-    public function save($data = null)
+    public function save(Array $data = array())
     {
-        if($data) $this->dump($data);
+        $this->dump($data);
 
         if($this->callback('_beforeSave') === false) return false;
 
