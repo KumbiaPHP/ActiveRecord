@@ -151,27 +151,25 @@ class Paginator implements \Iterator
     public function rewind()
     {
         $model = $this->_model;
-        $values = $this->_values;
 
         $start = $this->per_page * ($this->current - 1);
 
         //Cuento las apariciones atraves de una tabla derivada
-        $n = $model::query("SELECT COUNT(*) AS count FROM ($this->_sql) AS t", $values)->fetch()->count;
+        $this->count = $model::query("SELECT COUNT(*) AS count FROM ($this->_sql) AS t", $this->_values)->fetch()->count;
 
         //si el inicio es superior o igual al conteo de elementos,
         //entonces la página no existe, exceptuando cuando es la página 1
-        if ($this->current > 1 && $start >= $n) throw new \KumbiaException("La página $this->current no existe en el páginador");
+        if ($this->current > 1 && $start >= $this->count) throw new \KumbiaException("La página $this->current no existe en el páginador");
 
         // Establece el limit y offset
         $this->_sql = Query\query_exec($model::getDriver(), 'limit', $this->_sql, $this->per_page, $start);
-        $this->items = $model::query($this->_sql, $values);
+        $this->items = $model::query($this->_sql, $this->_values);
         $this->_rowCount = $this->items->rowCount();
         //Se efectuan los calculos para las páginas
-        $this->next = ($start + $this->per_page) < $n ? ($this->current + 1) : null;
-        $this->prev = ($this->current > 1) ? ($this->current - 1) : null;
-        $this->total = ceil($n / $this->per_page);
-        $this->count = $n;
-        /*muve el cursor al primer item*/
+        $this->next = $this->nextPage($start);
+        $this->prev = $this->prevPage();
+        $this->total = ceil($this->count / $this->per_page);
+        /*mueve el cursor al primer item*/
         $this->next();
     }
 
@@ -216,5 +214,19 @@ class Paginator implements \Iterator
         return $this->_position < $this->_rowCount;
     }
 
-    protected 
+    /**
+     * Calcula el valor de la proxima página
+     * @param int $start registro donde se comienza
+     * @return int
+     */
+    protected function nextPage($start){
+        return ($start + $this->per_page) < $this->count ? ($this->current + 1) : null;
+    }
+    /**
+     * Calcula el valor de la página anterior
+     * @return int
+     */
+    protected function prevPage(){
+        return ($this->current > 1) ? ($this->current - 1) : null;
+    }
 }
