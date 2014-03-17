@@ -28,7 +28,7 @@ class LiteRecord extends BaseRecord
 {
 
     /**
-    * Obtener objeto por clave primaria, $var = $Modelo($id)
+    * Obtener objeto por clave primaria, $var = Modelo($id)
     *
     * @param string $id valor para clave primaria
     * @return ActiveRecord
@@ -177,6 +177,49 @@ class LiteRecord extends BaseRecord
         $sql = "SELECT $fields FROM $source";
 
         return self::sql($sql)->fetchAll();
+    }
+    
+    /**
+     * Todos los registros donde el campo = value
+     *
+     * @param  string       $field  Campo
+     * @param  string       $field  Valor
+     * @param  string       $fields Campos que se desean obtener separados por coma
+     * @return LiteRecord
+     */
+    public static function allBy($field, $value, $fields = '*')
+    {
+        return self::by($field, $value, $fields)->fetchAll();
+    }
+    
+    /**
+     * Primer registro donde el campo = value
+     *
+     * @param  string       $field  Campo
+     * @param  string       $field  Valor
+     * @param  string       $fields Campos que se desean obtener separados por coma
+     * @return LiteRecord
+     */
+    public static function firstBy($field, $value, $fields = '*')
+    {
+        return self::by($field, $value, $fields)->fetch();
+    }
+    
+    /**
+     * Devuelve PDOStatement donde el campo = value
+     *
+     * @param  string       $field  Campo
+     * @param  string       $field  Valor
+     * @param  string       $fields Campos que se desean obtener separados por coma
+     * @return \PDOStatement
+     */
+    public static function by($field, $value, $fields = '*')
+    {
+        $source = static::getSource();
+
+        $sql = "SELECT $fields FROM $source where ? = ?";
+
+        return self::query($sql, $field, $value);
     }
 
 }
