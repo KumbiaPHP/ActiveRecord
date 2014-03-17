@@ -242,4 +242,29 @@ class BaseRecord
     public static function getDriver(){
         return self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
     }
+
+        /**
+     * Comienza una trasacción
+     * @return bool
+     */
+    public static function begin(){
+        return self::dbh()->beginTransaction();
+    }
+
+
+    /**
+     * Da marcha atrás a una trasacción
+     * @return bool
+     */
+    public static function rollback(){
+        return self::dbh()->rollBack();
+    }
+
+    /**
+     * Realiza el commit de  una trasacción
+     * @return bool
+     */
+    public static function commit(){
+        return self::dbh()->commit();
+    }
 }
