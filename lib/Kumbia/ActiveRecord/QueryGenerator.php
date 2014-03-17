@@ -136,7 +136,7 @@ class QueryGenerator
     /**
      * Agrega un campo a para generar una consulta preparada para un INSERT
      * @param string $field Nombre del campo
-     * @param LiveRecord  $model valor del campo
+     * @param LiteRecord $model valor del campo
      * @param Array  $data array de datos
      * @param Array  $values array de valores
      * @return void
@@ -196,6 +196,7 @@ class QueryGenerator
      * @param string $model nombre del modelo a actualizar
      * @param Array $fields campos a actualizar
      * @param Array $data Datos pasados a la consulta preparada
+     * @param string|null $where
      * @todo ¿Hay que escapar los nombres de los campos?
      * @return string
      */
