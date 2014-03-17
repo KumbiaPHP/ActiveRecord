@@ -31,21 +31,14 @@ class BaseRecord
      *
      * @var string
      */
-    public static $database = 'default';
+    protected static $database = 'default';
 
     /**
      * PK por defecto, si no existe mira en metadata
      *
      * @var string
      */
-    public static $pk = 'id';
-
-    /**
-     * Prefijo para el nombre de tabla
-     *
-     * @var string
-     */
-    public static $prefix;
+    protected static $pk = 'id';
 
     /**
      * Constructor
