@@ -24,7 +24,7 @@ namespace Kumbia\ActiveRecord;
  * Implementación de paginador
  *
  */
-class Paginator implements \Iterator
+class Paginator implements \IteratorAggregate
 {
     /**
      * Items de pagina
@@ -32,12 +32,6 @@ class Paginator implements \Iterator
      * @var PDOStatement
      */
     public $items;
-
-    /**
-     * Item actual
-     * @var Object
-     */
-    protected $_cItem;
 
     /**
      * Numero de página siguiente
@@ -82,13 +76,6 @@ class Paginator implements \Iterator
      * TODO: colocar en camelcase
      */
     public $per_page;
-
-    /**
-     * Número de items recorridos
-     *
-     * @var int
-     */
-    private $_position = -1;
 
     /**
      * Cantidad de items ha recorrer
@@ -168,7 +155,8 @@ class Paginator implements \Iterator
      * @todo Mover este procedimiento a otro metodo y usar cursores iterables, ya se volveria a hacer la cnsulta
      * @return void
      */
-    public function rewind()
+
+    public function getIterator() 
     {
         $model = $this->_model;
 
@@ -185,8 +173,7 @@ class Paginator implements \Iterator
         $this->next = $this->nextPage($start);
         $this->prev = $this->prevPage();
         $this->total = ceil($this->count / $this->per_page);
-        /*mueve el cursor al primer item*/
-        $this->next();
+        return new \ArrayIterator($this->items->fetchAll());
     }
 
     /**
@@ -198,47 +185,6 @@ class Paginator implements \Iterator
         $model = $this->_model;
         $query = $model::query("SELECT COUNT(*) AS count FROM ($this->_sql) AS t", $this->_values)->fetch();
         return (int)$query->count;
-    }
-
-    /**
-     * Obtiene el item actual
-     *
-     * @return mixed
-     */
-    public function current()
-    {
-        return $this->_cItem;
-    }
-
-    /**
-     * Obtiene key
-     *
-     * @return int
-     */
-    public function key()
-    {
-        return $this->_position;
-    }
-
-    /**
-     * Avanza iterador
-     *
-     * @return mixed
-     */
-    public function next()
-    {
-        $this->_position++;
-        $this->_cItem = $this->items->fetch(\PDO::FETCH_ORI_NEXT);
-    }
-
-    /**
-     * Verifica si es valida la iteracion
-     *
-     * @return boolean
-     */
-    public function valid()
-    {
-        return $this->_position < $this->_rowCount;
     }
 
     /**
