@@ -127,10 +127,11 @@ class ActiveRecord extends LiteRecord
      */
     public static function first($params = array(), $values = array())
     {
-        if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
-        $params['limit'] = 1;
-
-        return self::all($params, $values)->fetch();
+        $args = func_get_args();
+        /*Reescribe el limit*/
+        $args[0]['limit'] = 1;
+        $res =  static::doQuery($args);
+        return $res->fetch();
     }
 
     /**
@@ -150,19 +151,35 @@ class ActiveRecord extends LiteRecord
      */
     public static function all($params = null, $values = null)
     {
-        if ($params === null) {
-            $source = static::getSource();
-            $sql = "SELECT * FROM $source";
-        } else {
-            $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
-        }
+        $res =  static::doQuery(func_get_args());
+        return $res->fetchAll();
+    }
 
+
+    /**
+     * Obtener el Recurso para una sentencia
+     *
+     * @param  array        $params parametros de bus
+     * @param  string       $field  campo
+     * @param  string       $value  valor
+     * @param  array        $params parametros adicionales
+     *                              order: criterio de ordenamiento
+     *                              fields: lista de campos
+     *                              group: agrupar campos
+     *                              join: joins de tablas
+     *                              having: condiciones de grupo
+     *                              offset: valor offset queda
+     * @param  array        $values valores de busqueda
+     * @param  array        $array  Por si hay parametros sin nombre
+     * @return ActiveRecord
+     */
+    protected static function doQuery(Array $array){
+        $params = array_shift($array);
+        $values  = $array[0];
+        $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
         $sth = self::prepare($sql);
-
-        if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
-
+        if($values !== null && !is_array($values)) $values = $array;
         $sth->execute($values);
-
         return $sth;
     }
 
