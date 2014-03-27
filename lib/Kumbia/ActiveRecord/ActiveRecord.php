@@ -130,7 +130,7 @@ class ActiveRecord extends LiteRecord
         $args = func_get_args();
         /*Reescribe el limit*/
         $args[0]['limit'] = 1;
-        $res =  static::doQuery($args);
+        $res =  self::doQuery($args);
         return $res->fetch();
     }
 
@@ -151,7 +151,7 @@ class ActiveRecord extends LiteRecord
      */
     public static function all($params = array(), $values = array())
     {
-        $res =  static::doQuery(func_get_args());
+        $res =  self::doQuery(func_get_args());
         return $res->fetchAll();
     }
 
