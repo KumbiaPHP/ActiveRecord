@@ -149,7 +149,7 @@ class ActiveRecord extends LiteRecord
      * @param  array        $values valores de busqueda
      * @return \PDOStatement
      */
-    public static function all($params = null, $values = null)
+    public static function all($params = array(), $values = array())
     {
         $res =  static::doQuery(func_get_args());
         return $res->fetchAll();
