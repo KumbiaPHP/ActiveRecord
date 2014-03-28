@@ -17,6 +17,7 @@ No usar en producción
 Necesita KumbiaPHP > 0.9RC
 
 1. Copiar [config_databases.php](/config_databases.php) en app/config/databases.php y configurar
+
 2. Copiar la carpeta lib/Kumbia en vendor.  (vendor/Kumbia/ActiveRecord/..)
 3. Añadir en app/libs/ : [lite_record.php](#LiteRecord) y/o [act_record.php](#ActRecord)
 
