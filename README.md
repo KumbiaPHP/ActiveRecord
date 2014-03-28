@@ -42,7 +42,6 @@ Para los que prefieren SQL y las ventajas de un ORM, incluye un mini ActiveRecor
 
 use Kumbia\ActiveRecord\LiteRecord as ORM;
 
-
 class LiteRecord extends ORM
 {
 
@@ -69,7 +68,6 @@ ActiveRecord completo
  */
 
 use Kumbia\ActiveRecord\ActiveRecord;
-
 
 class ActRecord extends ActiveRecord
 {
