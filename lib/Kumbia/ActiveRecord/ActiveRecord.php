@@ -174,8 +174,12 @@ class ActiveRecord extends LiteRecord
      * @return ActiveRecord
      */
     protected static function doQuery(Array $array){
-        $params = array_shift($array);
-        $values  = $array[0];
+        $params = array();
+        $values = array();
+        if(!empty($array)){
+            $params = array_shift($array);
+            $values  = $array[0];
+        }
         $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
         $sth = self::prepare($sql);
         if($values !== null && !is_array($values)) $values = $array;
