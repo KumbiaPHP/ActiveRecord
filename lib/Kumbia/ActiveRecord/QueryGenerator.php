@@ -145,12 +145,22 @@ class QueryGenerator
         $meta = $model::metadata();
         $withDefault =  $meta->getWithDefault();
         $autoFields =   $meta->getAutoFields();
-        if (!empty($model->$field)) {
+        if (self::haveValue($model, $field)) {
             $data[":$field"] = $model->$field;
             $values[] = ":$field";
         } elseif (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
             $values[] = 'NULL';
         }
+    }
+
+    /**
+     * Permite conocer si la columna debe definirse como nula
+     * @param LiteRecord $model
+     * @param string $field
+     * @return bool
+     */
+    protected  static function haveValue(LiteRecord $model, $field){
+        return isset($model->$field) && !is_null($model->$field) && $model->$field !== '';
     }
 
     /**
