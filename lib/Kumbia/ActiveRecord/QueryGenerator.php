@@ -160,7 +160,7 @@ class QueryGenerator
      * @return bool
      */
     protected  static function haveValue(LiteRecord $model, $field){
-        return isset($model->$field) && !is_null($model->$field) && $model->$field !== '';
+        return isset($model->$field) && $model->$field !== '';
     }
 
     /**
