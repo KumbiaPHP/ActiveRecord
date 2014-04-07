@@ -59,7 +59,7 @@ class QueryGenerator
         $sql = "SELECT {$params['fields']} FROM $source {$params['join']} $where $group $having $order";
 
         if (!is_null($params['limit']) || !is_null($params['offset'])) {
-            $sql = Query\query_exec($type, 'limit', $sql, $params['limit'], $params['offset']);
+            $sql = self::query($type, 'limit', $sql, $params['limit'], $params['offset']);
         }
         return $sql;
     }
@@ -221,5 +221,24 @@ class QueryGenerator
         $source = $model::getSource();
         $where = static::where(array('where'=>$where));
         return "UPDATE $source SET $set $where";
+    }
+    
+    /**
+    * Ejecuta una consulta
+    *
+    * @param string $type tipo de driver
+    * @param string $query_function nombre de funcion
+    * @return mixed
+    * @thow KumbiaException
+    */
+   public static function query($type, $query_function)
+   {
+        $query_function = "{$type}_{$query_function}";
+    
+        require_once __DIR__ . "/Query/{$query_function}.php";
+    
+        $args = \array_slice(\func_get_args(), 2);
+    
+        return call_user_func_array(__NAMESPACE__ . "\\Query\\$query_function", $args);
     }
 }

@@ -166,7 +166,7 @@ class Paginator implements \IteratorAggregate
         //valida
         $this->validCurrent($start);
         // Establece el limit y offset
-        $this->_sql = Query\query_exec($model::getDriver(), 'limit', $this->_sql, $this->per_page, $start);
+        $this->_sql = QueryGenerator::query($model::getDriver(), 'limit', $this->_sql, $this->per_page, $start);
         $this->items = $model::query($this->_sql, $this->_values);
         $this->_rowCount = $this->items->rowCount();
         //Se efectuan los calculos para las páginas
