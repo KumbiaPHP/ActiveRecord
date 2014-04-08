@@ -31,28 +31,28 @@ class Paginator implements \IteratorAggregate, \Countable
      *
      * @var int
      */
-    public $page;
+    protected $page;
 
     /**
      * Cantidad de items por página
      *
      * @var int
      */
-    public $perPage;
+    protected $perPage;
     
     /**
      * Número de páginas totales
      *
      * @var int
      */
-    public $totalPages;
+    protected $totalPages;
 
     /**
      * Cantidad de items totales
      *
      * @var int
      */
-    public $count;
+    protected $count;
 
     /**
      * Nombre del modelo a usar
@@ -126,8 +126,9 @@ class Paginator implements \IteratorAggregate, \Countable
      */
     private function validCurrent()
     {
-        if ($this->page > $this->totalPages)
+        if ($this->page > $this->totalPages){
             throw new \RangeException("La página $this->page no existe", 404);
+        }
     }
 
     /**
@@ -191,5 +192,14 @@ class Paginator implements \IteratorAggregate, \Countable
     public function count()
     {
         return count($this->items);
+    }
+
+    /**
+     * Página actual de paginador
+     * @return int
+     */
+    public function page()
+    {
+        return $this->page;
     }
 }
