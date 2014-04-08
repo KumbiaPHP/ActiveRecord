@@ -24,42 +24,28 @@ namespace Kumbia\ActiveRecord;
  * Implementación de paginador
  *
  */
-class Paginator implements \IteratorAggregate
+class Paginator implements \IteratorAggregate, \Countable
 {
-    /**
-     * Items de pagina
-     *
-     * @var PDOStatement
-     */
-    public $items;
-
-    /**
-     * Numero de página siguiente
-     *
-     * @var int
-     */
-    public $next;
-
-    /**
-     * Número de página anterior
-     *
-     * @var int
-     */
-    public $prev;
-
     /**
      * Número de página actual
      *
      * @var int
      */
-    public $current;
+    public $page;
 
+    /**
+     * Cantidad de items por página
+     *
+     * @var int
+     */
+    public $perPage;
+    
     /**
      * Número de páginas totales
      *
      * @var int
      */
-    public $total;
+    public $totalPages;
 
     /**
      * Cantidad de items totales
@@ -67,22 +53,6 @@ class Paginator implements \IteratorAggregate
      * @var int
      */
     public $count;
-
-    /**
-     * Cantidad de items por página
-     *
-     * @var int
-     *
-     * TODO: colocar en camelcase
-     */
-    public $per_page;
-
-    /**
-     * Cantidad de items ha recorrer
-     *
-     * @var int
-     */
-    private $_rowCount = 0;
 
     /**
      * Nombre del modelo a usar
@@ -97,11 +67,17 @@ class Paginator implements \IteratorAggregate
     protected $_sql;
 
     /**
-     * Valores de los parametros de la consulta
+     * Párametros de la consulta
      * @var array
      */
     protected $_values;
-
+    
+    /**
+     * Items de pagina
+     *
+     * @var array de objetos
+     */
+    private $items;
 
     /**
      * Constructor
@@ -114,92 +90,106 @@ class Paginator implements \IteratorAggregate
      */
     public function __construct($model, $sql, $page, $perPage, $values = null)
     {
-        $this->per_page = $perPage;
-        $this->current = $page;
+        $this->perPage = (int)$perPage;
+        $this->page = (int)$page;
 
         /*validacion*/
         $this->validPage();
         
         $this->_model = $model;
-        $this->_sql = $sql;
 
         // Valores para consulta
         $this->_values = ($values !== null && !is_array($values)) ?
                     array_slice(func_get_args(), 4) : $values;
+		
+		$this->count = $this->countQuery($model, $sql);
+		$this->totalPages = (int)ceil($this->count / $this->perPage);
+		$this->validCurrent();
+		// Establece el limit y offset
+		$this->_sql = QueryGenerator::query($model::getDriver(), 'limit', $sql, $perPage, ($page-1)*$perPage);
+		$this->items = $model::query($this->_sql, $this->_values)->fetchAll();
     }
 
     /**
      * Verifica que la pagina sea válida
      */
-    protected function validPage(){
+    private function validPage()
+    {
         //Si la página o por página es menor de 1 (0 o negativo)
-        if ($this->current < 1 || $this->per_page < 1) {
-            throw new KumbiaException("La página $this->current no existe en el páginador");
+        if ($this->page < 1 || $this->perPage < 1) {
+            throw new \RangeException("La página $this->page no existe", 404);
         }
     }
 
     /**
-     * Valida que la pagina actual sea válida
-     * @param int comienzo
+     * Valida que la página actual
      */
-    protected function validCurrent($start){
-        //si el inicio es superior o igual al conteo de elementos,
-        //entonces la página no existe, exceptuando cuando es la página 1
-        if ($this->current > 1 && $start >= $this->count)
-            throw new \KumbiaException("La página $this->current no existe en el páginador");
+    private function validCurrent()
+    {
+        if ($this->page > $this->totalPages)
+            throw new \RangeException("La página $this->page no existe", 404);
     }
 
-
     /**
-     * Implementa el retroceso de cursor en la iteración
-     * @todo Mover este procedimiento a otro metodo y usar cursores iterables, ya se volveria a hacer la cnsulta
-     * @return void
+     * (non-PHPdoc)
+     * @see IteratorAggregate::getIterator()
      */
-
-    public function getIterator() 
+    public function getIterator()
     {
-        $model = $this->_model;
-
-        $start = $this->per_page * ($this->current - 1);
-
-        $this->count = $this->countQuery();
-        //valida
-        $this->validCurrent($start);
-        // Establece el limit y offset
-        $this->_sql = QueryGenerator::query($model::getDriver(), 'limit', $this->_sql, $this->per_page, $start);
-        $this->items = $model::query($this->_sql, $this->_values);
-        $this->_rowCount = $this->items->rowCount();
-        //Se efectuan los calculos para las páginas
-        $this->next = $this->nextPage($start);
-        $this->prev = $this->prevPage();
-        $this->total = ceil($this->count / $this->per_page);
-        return new \ArrayIterator($this->items->fetchAll());
+        return new \ArrayIterator($this->items);
     }
 
     /**
      * Cuenta el número de resultados totales
      * @return int total de resultados
      */
-    protected function countQuery(){
-        //Cuento las apariciones atraves de una tabla derivada
-        $model = $this->_model;
-        $query = $model::query("SELECT COUNT(*) AS count FROM ($this->_sql) AS t", $this->_values)->fetch();
+    protected function countQuery($model, $sql){
+        $query = $model::query("SELECT COUNT(*) AS count FROM ($sql) AS t", $this->_values)->fetch();
         return (int)$query->count;
     }
 
     /**
-     * Calcula el valor de la proxima página
-     * @param int $start registro donde se comienza
+     * Total de items
      * @return int
      */
-    protected function nextPage($start){
-        return ($start + $this->per_page) < $this->count ? ($this->current + 1) : null;
+    public function totalItems()
+    {
+        return $this->count;
+    }
+    
+    /**
+     * Total de páginas
+     * @return int
+     */
+    public function totalPages()
+    {
+        return $this->totalPages;
+    }
+    
+    /**
+     * Calcula el valor de la próxima página
+     * @return int
+     */
+    public function nextPage()
+    {
+        return ($this->totalPages > $this->page) ? ($this->page + 1) : null;
     }
     /**
      * Calcula el valor de la página anterior
      * @return int
      */
-    protected function prevPage(){
-        return ($this->current > 1) ? ($this->current - 1) : null;
+    public function prevPage()
+    {
+        return ($this->page > 1) ? ($this->page - 1) : null;
+    }
+    
+    /**
+     * Items devueltos
+     * @see Countable::countable()
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->items);
     }
 }
