@@ -72,7 +72,7 @@ class LiteRecord extends BaseRecord
         // Verifica si la PK es autogenerada
         $pk = static::getPK();
         if (!isset($this->$pk)) {
-            $this->$pk = Query\query_exec(static::getDriver(), 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
+            $this->$pk = QueryGenerator::query_exec(static::getDriver(), 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
         }
         // Callback despues de crear
         $this->callback('_afterCreate');
