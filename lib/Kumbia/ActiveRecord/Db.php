@@ -96,4 +96,13 @@ abstract class Db
 		return self::$config[$database] + array('username' => NULL, 'password' => NULL, 'params' => array());
 
 	}
+
+    /**
+     * Permite agregar una base de datos sin leer del archivo de configuracion
+     * @param string $database Nombre de la conexion
+     * @param Array  $value Valores de la configuración
+     */
+    static function setConfig( Array $value, $database='default'){
+        self::$config[$database] = $value;
+    }
 }
