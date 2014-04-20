@@ -178,7 +178,7 @@ class ActiveRecord extends LiteRecord
         $values = array_shift($array);
         $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
         $sth = self::prepare($sql);
-        if($values !== null && !is_array($values)) $values = $value + $array;
+        if($values !== null && !is_array($values)) $values = $values + $array;
         $sth->execute($values);
         return $sth;
     }
