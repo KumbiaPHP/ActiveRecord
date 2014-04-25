@@ -249,4 +249,36 @@ class ActiveRecord extends LiteRecord
 
         return new Paginator(\get_called_class(), $sql, (int) $page, (int) $perPage, $values);
     }
+    
+    /**
+     * Obtiene todos los registros de la consulta sql
+     *
+     * @param  string $sql
+     * @param string | array $values
+     * @return array
+     */
+    public static function allBySql($sql, $values = null)
+    {
+        if (!is_array($values)) {
+            $values = \array_slice(\func_get_args(), 1);
+        }
+
+        return parent::all($sql, $values);
+    }
+    
+    /**
+     * Obtiene el primer registro de la consulta sql
+     *
+     * @param  string $sql
+     * @param string | array $values
+     * @return array
+     */
+    public static function firstBySql($sql, $values = null)
+    {
+        if (!is_array($values)) {
+            $values = \array_slice(\func_get_args(), 1);
+        }
+
+        return parent::first($sql, $values);
+    }
 }

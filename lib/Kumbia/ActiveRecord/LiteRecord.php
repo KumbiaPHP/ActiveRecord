@@ -165,61 +165,40 @@ class LiteRecord extends BaseRecord
     }
 
     /**
-     * Listar todos los registros
+     * Obtiene todos los registros de la consulta sql
      *
-     * @param  string       $fields campos que se desean obtener separados por coma
-     * @return LiteRecord
+     * @param  string $sql
+     * @param string | array $values
+     * @return array
      */
-    public static function all($fields = '*')
+    public static function all($sql, $values = null)
     {
-        $source = static::getSource();
+        if (func_num_args() === 1) return self::sql($sql)->fetchAll();
 
-        $sql = "SELECT $fields FROM $source";
+        $sth = self::prepare($sql);
+        if (!is_array($values)) {
+            $values = \array_slice(\func_get_args(), 1);
+        }
 
-        return self::sql($sql)->fetchAll();
+        return $sth->execute($values) ? $sth->fetchAll() : FALSE;
     }
     
     /**
-     * Todos los registros donde el campo = value
+     * Obtiene el primer registro de la consulta sql
      *
-     * @param  string       $field  Campo
-     * @param  string       $field  Valor
-     * @param  string       $fields Campos que se desean obtener separados por coma
-     * @return LiteRecord
+     * @param  string $sql
+     * @param string | array $values
+     * @return array
      */
-    public static function allBy($field, $value, $fields = '*')
+    public static function first($sql, $values = null)
     {
-        return self::by($field, $value, $fields)->fetchAll();
-    }
-    
-    /**
-     * Primer registro donde el campo = value
-     *
-     * @param  string       $field  Campo
-     * @param  string       $field  Valor
-     * @param  string       $fields Campos que se desean obtener separados por coma
-     * @return LiteRecord
-     */
-    public static function firstBy($field, $value, $fields = '*')
-    {
-        return self::by($field, $value, $fields)->fetch();
-    }
-    
-    /**
-     * Devuelve PDOStatement donde el campo = value
-     *
-     * @param  string       $field  Campo
-     * @param  string       $field  Valor
-     * @param  string       $fields Campos que se desean obtener separados por coma
-     * @return \PDOStatement
-     */
-    public static function by($field, $value, $fields = '*')
-    {
-        $source = static::getSource();
+        if (func_num_args() === 1) return self::sql($sql)->fetch();
 
-        $sql = "SELECT $fields FROM $source where ? = ?";
+        $sth = self::prepare($sql);
+        if (!is_array($values)) {
+            $values = \array_slice(\func_get_args(), 1);
+        }
 
-        return self::query($sql, $field, $value);
+        return $sth->execute($values) ? $sth->fetch() : FALSE;
     }
-
 }
