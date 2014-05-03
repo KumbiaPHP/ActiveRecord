@@ -175,12 +175,12 @@ class LiteRecord extends BaseRecord
     {
         if (func_num_args() === 1) return self::sql($sql)->fetchAll();
 
-        $sth = self::prepare($sql);
-        if (!is_array($values)) {
-            $values = \array_slice(\func_get_args(), 1);
+        $sth = self::query($sql, $values);
+        if ($sth) {
+            $sth = $sth->fetchAll();
         }
 
-        return $sth->execute($values) ? $sth->fetchAll() : FALSE;
+        return $sth;
     }
     
     /**
@@ -194,11 +194,11 @@ class LiteRecord extends BaseRecord
     {
         if (func_num_args() === 1) return self::sql($sql)->fetch();
 
-        $sth = self::prepare($sql);
-        if (!is_array($values)) {
-            $values = \array_slice(\func_get_args(), 1);
+        $sth = self::query($sql, $values);
+        if ($sth) {
+            $sth = $sth->fetch();
         }
 
-        return $sth->execute($values) ? $sth->fetch() : FALSE;
+        return $sth;
     }
 }
