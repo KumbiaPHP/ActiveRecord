@@ -173,14 +173,7 @@ class LiteRecord extends BaseRecord
      */
     public static function all($sql, $values = null)
     {
-        if (func_num_args() === 1) return self::sql($sql)->fetchAll();
-
-        $sth = self::query($sql, $values);
-        if ($sth) {
-            $sth = $sth->fetchAll();
-        }
-
-        return $sth;
+        return self::query($sql, $values)->fetchAll();
     }
     
     /**
@@ -192,13 +185,6 @@ class LiteRecord extends BaseRecord
      */
     public static function first($sql, $values = null)
     {
-        if (func_num_args() === 1) return self::sql($sql)->fetch();
-
-        $sth = self::query($sql, $values);
-        if ($sth) {
-            $sth = $sth->fetch();
-        }
-
-        return $sth;
+        return self::query($sql, $values)->fetch();
     }
 }
