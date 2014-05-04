@@ -42,11 +42,8 @@ class MysqlMetadata extends Metadata
      */
     protected function queryFields($database, $table, $schema = null)
     {
-        if (!$schema) {
-            $describe = Db::get($database)->query("DESCRIBE `$table`");
-        } else {
-            $describe = Db::get($database)->query("DESCRIBE `$schema`.`$table`");
-        }
+        $sql = $schema ? "DESCRIBE `$schema`.`$table`": "DESCRIBE `$table`";
+        $describe = Db::get($database)->query($sql);
 
         $fields = array();
         while(( $value = $describe->fetch(PDO::FETCH_OBJ))) {
