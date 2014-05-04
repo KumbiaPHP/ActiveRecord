@@ -104,6 +104,6 @@ abstract class Db
      * @param Array  $value Valores de la configuración
      */
     static function setConfig( Array $value, $database='default'){
-        self::$config[$database] = $value;
+        self::$config = array_merge(array(),  self::$config, $value);
     }
 }
