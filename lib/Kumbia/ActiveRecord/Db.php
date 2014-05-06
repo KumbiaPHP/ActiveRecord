@@ -71,7 +71,6 @@ abstract class Db
 	{
         try {
             $dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) { //TODO: comprobar
             throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
         }
@@ -94,8 +93,11 @@ abstract class Db
 		if(!isset(self::$config[$database])) throw new \KumbiaException("No existen datos de conexión para la bd '$database' en ".APP_PATH."config/databases.php");
 			
         // Envia y carga los valores por defecto para la conexión, si no existen
-		return self::$config[$database] + array('username' => NULL, 'password' => NULL, 'params' => array());
-
+		return self::$config[$database] + array(
+                'username' => NULL,
+                'password' => NULL,
+                'params' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+        );
 	}
 
     /**
