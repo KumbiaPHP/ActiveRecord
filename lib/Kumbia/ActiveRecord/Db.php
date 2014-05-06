@@ -94,9 +94,10 @@ abstract class Db
 			
         // Envia y carga los valores por defecto para la conexión, si no existen
 		return self::$config[$database] + array(
-                'username' => NULL,
-                'password' => NULL,
-                'params' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+            'dns'      => NULL,
+            'username' => NULL,
+            'password' => NULL,
+            'params' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
         );
 	}
 
@@ -106,6 +107,6 @@ abstract class Db
      * @param Array  $value Valores de la configuración
      */
     static function setConfig( Array $value, $database='default'){
-        self::$config = array_merge(array(),  self::$config, $value);
+        self::$config = array()+  self::$config+ $value;
     }
 }
