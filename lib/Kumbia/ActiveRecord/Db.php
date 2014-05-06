@@ -107,6 +107,6 @@ abstract class Db
      * @param Array  $value Valores de la configuración
      */
     static function setConfig( Array $value, $database='default'){
-        self::$config = array_merge_recursive(array(),  self::$config, $value);
+        self::$config = array()+  self::$config+ $value;
     }
 }
