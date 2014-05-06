@@ -175,22 +175,31 @@ class ActiveRecord extends LiteRecord
      */
     protected static function doQuery(Array $array){
         $params = self::getParam($array);
-        $values = $array;
+        $values = self::getValues($array);
         $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
         $sth = self::prepare($sql);
-        if($values !== null && is_array($values)) $values = $values + $array;
         $sth->execute($values);
         return $sth;
     }
 
     /**
-     * Retorna un array vacio o el primer valor de un array
+     * Retorna los parametros para el doQuery
      * @param Array $array 
      * @return Array
      */
     protected static function getParam(Array &$array){
         $val = array_shift($array);
         return is_null($val) ?  array():$val;
+    }
+
+    /**
+     * Retorna los values para el doQuery
+     * @param Array $array 
+     * @return Array
+     */
+    protected static function getValues(Array $array){
+        return isset($array[0]) ?
+            is_array($array[0]) ? $array[0]: array($array[0]): $array;
     }
 
 
