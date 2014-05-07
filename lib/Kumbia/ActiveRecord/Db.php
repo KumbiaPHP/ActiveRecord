@@ -97,7 +97,7 @@ abstract class Db
             	'dns'      => NULL,
             	'username' => NULL,
             	'password' => NULL,
-        		'params' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+        	'params' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
         	);
 	}
 
