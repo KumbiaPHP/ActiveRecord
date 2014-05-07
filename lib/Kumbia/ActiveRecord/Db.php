@@ -69,14 +69,14 @@ abstract class Db
      */
 	private static function connect($config)
 	{
-        try {
-            $dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
-        } catch (\PDOException $e) { //TODO: comprobar
-            throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
-        }
+        	try {
+            	$dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
+        	} catch (\PDOException $e) { //TODO: comprobar
+            		throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
+        	}
 
-        return $dbh;
-    }
+        	return $dbh;
+    	}
 	
 	/**
      * Obtiene manejador de conexión a la base de datos
@@ -84,7 +84,7 @@ abstract class Db
      * @param  string  $database base de datos a conectar
      * @return array
      */
-	private static function getConfig($database)
+	private static function getConfig( $database )
 	{
 		if(!self::$config) {
 			// Leer la configuración de conexión
@@ -92,21 +92,21 @@ abstract class Db
 		}
 		if(!isset(self::$config[$database])) throw new \KumbiaException("No existen datos de conexión para la bd '$database' en ".APP_PATH."config/databases.php");
 			
-        // Envia y carga los valores por defecto para la conexión, si no existen
-		return self::$config[$database] + array(
-            'dns'      => NULL,
-            'username' => NULL,
-            'password' => NULL,
-            'params' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
-        );
+        	// Envia y carga los valores por defecto para la conexión, si no existen
+		return self::$config[$database] + array (
+            	'dns'      => NULL,
+            	'username' => NULL,
+            	'password' => NULL,
+        		'params' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+        	);
 	}
 
     /**
      * Permite agregar una base de datos sin leer del archivo de configuracion
-     * @param string $database Nombre de la conexion
      * @param Array  $value Valores de la configuración
      */
-    static function setConfig( Array $value, $database='default'){
-        self::$config = array()+  self::$config+ $value;
+    static function setConfig( Array $value )
+    {
+        self::$config = self::$config + $value;
     }
 }
