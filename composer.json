@@ -2,7 +2,7 @@
     "name": "kumbia/activerecord",
     "type": "library",
     "description": "Fast ActiveRecord",
-    "keywords": ["ActiveRecord","database"],
+    "keywords": ["ActiveRecord","database","ORM"],
     "homepage": "https://github.com/KumbiaPHP/ActiveRecord",
     "license": "New BSD",
     "support": {
