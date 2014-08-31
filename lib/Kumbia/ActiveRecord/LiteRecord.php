@@ -144,7 +144,7 @@ class LiteRecord extends BaseRecord
         $source = static::getSource();
         $pkField = static::getPK();
 
-        return self::query("DELETE FROM $source WHERE $pkField = ?", (int) $pk)->rowCount() > 0;
+        return static::query("DELETE FROM $source WHERE $pkField = ?", (int) $pk)->rowCount() > 0;
     }
 
     /**
@@ -161,7 +161,7 @@ class LiteRecord extends BaseRecord
 
         $sql = "SELECT $fields FROM $source WHERE $pkField = ?";
 
-        return self::query($sql, $pk)->fetch();
+        return static::query($sql, $pk)->fetch();
     }
 
     /**
@@ -173,7 +173,7 @@ class LiteRecord extends BaseRecord
      */
     public static function all($sql, $values = null)
     {
-        return self::query($sql, $values)->fetchAll();
+        return static::query($sql, $values)->fetchAll();
     }
     
     /**
@@ -185,6 +185,6 @@ class LiteRecord extends BaseRecord
      */
     public static function first($sql, $values = null)
     {
-        return self::query($sql, $values)->fetch();
+        return static::query($sql, $values)->fetch();
     }
 }
