@@ -177,7 +177,7 @@ class ActiveRecord extends LiteRecord
         $params = self::getParam($array);
         $values = self::getValues($array);
         $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
-        $sth = static::query($sql);
+        $sth = static::query($sql, $values);
         return $sth;
     }
 
