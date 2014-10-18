@@ -72,7 +72,7 @@ abstract class Db
         try {
             $dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
         } catch (\PDOException $e) { //TODO: comprobar
-            throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
+            throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}', compruebe su configuración.");
         }
 
         return $dbh;
