@@ -72,7 +72,8 @@ abstract class Db
         try {
             $dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
         } catch (\PDOException $e) { //TODO: comprobar
-            throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}', compruebe su configuración.");
+            $message = $e->getMessage();
+            throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}'. {$message}");
         }
 
         return $dbh;
