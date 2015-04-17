@@ -103,6 +103,9 @@ class PersonasController extends AppController {
     public function index() {
         $this->data = Personas::all();
     }
-
+    
+    public function find($id) {
+        $this->data = Personas($id);
+    }
 }
 ```
