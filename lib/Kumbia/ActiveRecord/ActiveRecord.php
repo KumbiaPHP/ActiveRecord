@@ -29,7 +29,7 @@ class ActiveRecord extends LiteRecord
     /**
      * Actualizar registros
      *
-     * @param  array          $field
+     * @param  array          $fields
      * @param  string         $where  condiciones
      * @param  array          $values valores para condiciones
      * @return int            numero de registros actualizados
@@ -112,9 +112,6 @@ class ActiveRecord extends LiteRecord
     /**
      * Obtener la primera coincidencia de las condiciones indicadas
      *
-     * @param  array        $params parametros de bus
-     * @param  string       $field  campo
-     * @param  string       $value  valor
      * @param  array        $params parametros adicionales
      *                              order: criterio de ordenamiento
      *                              fields: lista de campos
@@ -159,17 +156,6 @@ class ActiveRecord extends LiteRecord
     /**
      * Obtener el Recurso para una sentencia
      *
-     * @param  array        $params parametros de bus
-     * @param  string       $field  campo
-     * @param  string       $value  valor
-     * @param  array        $params parametros adicionales
-     *                              order: criterio de ordenamiento
-     *                              fields: lista de campos
-     *                              group: agrupar campos
-     *                              join: joins de tablas
-     *                              having: condiciones de grupo
-     *                              offset: valor offset queda
-     * @param  array        $values valores de busqueda
      * @param  array        $array  Por si hay parametros sin nombre
      * @return ActiveRecord
      */
