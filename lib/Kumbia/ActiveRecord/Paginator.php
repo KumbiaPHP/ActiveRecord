@@ -142,6 +142,8 @@ class Paginator implements \IteratorAggregate, \Countable
 
     /**
      * Cuenta el número de resultados totales
+     * @param string $model
+     * @param string $sql
      * @return int total de resultados
      */
     protected function countQuery($model, $sql){
