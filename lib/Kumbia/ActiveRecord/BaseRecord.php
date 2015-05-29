@@ -55,7 +55,7 @@ class BaseRecord
      *
      * @param array $data
      */
-    protected function dump(Array $data = array())
+    public function dump(Array $data = array())
     {   
         foreach ($data as $k => $v) {
             $this->$k = $v;
