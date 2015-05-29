@@ -86,7 +86,7 @@ class Paginator implements \IteratorAggregate, \Countable
      * @param string $sql     consulta select sql
      * @param int    $page    numero de pagina
      * @param int    $perPage cantidad de items por pagina
-     * @param array  $values  valores
+     * @param mixed  $values  valores
      */
     public function __construct($model, $sql, $page, $perPage, $values = null)
     {
