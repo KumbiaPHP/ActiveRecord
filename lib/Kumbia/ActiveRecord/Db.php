@@ -107,7 +107,7 @@ abstract class Db
      * @param string $database Nombre de la conexion
      * @param Array  $value Valores de la configuración
      */
-    static function setConfig(Array $value){
+    static public function setConfig(Array $value){
         self::$config = array()+  self::$config+ $value;
     }
 }
