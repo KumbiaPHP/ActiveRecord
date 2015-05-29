@@ -91,7 +91,8 @@ abstract class Db
 			// Leer la configuración de conexión
 			self::$config = require(APP_PATH.'config/databases.php');
 		}
-		if(!isset(self::$config[$database])) throw new \KumbiaException("No existen datos de conexión para la bd '$database' en ".APP_PATH."config/databases.php");
+		if(!isset(self::$config[$database]))
+            throw new \RuntimeException("No existen datos de conexión para la bd '$database' en ".APP_PATH."config/databases.php");
 			
         // Envia y carga los valores por defecto para la conexión, si no existen
 		return self::$config[$database] + array(
