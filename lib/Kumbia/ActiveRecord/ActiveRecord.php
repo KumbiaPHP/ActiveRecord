@@ -29,7 +29,7 @@ class ActiveRecord extends LiteRecord
     /**
      * Actualizar registros
      *
-     * @param  array          $field
+     * @param  array          $fields
      * @param  string         $where  condiciones
      * @param  array          $values valores para condiciones
      * @return int            numero de registros actualizados
