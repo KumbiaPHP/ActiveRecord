@@ -87,7 +87,7 @@ abstract class Db
      */
 	private static function getConfig($database)
 	{
-		if(!self::$config) {
+		if(!empty(self::$config)) {
 			// Leer la configuración de conexión
 			self::$config = require(APP_PATH.'config/databases.php');
 		}
