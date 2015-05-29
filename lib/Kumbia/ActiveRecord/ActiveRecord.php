@@ -53,16 +53,8 @@ class ActiveRecord extends LiteRecord
     public static function deleteAll($where = null, $values = null)
     {
         $source = static::getSource();
-
-        $sql = "DELETE FROM $source";
-        if($where !== null) $sql .= " WHERE $where";
-
-        $sth = self::prepare($sql);
-
-        if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
-
-        $sth->execute($values);
-
+        $sql = QueryGenerator::deleteAll($source,  $where);
+        $sth = self::query($sql, $values);
         return $sth->rowCount();
     }
 
@@ -223,16 +215,9 @@ class ActiveRecord extends LiteRecord
     public static function count($where = null, $values = null)
     {
         $source = static::getSource();
-
-        $sql = "SELECT COUNT(*) AS count FROM $source";
-        if($where !== null) $sql .= " WHERE $where";
-
-        $sth = self::prepare($sql);
-
+        $sql = QueryGenerator::count($source, $where);
         if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
-
-        $sth->execute($values);
-
+        $sth = static::query($sql, $values);
         return $sth->fetch()->count;
     }
 

@@ -185,6 +185,27 @@ class QueryGenerator
     }
 
     /**
+     * Generate SQL for DELETE sentence
+     * @param  string $source source
+     * @param  string $where  condition
+     * @return string         SQL
+     */
+    public static function deleteAll($source, $where){
+        return "DELETE FROM $source ".static::where($where);
+    }
+
+    /**
+     * Generate SQL for COUNT sentence
+     * @param  string $source source
+     * @param  string $where  condition
+     * @return string         SQL
+     */
+    public static function count($source, $where){
+       return "SELECT COUNT(*) AS count FROM $source " .static::where($where);
+    }
+
+
+    /**
      * Agrega un campo a para generar una consulta preparada para un UPDATE
      * @param string $field Nombre del campo
      * @param mixed $value valor
