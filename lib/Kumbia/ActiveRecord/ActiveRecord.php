@@ -151,7 +151,7 @@ class ActiveRecord extends LiteRecord
    /**
     * Do a query
     * @param  Array  $array params of query
-    * @return [type]        [description]
+    * @return \PDOStatement
     */
     protected static function doQuery(Array $array){
         $params = self::getParam($array);
