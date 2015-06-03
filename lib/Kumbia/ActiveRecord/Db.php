@@ -69,14 +69,12 @@ abstract class Db
      */
 	private static function connect($config)
 	{
-        try {
-            $dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
-        } catch (\PDOException $e) { //TODO: comprobar
-            $message = $e->getMessage();
-            throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}'. {$message}");
-        }
-
-        	return $dbh;
+	        try {
+	            return new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
+	        } catch (\PDOException $e) { //TODO: comprobar
+	            $message = $e->getMessage();
+	            throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}'. {$message}");
+	        }
     	}
 	
 	/**
