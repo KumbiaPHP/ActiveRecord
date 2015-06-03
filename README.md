@@ -97,7 +97,7 @@ class Personas extends ActRecord //o LiteRecord según el que prefiera
 <?php
 //app/controller/personas_controller.php
 
-Load::models('personas');
+//Load::models('personas'); No es necesario en v1
 
 class PersonasController extends AppController {
 
