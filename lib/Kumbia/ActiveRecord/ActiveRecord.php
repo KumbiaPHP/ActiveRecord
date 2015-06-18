@@ -29,7 +29,7 @@ class ActiveRecord extends LiteRecord
     /**
      * Actualizar registros
      *
-     * @param  array          $field
+     * @param  array          $fields
      * @param  string         $where  condiciones
      * @param  array          $values valores para condiciones
      * @return int            numero de registros actualizados
@@ -53,16 +53,8 @@ class ActiveRecord extends LiteRecord
     public static function deleteAll($where = null, $values = null)
     {
         $source = static::getSource();
-
-        $sql = "DELETE FROM $source";
-        if($where !== null) $sql .= " WHERE $where";
-
-        $sth = self::prepare($sql);
-
-        if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
-
-        $sth->execute($values);
-
+        $sql = QueryGenerator::deleteAll($source,  $where);
+        $sth = self::query($sql, $values);
         return $sth->rowCount();
     }
 
@@ -156,29 +148,16 @@ class ActiveRecord extends LiteRecord
     }
 
 
-    /**
-     * Obtener el Recurso para una sentencia
-     *
-     * @param  array        $params parametros de bus
-     * @param  string       $field  campo
-     * @param  string       $value  valor
-     * @param  array        $params parametros adicionales
-     *                              order: criterio de ordenamiento
-     *                              fields: lista de campos
-     *                              group: agrupar campos
-     *                              join: joins de tablas
-     *                              having: condiciones de grupo
-     *                              offset: valor offset queda
-     * @param  array        $values valores de busqueda
-     * @param  array        $array  Por si hay parametros sin nombre
-     * @return ActiveRecord
-     */
+   /**
+    * Do a query
+    * @param  Array  $array params of query
+    * @return \PDOStatement
+    */
     protected static function doQuery(Array $array){
         $params = self::getParam($array);
         $values = self::getValues($array);
         $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
-        $sth = self::prepare($sql);
-        $sth->execute($values);
+        $sth = static::query($sql, $values);
         return $sth;
     }
 
@@ -236,16 +215,9 @@ class ActiveRecord extends LiteRecord
     public static function count($where = null, $values = null)
     {
         $source = static::getSource();
-
-        $sql = "SELECT COUNT(*) AS count FROM $source";
-        if($where !== null) $sql .= " WHERE $where";
-
-        $sth = self::prepare($sql);
-
+        $sql = QueryGenerator::count($source, $where);
         if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
-
-        $sth->execute($values);
-
+        $sth = static::query($sql, $values);
         return $sth->fetch()->count;
     }
 

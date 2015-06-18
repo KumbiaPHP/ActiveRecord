@@ -69,13 +69,12 @@ abstract class Db
      */
 	private static function connect($config)
 	{
-        	try {
-            	$dbh = new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
-        	} catch (\PDOException $e) { //TODO: comprobar
-            		throw new \KumbiaException("No se pudo realizar la conexión con $database, compruebe su configuración.");
-        	}
-
-        	return $dbh;
+	        try {
+	            return new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
+	        } catch (\PDOException $e) { //TODO: comprobar
+	            $message = $e->getMessage();
+	            throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}'. {$message}");
+	        }
     	}
 	
 	/**
@@ -86,18 +85,19 @@ abstract class Db
      */
 	private static function getConfig( $database )
 	{
-		if(!self::$config) {
+		if(empty(self::$config)) {
 			// Leer la configuración de conexión
 			self::$config = require(APP_PATH.'config/databases.php');
 		}
-		if(!isset(self::$config[$database])) throw new \KumbiaException("No existen datos de conexión para la bd '$database' en ".APP_PATH."config/databases.php");
+		if(!isset(self::$config[$database]))
+            throw new \RuntimeException("No existen datos de conexión para la bd '$database' en ".APP_PATH."config/databases.php");
 			
         	// Envia y carga los valores por defecto para la conexión, si no existen
 		return self::$config[$database] + array (
             	'dns'      => NULL,
             	'username' => NULL,
             	'password' => NULL,
-        	'params' => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+        		'params'   => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
         	);
 	}
 
@@ -105,8 +105,8 @@ abstract class Db
      * Permite agregar una base de datos sin leer del archivo de configuracion
      * @param Array  $value Valores de la configuración
      */
-    static function setConfig( Array $value )
-    {
-        self::$config = self::$config + $value;
+
+    static public function setConfig(Array $value){
+        self::$config = array()+  self::$config+ $value;
     }
 }

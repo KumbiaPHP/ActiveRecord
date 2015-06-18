@@ -86,7 +86,7 @@ class Paginator implements \IteratorAggregate, \Countable
      * @param string $sql     consulta select sql
      * @param int    $page    numero de pagina
      * @param int    $perPage cantidad de items por pagina
-     * @param array  $values  valores
+     * @param mixed  $values  valores
      */
     public function __construct($model, $sql, $page, $perPage, $values = null)
     {
@@ -103,7 +103,7 @@ class Paginator implements \IteratorAggregate, \Countable
                     array_slice(func_get_args(), 4) : $values;
 		
 		$this->count = $this->countQuery($model, $sql);
-		$this->totalPages = (int)ceil($this->count / $this->perPage);
+		$this->totalPages = (int)max(1,ceil($this->count / $this->perPage));
 		$this->validCurrent();
 		// Establece el limit y offset
 		$this->_sql = QueryGenerator::query($model::getDriver(), 'limit', $sql, $perPage, ($page-1)*$perPage);
@@ -126,7 +126,7 @@ class Paginator implements \IteratorAggregate, \Countable
      */
     private function validCurrent()
     {
-        if ($this->page > $this->totalPages){
+        if ($this->page > $this->totalPages ){
             throw new \RangeException("La página $this->page no existe", 404);
         }
     }
@@ -142,6 +142,8 @@ class Paginator implements \IteratorAggregate, \Countable
 
     /**
      * Cuenta el número de resultados totales
+     * @param string $model
+     * @param string $sql
      * @return int total de resultados
      */
     protected function countQuery($model, $sql){
