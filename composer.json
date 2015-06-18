@@ -4,7 +4,7 @@
     "description": "Fast ActiveRecord",
     "keywords": ["ActiveRecord","database","ORM"],
     "homepage": "https://github.com/KumbiaPHP/ActiveRecord",
-    "license": "New BSD",
+    "license": "BSD-3-Clause",
     "support": {
         "issues": "https://github.com/KumbiaPHP/ActiveRecord/issues",
         "irc": "irc://irc.freenode.org/kumbiaphp"
