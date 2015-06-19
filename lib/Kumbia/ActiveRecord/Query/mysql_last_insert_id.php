@@ -30,7 +30,7 @@ namespace Kumbia\ActiveRecord\Query;
  * @param string $schema esquema
  * @return int
  */
-function mysql_last_insert_id(PDO $dbh, $pk, $table, $schema = null)
+function mysql_last_insert_id(\PDO $dbh, $pk, $table, $schema = null)
 {
     return $dbh->lastInsertId();
 }
