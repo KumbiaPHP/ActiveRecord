@@ -46,9 +46,9 @@ class LiteRecord extends BaseRecord
      */
     protected function callback($callback)
     {
-        if(\method_exists($this, $callback)) return $this->$callback();
-
-        return null;
+        if(\method_exists($this, $callback)) {
+            return $this->$callback();
+        }
     }
 
     /**
