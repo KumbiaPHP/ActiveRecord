@@ -9,18 +9,18 @@ ESPAÑOL - [ENGLISH](/README.en.md)
 
 # ActiveRecord
 
-Nuevo ActiveRecord en desarrollo, requiere PHP 5.3
+New ActiveRecord in development, requires PHP > 5.3
 
-No usar en producción
+Don't use in production
 
-## Instalar con composer en KumbiaPHP
+## Install with composer in KumbiaPHP
 
-Necesita KumbiaPHP > 0.9RC
+Need KumbiaPHP > 0.9RC
 
-* Crear el archivo ***composer.json*** en la raiz del proyecto:
+* Make file ***composer.json*** in to project root:
 
 ```yml
---proyecto  
+--project  
     |  
     |--vendor  
     |--default  
@@ -28,7 +28,7 @@ Necesita KumbiaPHP > 0.9RC
     |--composer.json        Acá va nuestro archivo  
 ```
 
-* Añadir el siguiente código:
+* Add the next lines:
 
 ```json
 {
@@ -38,9 +38,9 @@ Necesita KumbiaPHP > 0.9RC
 }
 ```
 
-* Ejecutar el comando **composer install**
+* Execute command **composer install**
 
-* Seguir los pasos 2 y 3 de la siguiente sección.
+* Continue with steps number 2 and 3 of the next section.
 
 ## Instalar en KumbiaPHP
 
