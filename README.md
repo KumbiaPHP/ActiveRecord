@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/KumbiaPHP/ActiveRecord.png?branch=master)](https://travis-ci.org/KumbiaPHP/ActiveRecord)
 [![Code Climate](https://codeclimate.com/github/KumbiaPHP/ActiveRecord/badges/gpa.svg)](https://codeclimate.com/github/KumbiaPHP/ActiveRecord)
 
-ESPAÑOL - [ENGLISH](/README.en.md) - [DEV](/README-DEV.md)
+ESPAÑOL - [ENGLISH](/README.en.md)
 
 # ActiveRecord
 
@@ -13,13 +13,43 @@ Nuevo ActiveRecord en desarrollo, requiere PHP 5.3
 
 No usar en producción
 
+## Instalar con composer en KumbiaPHP
+
+Necesita KumbiaPHP > 0.9RC
+
+* Crear el archivo ***composer.json*** en la raiz del proyecto:
+
+```yml
+--proyecto  
+    |  
+    |--vendor  
+    |--default  
+    |--core  
+    |--composer.json        Acá va nuestro archivo  
+```
+
+* Añadir el siguiente código:
+
+```json
+{
+    "require": {
+        "kumbia/activerecord" : "dev-master"
+    }
+}
+```
+
+* Ejecutar el comando **composer install**
+
+* Seguir los pasos 2 y 3 de la siguiente sección.
+
 ## Instalar en KumbiaPHP
 
 Necesita KumbiaPHP > 0.9RC
 
-1. Copiar [config_databases.php](/config_databases.php) en app/config/databases.php y configurar
+1. Copiar la carpeta lib/Kumbia en vendor.  (vendor/Kumbia/ActiveRecord/..)
 
-2. Copiar la carpeta lib/Kumbia en vendor.  (vendor/Kumbia/ActiveRecord/..)
+2. Copiar [config_databases.php](/config_databases.php) en app/config/databases.php y configurar
+
 3. Añadir en app/libs/ : [lite_record.php](#LiteRecord) y/o [act_record.php](#ActRecord)
 
 
