@@ -50,7 +50,7 @@ Necesita KumbiaPHP > 0.9RC
 
 2. Copiar [config_databases.php](/config_databases.php) en app/config/databases.php y configurar
 
-3. Añadir en app/libs/ : [lite_record.php](#LiteRecord) y/o [act_record.php](#ActRecord)
+3. Añadir en app/libs/ : [lite_record.php](#literecord) y/o [act_record.php](#actrecord)
 
 
 ### LiteRecord
@@ -81,7 +81,6 @@ class LiteRecord extends ORM
 ```
 
 ### ActRecord
-
 
 ActiveRecord completo
 
