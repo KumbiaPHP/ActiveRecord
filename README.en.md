@@ -50,7 +50,7 @@ Requires KumbiaPHP > 0.9RC
 
 2. Copy [config_databases.php](/config_databases.php) in ***app/config/databases.php*** and set configuration
 
-3. Add in ***app/libs/*** : [lite_record.php](#LiteRecord) and/or [act_record.php](#ActRecord)
+3. Add in ***app/libs/*** : [lite_record.php](#literecord) and/or [act_record.php](#actrecord)
 
 
 ### LiteRecord
