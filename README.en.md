@@ -5,30 +5,30 @@
 [![Build Status](https://travis-ci.org/KumbiaPHP/ActiveRecord.png?branch=master)](https://travis-ci.org/KumbiaPHP/ActiveRecord)
 [![Code Climate](https://codeclimate.com/github/KumbiaPHP/ActiveRecord/badges/gpa.svg)](https://codeclimate.com/github/KumbiaPHP/ActiveRecord)
 
-ESPAÑOL - [ENGLISH](/README.en.md)
+ENGLISH - [SPANISH](/README.md)
 
 # ActiveRecord
 
-Nuevo ActiveRecord en desarrollo, requiere PHP 5.3
+New ActiveRecord in development, requires PHP > 5.3
 
-No usar en producción
+Don't use in production
 
-## Instalar con composer en KumbiaPHP
+## Install with composer in KumbiaPHP
 
-Necesita KumbiaPHP > 0.9RC
+Requires KumbiaPHP > 0.9RC
 
-* Crear el archivo ***composer.json*** en la raiz del proyecto:
+* Create file ***composer.json*** in to project root:
 
 ```yml
---proyecto  
+--project  
     |  
     |--vendor  
     |--default  
     |--core  
-    |--composer.json        Acá va nuestro archivo  
+    |--composer.json        This is our file  
 ```
 
-* Añadir el siguiente código:
+* Add the next lines:
 
 ```json
 {
@@ -38,34 +38,34 @@ Necesita KumbiaPHP > 0.9RC
 }
 ```
 
-* Ejecutar el comando **composer install**
+* Execute command **composer install**
 
-* Seguir los pasos 2 y 3 de la siguiente sección.
+* Continue with steps number 2 and 3 of the next section.
 
-## Instalar en KumbiaPHP
+## Install in KumbiaPHP
 
-Necesita KumbiaPHP > 0.9RC
+Requires KumbiaPHP > 0.9RC
 
-1. Copiar la carpeta lib/Kumbia en vendor.  (vendor/Kumbia/ActiveRecord/..)
+1. Copy folder ***lib/Kumbia*** in vendor. (vendor/Kumbia/ActiveRecord/..)
 
-2. Copiar [config_databases.php](/config_databases.php) en app/config/databases.php y configurar
+2. Copy [config_databases.php](/config_databases.php) in ***app/config/databases.php*** and set configuration
 
-3. Añadir en app/libs/ : [lite_record.php](#literecord) y/o [act_record.php](#actrecord)
+3. Add in ***app/libs/*** : [lite_record.php](#literecord) and/or [act_record.php](#actrecord)
 
 
 ### LiteRecord
 
-Para los que prefieren SQL y las ventajas de un ORM, incluye un mini ActiveRecord
+For those who prefer SQL and the advantages of an ORM it includes a mini ActiveRecord
 
 ```php
 <?php
 //app/libs/lite_record.php
 
 /**
- * Record 
- * Para los que prefieren SQL con las ventajas de ORM
+ * LiteRecord 
+ * For those who prefer SQL and the advantages of an ORM
  *
- * Clase padre para añadir tus métodos
+ * Parent class to add your methods
  *
  * @category Kumbia
  * @package ActiveRecord
@@ -82,16 +82,16 @@ class LiteRecord extends ORM
 
 ### ActRecord
 
-ActiveRecord completo
+Full ActiveRecord
 
 ```php
 <?php
 //app/libs/act_record.php
 
 /**
- * ActiveRecord Nuevo
+ * ActiveRecord
  *
- * Clase padre para añadir tus métodos
+ * Parent class to add your methods
  *
  * @category Kumbia
  * @package ActiveRecord
@@ -106,15 +106,15 @@ class ActRecord extends ActiveRecord
 }
 ```
 
-# Ejemplo
+# Example
 
-## Modelo
+## Model
 
 ```php
 <?php
-//app/models/personas.php
+//app/models/people.php
 
-class Personas extends ActRecord //o LiteRecord según el que prefiera
+class People extends ActRecord //or LiteRecord depending on your choice
 {
 
 }
@@ -124,18 +124,18 @@ class Personas extends ActRecord //o LiteRecord según el que prefiera
 
 ```php
 <?php
-//app/controller/personas_controller.php
+//app/controller/people_controller.php
 
-//Load::models('personas'); No es necesario en v1
+//Load::models('people'); This is not necessary in v1
 
-class PersonasController extends AppController {
+class PeopleController extends AppController {
 
     public function index() {
-        $this->data = Personas::all();
+        $this->data = People::all();
     }
     
     public function find($id) {
-        $this->data = Personas($id);
+        $this->data = People($id);
     }
 }
 ```
