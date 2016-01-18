@@ -32,6 +32,17 @@ $databses['database3'] = array(
         )
 );
 
+//Conexion a MSSQL
+$databases['database4'] = array(
+        'dsn' => 'sqlsrv:Server=mihost;Database=midatabase;',
+        'username' => 'miusername',
+        'password' => 'mipassword',
+        /*'params' => array(
+            PDO::ATTR_PERSISTENT => true, //conexión persistente
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        )*/
+);
+
 //Más conexiones
 
 return $databases; //Siempre al final
