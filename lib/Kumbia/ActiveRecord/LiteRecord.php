@@ -171,8 +171,13 @@ class LiteRecord extends BaseRecord
      * @param string | array $values
      * @return array
      */
-    public static function all($sql, $values = null)
+    public static function all($sql = null, $values = null)
     {
+        if ( ! $sql )
+        {
+            $source = static::getSource();
+            $sql = "SELECT * FROM $source";
+        }
         return static::query($sql, $values)->fetchAll();
     }
     
