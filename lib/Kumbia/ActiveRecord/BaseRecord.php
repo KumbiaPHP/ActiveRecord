@@ -172,7 +172,17 @@ class BaseRecord
 
         return $sth;
     }
-
+     
+    /**
+     * Retorna el último ID insertado
+     *
+     * @return ID
+     */
+    public static function lastInsertId()
+    {
+        return self::dbh()->lastInsertId();
+    }
+     
     /**
      * Consulta sql
      *
