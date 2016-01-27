@@ -1,6 +1,6 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP web & app Framework.
  *
  * LICENSE
  *
@@ -13,20 +13,19 @@
  * to license@kumbiaphp.com so we can send you a copy immediately.
  *
  * @category   Kumbia
- * @package    ActiveRecord
- * @subpackage Query
+ *
  * @copyright  Copyright (c) 2005-2014  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
-
 namespace Kumbia\ActiveRecord\Query;
 
 /**
- * Adiciona limit y offset a la consulta sql en mysql
+ * Adiciona limit y offset a la consulta sql en mysql.
  *
- * @param string $sql consulta select
- * @param string $limit valor limit
+ * @param string $sql    consulta select
+ * @param string $limit  valor limit
  * @param string $offset valor offset
+ *
  * @return string
  */
 function mysql_limit($sql, $limit = null, $offset = null)

@@ -1,6 +1,6 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP web & app Framework.
  *
  * LICENSE
  *
@@ -13,27 +13,28 @@
  * to license@kumbiaphp.com so we can send you a copy immediately.
  *
  * @category   Kumbia
- * @package    ActiveRecord
- * @subpackage Query
+ *
  * @copyright  Copyright (c) 2005-2014  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
-
 namespace Kumbia\ActiveRecord\Query;
 
 /**
- * Obtiene el último id generado en pgsql
+ * Obtiene el último id generado en pgsql.
  *
- * @param \PDO $dbh conexion pdo
- * @param string $pk campo clave primaria
- * @param string $table nombre de tabla
+ * @param \PDO   $dbh    conexion pdo
+ * @param string $pk     campo clave primaria
+ * @param string $table  nombre de tabla
  * @param string $schema esquema
+ *
  * @return string
  */
 function pgsql_last_insert_id(\PDO $dbh, $pk, $table, $schema = null)
 {
     $seq = "{$table}_{$pk}_seq";
-    if($schema) $seq = "$schema.$seq";
+    if ($schema) {
+        $seq = "$schema.$seq";
+    }
 
     return $dbh->lastInsertId($seq);
 }
