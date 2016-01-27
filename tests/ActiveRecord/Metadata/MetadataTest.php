@@ -2,9 +2,7 @@
 
 class MetadataTest extends PHPUnit_Framework_TestCase
 {
-
     /**
-     * 
      * @return \Kumbia\ActiveRecord\Metadata\Metadata
      */
     protected function createClass()
@@ -52,11 +50,11 @@ class MetadataTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($fields), 'Debe retornar un array');
         $this->assertEquals(4, count($fields));
 
-        $this->assertEquals(array('id', 'nombre', 'email', 'activo'), array_keys($fields));
-        $this->assertEquals(array('Type', 'Null', 'Key', 'Default', 'Auto'), array_keys($fields['id']));
-        $this->assertEquals(array('Type', 'Null', 'Key', 'Default', 'Auto'), array_keys($fields['nombre']));
-        $this->assertEquals(array('Type', 'Null', 'Key', 'Default', 'Auto'), array_keys($fields['email']));
-        $this->assertEquals(array('Type', 'Null', 'Key', 'Default', 'Auto'), array_keys($fields['activo']));
+        $this->assertEquals(['id', 'nombre', 'email', 'activo'], array_keys($fields));
+        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['id']));
+        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['nombre']));
+        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['email']));
+        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['activo']));
 
         $this->fieldData($fields['id'], 'int(11)', false, 'PRI', true, false);
         $this->fieldData($fields['nombre'], 'varchar(50)', false, '', false, false);
@@ -81,7 +79,7 @@ class MetadataTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($fields), 'Debe retornar un array');
         $this->assertEquals(4, count($fields));
 
-        $this->assertEquals(array('id', 'nombre', 'email', 'activo'), $fields);
+        $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fields);
     }
 
     public function testMethod_getAutoFields()
@@ -95,5 +93,4 @@ class MetadataTest extends PHPUnit_Framework_TestCase
 //
 //        $this->assertEquals(array('id', 'nombre', 'email', 'activo'), $fields);
     }
-
 }
