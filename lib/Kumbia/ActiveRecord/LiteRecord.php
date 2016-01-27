@@ -171,7 +171,7 @@ class LiteRecord extends BaseRecord
      * @param string | array $values
      * @return array
      */
-    public static function all($sql = null, $values = null)
+    public static function all($sql = '', $values = null)
     {
         if ( ! $sql )
         {
