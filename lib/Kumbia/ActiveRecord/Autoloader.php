@@ -1,7 +1,7 @@
 <?php
 
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP web & app Framework.
  *
  * LICENSE
  *
@@ -14,31 +14,28 @@
  * to license@kumbiaphp.com so we can send you a copy immediately.
  *
  * @category   Kumbia
- * @package    ActiveRecord
+ *
  * @copyright  Copyright (c) 2005-2014  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
-
 namespace Kumbia\ActiveRecord;
 
 /**
- * Autoload de las clases
- *
+ * Autoload de las clases.
  */
 class Autoloader
 {
-
     private static $folder;
 
     /**
-     * Registra el autoloader
+     * Registra el autoloader.
      *
-     * @param boolean $prepend
+     * @param bool $prepend
      */
     public static function register($prepend = false)
     {
-        spl_autoload_register(array(__CLASS__, 'autoload'), true, $prepend);
-        self::$folder = dirname(dirname(__DIR__)) . '/';
+        spl_autoload_register([__CLASS__, 'autoload'], true, $prepend);
+        self::$folder = dirname(dirname(__DIR__)).'/';
     }
 
     /**
@@ -50,8 +47,7 @@ class Autoloader
             return;
         }
 
-        $fileName = str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $className) . '.php';
-        require self::$folder . $fileName;
+        $fileName = str_replace(['_', '\\'], DIRECTORY_SEPARATOR, $className).'.php';
+        require self::$folder.$fileName;
     }
-
 }

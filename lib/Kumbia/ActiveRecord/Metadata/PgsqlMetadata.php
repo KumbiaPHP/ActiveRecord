@@ -1,6 +1,6 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP web & app Framework.
  *
  * LICENSE
  *
@@ -13,28 +13,26 @@
  * to license@kumbiaphp.com so we can send you a copy immediately.
  *
  * @category   Kumbia
- * @package    ActiveRecord
- * @subpackage Metadata
+ *
  * @copyright  Copyright (c) 2005-2014  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
-
 namespace Kumbia\ActiveRecord\Metadata;
 
 use Kumbia\ActiveRecord\Db;
 
 /**
- * Adaptador de Metadata para Pgsql
- *
+ * Adaptador de Metadata para Pgsql.
  */
 class PgsqlMetadata extends Metadata
 {
     /**
-     * Consultar los campos de la tabla en la base de datos
+     * Consultar los campos de la tabla en la base de datos.
      *
-     * @param  string $database base de datos
-     * @param  string $table    tabla
-     * @param  string $schema   squema
+     * @param string $database base de datos
+     * @param string $table    tabla
+     * @param string $schema   squema
+     *
      * @return array
      */
     protected function queryFields($database, $table, $schema = 'public')
@@ -60,28 +58,27 @@ class PgsqlMetadata extends Metadata
 
         return self::describe($describe);
     }
-    
+
     /**
-     * Genera la metadata
+     * Genera la metadata.
      *
-     * @param  \PDOStatement $describe
+     * @param \PDOStatement $describe
+     *
      * @return array
      */
     private static function describe(\PDOStatement $describe)
     {
-        $fields = array();
+        $fields = [];
         foreach ($describe as $value) {
-
-            $fields[$value['field']] = array(
-                'Type' => $value['type'],
-                'Null' => $value['null'] != 'NO',
+            $fields[$value['field']] = [
+                'Type'    => $value['type'],
+                'Null'    => $value['null'] != 'NO',
                 'Default' => $value['default'] != '',
-                'Key' => \substr($value['key'], 0, 3),
-                'Auto' => \preg_match('/^nextval\(/', $value['default'])
-            );
+                'Key'     => \substr($value['key'], 0, 3),
+                'Auto'    => \preg_match('/^nextval\(/', $value['default']),
+            ];
         }
 
         return $fields;
     }
-
 }
