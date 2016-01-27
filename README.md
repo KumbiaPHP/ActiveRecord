@@ -9,7 +9,7 @@ ESPAÑOL - [ENGLISH](/README.en.md)
 
 # ActiveRecord
 
-Nuevo ActiveRecord en desarrollo, requiere PHP 5.3
+Nuevo ActiveRecord en desarrollo, requiere PHP 5.4
 
 No usar en producción
 
@@ -135,7 +135,7 @@ class PersonasController extends AppController {
     }
     
     public function find($id) {
-        $this->data = Personas($id);
+        $this->data = Personas::get($id);
     }
 }
 ```
