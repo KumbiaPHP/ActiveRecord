@@ -1,7 +1,7 @@
 <?php
 
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP web & app Framework.
  *
  * LICENSE
  *
@@ -14,70 +14,67 @@
  * to license@kumbiaphp.com so we can send you a copy immediately.
  *
  * @category   Kumbia
- * @package    ActiveRecord
- * @subpackage Metadata
+ *
  * @copyright  Copyright (c) 2005-2014  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
-
 namespace Kumbia\ActiveRecord\Metadata;
 
 /**
- * Metadata de tabla
- *
+ * Metadata de tabla.
  */
 abstract class Metadata
 {
-
     /**
-     * Singleton de metadata
+     * Singleton de metadata.
      *
      * @var array
      */
-    private static $instances = array();
+    private static $instances = [];
 
     /**
-     * Descripción de los campos
+     * Descripción de los campos.
      *
      * @var array
      */
-    protected $fields = array();
+    protected $fields = [];
 
     /**
-     * Lista de campos
+     * Lista de campos.
      *
      * @var array
      */
-    protected $fieldsList = array();
+    protected $fieldsList = [];
 
     /**
-     * Clave primaria
+     * Clave primaria.
      *
      * @var string
      */
     protected $pk;
 
     /**
-     * Campos con valor predeterminado
+     * Campos con valor predeterminado.
      *
      * @var array
      */
-    protected $withDefault = array();
+    protected $withDefault = [];
 
     /**
-     * Campos con valor autogenerado
+     * Campos con valor autogenerado.
      *
      * @var array
      */
-    protected $autoFields = array();
+    protected $autoFields = [];
 
     /**
-     * Metadata de la tabla
+     * Metadata de la tabla.
      *
-     * @param  string   $type tipo de controlador
-     * @param  string   $database
-     * @param  string   $table
-     * @param  string   $schema
+     * @param string $type     tipo de controlador
+     * @param string $database
+     * @param string $table
+     * @param string $schema
+     *
      * @return Metadata
      */
     public static function get($type, $database, $table, $schema = null)
@@ -88,14 +85,16 @@ abstract class Metadata
 
         return self::getMetadata($type, $database, $table, $schema);
     }
+
     /**
      * Obtiene la metadata de la tabla
-     * Y la cachea si esta en producción
+     * Y la cachea si esta en producción.
      *
-     * @param  string   $type tipo de controlador
-     * @param  string   $database
-     * @param  string   $table
-     * @param  string   $schema
+     * @param string $type     tipo de controlador
+     * @param string $database
+     * @param string $table
+     * @param string $schema
+     *
      * @return Metadata
      */
     private static function getMetadata($type, $database, $table, $schema)
@@ -103,9 +102,9 @@ abstract class Metadata
         if (PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
             return self::$instances["$database.$table.$schema"];
         }
-        $class = ucwords($type) . 'Metadata';
+        $class = ucwords($type).'Metadata';
 
-        $class = __NAMESPACE__ . "\\$class";
+        $class = __NAMESPACE__."\\$class";
 
         self::$instances["$database.$table.$schema"] = new $class($database, $table, $schema);
 
@@ -123,7 +122,7 @@ abstract class Metadata
     }
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $database base de datos
      * @param string $table    tabla
@@ -136,32 +135,35 @@ abstract class Metadata
     }
 
     /**
-     * Permite el filtrado de columna en PK, por Defecto y Autogenerado
+     * Permite el filtrado de columna en PK, por Defecto y Autogenerado.
+     *
      * @param $m información de la columna
      * @param $field nombre de la columna
      */
     protected function filterCol($m, $field)
     {
-        if ($m['Key'] == 'PRI')
+        if ($m['Key'] == 'PRI') {
             $this->pk = $field;
-        elseif ($m['Default'])
+        } elseif ($m['Default']) {
             $this->withDefault[] = $field;
-        elseif ($m['Auto'])
+        } elseif ($m['Auto']) {
             $this->autoFields[] = $field;
+        }
     }
 
     /**
-     * Consultar los campos de la tabla en la base de datos
+     * Consultar los campos de la tabla en la base de datos.
      *
-     * @param  string $database base de datos
-     * @param  string $table    tabla
-     * @param  string $schema   squema
+     * @param string $database base de datos
+     * @param string $table    tabla
+     * @param string $schema   squema
+     *
      * @return array
      */
     abstract protected function queryFields($database, $table, $schema = null);
 
     /**
-     * Obtiene la descripción de los campos
+     * Obtiene la descripción de los campos.
      *
      * @return array
      */
@@ -171,7 +173,7 @@ abstract class Metadata
     }
 
     /**
-     * Obtiene la lista de campos
+     * Obtiene la lista de campos.
      *
      * @return array
      */
@@ -181,7 +183,7 @@ abstract class Metadata
     }
 
     /**
-     * Obtiene la clave primaria
+     * Obtiene la clave primaria.
      *
      * @return string
      */
@@ -191,7 +193,7 @@ abstract class Metadata
     }
 
     /**
-     * Obtiene los campos con valor predeterminado
+     * Obtiene los campos con valor predeterminado.
      *
      * @return array
      */
@@ -201,7 +203,7 @@ abstract class Metadata
     }
 
     /**
-     * Obtiene los campos con valor generado automatico
+     * Obtiene los campos con valor generado automatico.
      *
      * @return array
      */
