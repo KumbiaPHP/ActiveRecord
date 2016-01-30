@@ -42,7 +42,7 @@ class QueryGenerator
      * @param string $type
      * @return string
      */
-    public static function select($source, $type, Array $params)
+    public static function select($source, $type, array $params)
     {
         $params = array_merge(array(
             'fields' => '*',
@@ -69,7 +69,8 @@ class QueryGenerator
       * en base a los parametros $param
       * @param Array  $params
       */
-    protected static function prepareParam(Array $params){
+    protected static function prepareParam(array $params)
+    {
         return array(
             static::where($params['where']),
             static::group($params['group']),
@@ -80,33 +81,37 @@ class QueryGenerator
 
     /**
      * Genera una sentencia where
-     * @return string 
+     * @return string
      */
-    protected static function where($where){
+    protected static function where($where)
+    {
         return empty($where)  ? '': "WHERE $where";
     }
 
     /**
      * Genera una sentencia GROUP
-     * @return string 
+     * @return string
      */
-    protected static function group($group){
+    protected static function group($group)
+    {
         return empty($group)  ? '': "GROUP BY $group";
     }
 
     /**
      * Genera una sentencia HAVING
-     * @return string 
+     * @return string
      */
-    protected static function having($having){
+    protected static function having($having)
+    {
         return empty($having)  ? '': "HAVING $having";
     }
 
      /**
      * Genera una sentencia ORDER BY
-     * @return string 
+     * @return string
      */
-    protected static function order($order){
+    protected static function order($order)
+    {
         return empty($order)  ? '': "ORDER BY $order";
     }
 
@@ -116,7 +121,8 @@ class QueryGenerator
      * @param Array $data Datos pasados a la consulta preparada
      * @return string
      */
-    public static function insert(\Kumbia\ActiveRecord\LiteRecord $model, &$data){
+    public static function insert(\Kumbia\ActiveRecord\LiteRecord $model, &$data)
+    {
         $meta = $model::metadata();
         $data = array();
         $columns = array();
@@ -141,7 +147,8 @@ class QueryGenerator
      * @param Array  $values array de valores
      * @return void
      */
-    protected static function insertField($field, LiteRecord $model, Array &$data, Array &$values){
+    protected static function insertField($field, LiteRecord $model, array &$data, array &$values)
+    {
         $meta = $model::metadata();
         $withDefault =  $meta->getWithDefault();
         $autoFields =   $meta->getAutoFields();
@@ -159,17 +166,19 @@ class QueryGenerator
      * @param string $field
      * @return bool
      */
-    protected  static function haveValue(LiteRecord $model, $field){
+    protected static function haveValue(LiteRecord $model, $field)
+    {
         return isset($model->$field) && $model->$field !== '';
     }
 
     /**
-     * Construye una consulta UPDATE 
+     * Construye una consulta UPDATE
      * @param \Kumbia\ActiveRecord\LiteRecord $model Modelo a actualizar
      * @param Array $data Datos pasados a la consulta preparada
      * @return string
      */
-    public static function update(\Kumbia\ActiveRecord\LiteRecord $model, Array &$data){
+    public static function update(\Kumbia\ActiveRecord\LiteRecord $model, array &$data)
+    {
         $set = array();
         $pk = $model::getPK();
         /*elimina la clave primaria*/
@@ -190,7 +199,8 @@ class QueryGenerator
      * @param  string $where  condition
      * @return string         SQL
      */
-    public static function deleteAll($source, $where){
+    public static function deleteAll($source, $where)
+    {
         return "DELETE FROM $source ".static::where($where);
     }
 
@@ -200,8 +210,9 @@ class QueryGenerator
      * @param  string $where  condition
      * @return string         SQL
      */
-    public static function count($source, $where){
-       return "SELECT COUNT(*) AS count FROM $source " .static::where($where);
+    public static function count($source, $where)
+    {
+        return "SELECT COUNT(*) AS count FROM $source " .static::where($where);
     }
 
 
@@ -213,7 +224,8 @@ class QueryGenerator
      * @param Array  $set array de valores
      * @return void
      */
-    protected static function updateField($field, $value, Array &$data, Array &$set){
+    protected static function updateField($field, $value, array &$data, array &$set)
+    {
         if (!empty($value)) {
             $data[":$field"] = $value;
             $set[] = "$field = :$field";
@@ -223,7 +235,7 @@ class QueryGenerator
     }
 
      /**
-     * Construye una consulta UPDATE 
+     * Construye una consulta UPDATE
      * @param string $model nombre del modelo a actualizar
      * @param Array $fields campos a actualizar
      * @param Array $data Datos pasados a la consulta preparada
@@ -231,7 +243,8 @@ class QueryGenerator
      * @todo ¿Hay que escapar los nombres de los campos?
      * @return string
      */
-    public static function updateAll($model,  Array $fields, Array &$data, $where){
+    public static function updateAll($model, array $fields, array &$data, $where)
+    {
         $set = array();
         //$pk = $model::getPK();
         /*elimina la clave primaria*/
@@ -252,8 +265,8 @@ class QueryGenerator
     * @return mixed
     * @thow KumbiaException
     */
-   public static function query($type, $query_function)
-   {
+    public static function query($type, $query_function)
+    {
         $query_function = "{$type}_{$query_function}";
     
         require_once __DIR__ . "/Query/{$query_function}.php";

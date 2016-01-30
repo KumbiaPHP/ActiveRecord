@@ -34,9 +34,9 @@ class ActiveRecord extends LiteRecord
      * @param  array          $values valores para condiciones
      * @return int            numero de registros actualizados
      */
-    public static function updateAll(Array $fields, $where = null, Array $values = array())
+    public static function updateAll(array $fields, $where = null, array $values = array())
     {
-        if($values !== null && !is_array($values))$values = \array_slice(\func_get_args(), 2);
+        if ($values !== null && !is_array($values))$values = \array_slice(\func_get_args(), 2);
         $sql = QueryGenerator::updateAll(\get_called_class(), $fields, $values, $where);
         $sth = self::prepare($sql);
         $sth->execute($values);
@@ -53,7 +53,7 @@ class ActiveRecord extends LiteRecord
     public static function deleteAll($where = null, $values = null)
     {
         $source = static::getSource();
-        $sql = QueryGenerator::deleteAll($source,  $where);
+        $sql = QueryGenerator::deleteAll($source, $where);
         $sth = self::query($sql, $values);
         return $sth->rowCount();
     }
@@ -153,7 +153,8 @@ class ActiveRecord extends LiteRecord
     * @param  Array  $array params of query
     * @return \PDOStatement
     */
-    protected static function doQuery(Array $array){
+    protected static function doQuery(array $array)
+    {
         $params = self::getParam($array);
         $values = self::getValues($array);
         $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
@@ -163,20 +164,22 @@ class ActiveRecord extends LiteRecord
 
     /**
      * Retorna los parametros para el doQuery
-     * @param Array $array 
+     * @param Array $array
      * @return Array
      */
-    protected static function getParam(Array &$array){
+    protected static function getParam(array &$array)
+    {
         $val = array_shift($array);
         return is_null($val) ?  array():$val;
     }
 
     /**
      * Retorna los values para el doQuery
-     * @param Array $array 
+     * @param Array $array
      * @return Array
      */
-    protected static function getValues(Array $array){
+    protected static function getValues(array $array)
+    {
         return isset($array[0]) ?
             is_array($array[0]) ? $array[0]: array($array[0]): $array;
     }
@@ -216,7 +219,7 @@ class ActiveRecord extends LiteRecord
     {
         $source = static::getSource();
         $sql = QueryGenerator::count($source, $where);
-        if($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
+        if ($values !== null && !is_array($values)) $values = \array_slice(\func_get_args(), 1);
         $sth = static::query($sql, $values);
         return $sth->fetch()->count;
     }
@@ -230,13 +233,13 @@ class ActiveRecord extends LiteRecord
      * @param  array     $values  valores
      * @return Paginator
      */
-    public static function paginate(Array $params, $page, $perPage, $values = null)
+    public static function paginate(array $params, $page, $perPage, $values = null)
     {
         unset($params['limit'], $params['offset']);
         $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
 
         // Valores para consulta
-        if($values !== null && !\is_array($values)) $values = \array_slice(func_get_args(), 3);
+        if ($values !== null && !\is_array($values)) $values = \array_slice(func_get_args(), 3);
 
         return new Paginator(\get_called_class(), $sql, (int) $page, (int) $perPage, $values);
     }

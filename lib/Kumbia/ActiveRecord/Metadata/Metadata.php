@@ -100,7 +100,7 @@ abstract class Metadata
      */
     private static function getMetadata($type, $database, $table, $schema)
     {
-        if(PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
+        if (PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
             return self::$instances["$database.$table.$schema"];
         }
         $class = ucwords($type) . 'Metadata';
@@ -110,8 +110,14 @@ abstract class Metadata
         self::$instances["$database.$table.$schema"] = new $class($database, $table, $schema);
 
          // Cachea los metadatos
-        if (PRODUCTION)
-            \Cache::driver()->save(self::$instances["$database.$table.$schema"], \Config::get('config.application.metadata_lifetime'), "$database.$table.$schema", 'ActiveRecord.Metadata');
+        if (PRODUCTION) {
+            \Cache::driver()->save(
+                self::$instances["$database.$table.$schema"],
+                \Config::get('config.application.metadata_lifetime'),
+                "$database.$table.$schema",
+                'ActiveRecord.Metadata'
+            );
+        }
 
         return self::$instances["$database.$table.$schema"];
     }
@@ -134,7 +140,8 @@ abstract class Metadata
      * @param $m información de la columna
      * @param $field nombre de la columna
      */
-    protected function filterCol($m, $field){
+    protected function filterCol($m, $field)
+    {
         if ($m['Key'] == 'PRI')
             $this->pk = $field;
         elseif ($m['Default'])
@@ -202,5 +209,4 @@ abstract class Metadata
     {
         return $this->autoFields;
     }
-
 }

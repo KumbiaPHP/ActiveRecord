@@ -46,7 +46,7 @@ class LiteRecord extends BaseRecord
      */
     protected function callback($callback)
     {
-        if(\method_exists($this, $callback)) {
+        if (\method_exists($this, $callback)) {
             return $this->$callback();
         }
     }
@@ -58,21 +58,28 @@ class LiteRecord extends BaseRecord
      * @return boolean
      * @throw PDOException
      */
-    public function create(Array $data = array())
+    public function create(array $data = array())
     {
         $this->dump($data);
 
         // Callback antes de crear
-        if($this->callback('_beforeCreate') === false) return false;
+        if ($this->callback('_beforeCreate') === false) return false;
 
         $sql = QueryGenerator::insert($this, $data);
 
-        if(!self::prepare($sql)->execute($data)) return false;
+        if (!self::prepare($sql)->execute($data)) return false;
 
         // Verifica si la PK es autogenerada
         $pk = static::getPK();
         if (!isset($this->$pk)) {
-            $this->$pk = QueryGenerator::query(static::getDriver(), 'last_insert_id', self::dbh(), $pk, static::getTable(), static::getSchema());
+            $this->$pk = QueryGenerator::query(
+                static::getDriver(),
+                'last_insert_id',
+                self::dbh(),
+                $pk,
+                static::getTable(),
+                static::getSchema()
+            );
         }
         // Callback despues de crear
         $this->callback('_afterCreate');
@@ -85,16 +92,16 @@ class LiteRecord extends BaseRecord
      * @param  array   $data
      * @return boolean
      */
-    public function update(Array $data = array())
+    public function update(array $data = array())
     {
         $this->dump($data);
         // Callback antes de actualizar
-        if($this->callback('_beforeUpdate') === false) return false;
+        if ($this->callback('_beforeUpdate') === false) return false;
         $this->hasPK();
         $values = array();
         $sql = QueryGenerator::update($this, $values);
         //var_dump($values);var_dump($sql);die;
-        if(!self::prepare($sql)->execute($values)) return false;
+        if (!self::prepare($sql)->execute($values)) return false;
         // Callback despues de actualizar
         $this->callback('_afterUpdate');
 
@@ -107,16 +114,16 @@ class LiteRecord extends BaseRecord
      * @param  array   $data
      * @return boolean
      */
-    public function save(Array $data = array())
+    public function save(array $data = array())
     {
         $this->dump($data);
 
-        if($this->callback('_beforeSave') === false) return false;
+        if ($this->callback('_beforeSave') === false) return false;
 
         $method = $this->saveMethod();
         $result = $this->$method();
 
-        if(!$result) return false;
+        if (!$result) return false;
 
         $this->callback('_afterSave');
 
@@ -127,7 +134,8 @@ class LiteRecord extends BaseRecord
      * Retorna el nombre del metodo a llamar durante un save (create o update)
      * @return string
      */
-    protected function saveMethod(){
+    protected function saveMethod()
+    {
         $pk = static::getPK();
         return (empty($this->$pk) || !static::exists($this->$pk)) ?
             'create' : 'update';
@@ -173,8 +181,7 @@ class LiteRecord extends BaseRecord
      */
     public static function all($sql = '', $values = null)
     {
-        if ( ! $sql )
-        {
+        if (! $sql) {
             $source = static::getSource();
             $sql = "SELECT * FROM $source";
         }

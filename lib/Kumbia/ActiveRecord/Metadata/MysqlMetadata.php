@@ -46,7 +46,7 @@ class MysqlMetadata extends Metadata
         $describe = Db::get($database)->query($sql);
 
         $fields = array();
-        while(( $value = $describe->fetch(PDO::FETCH_OBJ))) {
+        while (( $value = $describe->fetch(PDO::FETCH_OBJ))) {
             $fields[$value->Field] = array(
                 'Type' => $value->Type,
                 'Null' => $value->Null != 'NO',
@@ -58,5 +58,4 @@ class MysqlMetadata extends Metadata
         }
         return $fields;
     }
-
 }

@@ -45,7 +45,7 @@ class BaseRecord
      *
      * @param array $data
      */
-    public function __construct(Array $data = array())
+    public function __construct(array $data = array())
     {
          $this->dump($data);
     }
@@ -55,8 +55,8 @@ class BaseRecord
      *
      * @param array $data
      */
-    public function dump(Array $data = array())
-    {   
+    public function dump(array $data = array())
+    {
         foreach ($data as $k => $v) {
             $this->$k = $v;
         }
@@ -76,9 +76,10 @@ class BaseRecord
      * Verifica que PK este seteado
      * @throw \KumbiaException
      */
-    protected function hasPK(){
+    protected function hasPK()
+    {
         $pk = static::getPK();
-        if(empty($this->$pk))
+        if (empty($this->$pk))
             throw new \KumbiaException(__('No se ha especificado valor para la clave primaria'));
     }
 
@@ -89,7 +90,7 @@ class BaseRecord
      */
     public static function getPK()
     {
-        if(static::$pk) return static::$pk;
+        if (static::$pk) return static::$pk;
 
         return self::metadata()->getPK();
     }
@@ -122,7 +123,7 @@ class BaseRecord
     public static function getSource()
     {
         $source = static::getTable();
-        if($schema = static::getSchema()) $source = "$schema.$source";
+        if ($schema = static::getSchema()) $source = "$schema.$source";
 
         return $source;
     }
@@ -144,7 +145,12 @@ class BaseRecord
      */
     public static function metadata()
     {
-        return Metadata\Metadata::get(static::getDriver(),static::getDatabase(), static::getTable(), static::getSchema());
+        return Metadata\Metadata::get(
+            static::getDriver(),
+            static::getDatabase(),
+            static::getTable(),
+            static::getSchema()
+        );
     }
 
     /**
@@ -205,7 +211,7 @@ class BaseRecord
      * @param  array | string $values valores
      * @return PDOStatement
      */
-    public static function query($sql, $values = NULL)
+    public static function query($sql, $values = null)
     {
         if (func_num_args() === 1) return self::sql($sql);
 
@@ -214,7 +220,7 @@ class BaseRecord
             $values = \array_slice(\func_get_args(), 1);
         }
 
-        return $sth->execute($values) ? $sth : FALSE;
+        return $sth->execute($values) ? $sth : false;
     }
 
     /**
@@ -249,7 +255,8 @@ class BaseRecord
      * Devuelve el nombre del drive PDO utilizado
      * @return string
      */
-    public static function getDriver(){
+    public static function getDriver()
+    {
         return self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
     }
 
@@ -257,7 +264,8 @@ class BaseRecord
      * Comienza una trasacción
      * @return bool
      */
-    public static function begin(){
+    public static function begin()
+    {
         return self::dbh()->beginTransaction();
     }
 
@@ -266,7 +274,8 @@ class BaseRecord
      * Da marcha atrás a una trasacción
      * @return bool
      */
-    public static function rollback(){
+    public static function rollback()
+    {
         return self::dbh()->rollBack();
     }
 
@@ -274,7 +283,8 @@ class BaseRecord
      * Realiza el commit de  una trasacción
      * @return bool
      */
-    public static function commit(){
+    public static function commit()
+    {
         return self::dbh()->commit();
     }
 }

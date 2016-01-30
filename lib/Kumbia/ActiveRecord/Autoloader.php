@@ -1,5 +1,4 @@
 <?php
-
 /**
  * KumbiaPHP web & app Framework
  *
@@ -53,5 +52,4 @@ class Autoloader
         $fileName = str_replace(array('_', '\\'), DIRECTORY_SEPARATOR, $className) . '.php';
         require self::$folder . $fileName;
     }
-
 }

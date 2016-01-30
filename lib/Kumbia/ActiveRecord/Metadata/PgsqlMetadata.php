@@ -54,7 +54,8 @@ class PgsqlMetadata extends Metadata
                     SELECT COUNT(*) FROM information_schema.key_column_usage
                     WHERE constraint_name = cu.constraint_name
                 ) = 1)
-            LEFT OUTER JOIN information_schema.table_constraints tc ON (cu.constraint_name = tc.constraint_name AND tc.constraint_type IN ('PRIMARY KEY', 'UNIQUE'))
+            LEFT OUTER JOIN information_schema.table_constraints tc 
+            ON (cu.constraint_name = tc.constraint_name AND tc.constraint_type IN ('PRIMARY KEY', 'UNIQUE'))
             WHERE c.table_name = '$table' AND c.table_schema = '$schema';
         ");
 
@@ -83,5 +84,4 @@ class PgsqlMetadata extends Metadata
 
         return $fields;
     }
-
 }
