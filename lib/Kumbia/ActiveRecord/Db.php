@@ -1,6 +1,6 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP web & app Framework.
  *
  * LICENSE
  *
@@ -13,100 +13,106 @@
  * to license@kumbiaphp.com so we can send you a copy immediately.
  *
  * @category   Kumbia
- * @package    ActiveRecord
+ *
  * @copyright  Copyright (c) 2005-2014  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
-
 namespace Kumbia\ActiveRecord;
 
 use PDO;
 
 /**
- * Manejador de conexiones de base de datos
- *
+ * Manejador de conexiones de base de datos.
  */
 abstract class Db
 {
     /**
-     * Pool de conexiones
+     * Pool de conexiones.
      *
      * @var array
      */
-    private static $pool = array();
-	
-	/**
-     * Config de conexiones
-     *
-     * @var array
-     */
-    private static $config = array();
+    private static $pool = [];
 
     /**
-     * Obtiene manejador de conexión a la base de datos
+     * Config de conexiones.
      *
-     * @param  string  $database base de datos a conectar
-     * @param  boolean $force    forzar nueva conexion PDO
+     * @var array
+     */
+    private static $config = [];
+
+    /**
+     * Obtiene manejador de conexión a la base de datos.
+     *
+     * @param string $database base de datos a conectar
+     * @param bool   $force    forzar nueva conexion PDO
+     *
      * @return PDO
      * @throw KumbiaException
      */
     public static function get($database = 'default', $force = false)
     {
         // Verifica el singleton
-        if(!$force && isset(self::$pool[$database]))
-			return self::$pool[$database];
-		
-		if($force) return self::connect(self::getConfig($database));
-		
-		return self::$pool[$database] = self::connect(self::getConfig($database));
-	}
-	
-	/**
-     * Conexión a la base de datos
-     *
-     * @param  array  $config Config base de datos a conectar
-     * @return PDO
-     */
-	private static function connect($config)
-	{
-	        try {
-	            return new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
-	        } catch (\PDOException $e) { //TODO: comprobar
-	            $message = $e->getMessage();
-	            throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}'. {$message}");
-	        }
-    	}
-	
-	/**
-     * Obtiene manejador de conexión a la base de datos
-     *
-     * @param  string  $database base de datos a conectar
-     * @return array
-     */
-	private static function getConfig( $database )
-	{
-		if(empty(self::$config)) {
-			// Leer la configuración de conexión
-			self::$config = require(APP_PATH.'config/databases.php');
-		}
-		if(!isset(self::$config[$database]))
-            throw new \RuntimeException("No existen datos de conexión para la bd '$database' en ".APP_PATH."config/databases.php");
-			
-        	// Envia y carga los valores por defecto para la conexión, si no existen
-		return self::$config[$database] + array (
-            	'dns'      => NULL,
-            	'username' => NULL,
-            	'password' => NULL,
-        		'params'   => array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
-        	);
-	}
+        if (!$force && isset(self::$pool[$database])) {
+            return self::$pool[$database];
+        }
+
+        if ($force) {
+            return self::connect(self::getConfig($database));
+        }
+
+        return self::$pool[$database] = self::connect(self::getConfig($database));
+    }
 
     /**
-     * Permite agregar una base de datos sin leer del archivo de configuracion
-     * @param Array  $value Valores de la configuración
+     * Conexión a la base de datos.
+     *
+     * @param array $config Config base de datos a conectar
+     *
+     * @return PDO
      */
+    private static function connect($config)
+    {
+        try {
+            return new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
+        } catch (\PDOException $e) { //TODO: comprobar
+                $message = $e->getMessage();
+            throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}'. {$message}");
+        }
+    }
 
-    static public function setConfig(Array $value){
-        self::$config = array()+  self::$config+ $value;
+    /**
+     * Obtiene manejador de conexión a la base de datos.
+     *
+     * @param string $database base de datos a conectar
+     *
+     * @return array
+     */
+    private static function getConfig($database)
+    {
+        if (empty(self::$config)) {
+            // Leer la configuración de conexión
+            self::$config = require APP_PATH.'config/databases.php';
+        }
+        if (!isset(self::$config[$database])) {
+            throw new \RuntimeException("No existen datos de conexión para la bd '$database' en ".APP_PATH.'config/databases.php');
+        }
+
+            // Envia y carga los valores por defecto para la conexión, si no existen
+        return self::$config[$database] +  [
+                'dns'      => null,
+                'username' => null,
+                'password' => null,
+                'params'   => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
+            ];
+    }
+
+    /**
+     * Permite agregar una base de datos sin leer del archivo de configuracion.
+     *
+     * @param array $value Valores de la configuración
+     */
+    public static function setConfig(array $value)
+    {
+        self::$config = [] +  self::$config + $value;
     }
 }
