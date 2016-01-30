@@ -151,7 +151,7 @@ class ActiveRecord extends LiteRecord
    /**
     * Do a query
     * @param  Array  $array params of query
-    * @return \PDOStatement
+    * @return \PDOStatement|false
     */
     protected static function doQuery(array $array)
     {
