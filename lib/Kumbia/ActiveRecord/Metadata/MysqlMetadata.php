@@ -43,6 +43,7 @@ class MysqlMetadata extends Metadata
         $describe = Db::get($database)->query($sql);
 
         $fields = [];
+        // TODO mejorar este código
         while (($value = $describe->fetch(PDO::FETCH_OBJ))) {
             $fields[$value->Field] = [
                 'Type'    => $value->Type,

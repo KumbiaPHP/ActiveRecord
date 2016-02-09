@@ -22,6 +22,7 @@ namespace Kumbia\ActiveRecord\Metadata;
 
 use Kumbia\ActiveRecord\Db;
 use PDO;
+
 /**
  * Adaptador de Metadata para Sqlsrv
  *
@@ -31,12 +32,13 @@ class SqlsrvMetadata extends Metadata
     /**
      * Consultar los campos de la tabla en la base de datos
      *
-     * @param  string $database base de datos
-     * @param  string $table    tabla
-     * @param  string $schema   squema
+     * @param string $database base de datos
+     * @param string $table    tabla
+     * @param string $schema   squema
+     *
      * @return array
      */
-    protected function queryFields($database, $table, $schema=null)
+    protected function queryFields($database, $table, $schema = null)
     {
         $sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='$table'";
         $describe = Db::get($database)->query($sql);
@@ -44,7 +46,8 @@ class SqlsrvMetadata extends Metadata
         $pk = Db::get($database)->query("exec sp_pkeys @table_name='$table'");
         $pk = $pk->fetch(PDO::FETCH_OBJ);
         $pk = $pk->COLUMN_NAME;
-        while( ( $value = $describe->fetch(PDO::FETCH_OBJ) ) ) :
+        // TODO mejorar este código, la consulta SQL no usa el $schema
+        while (( $value = $describe->fetch(PDO::FETCH_OBJ))) :
             $fields[$value->COLUMN_NAME] = array(
                 'Type' => $value->DATA_TYPE,
                 'Null' => $value->IS_NULLABLE,
@@ -54,7 +57,6 @@ class SqlsrvMetadata extends Metadata
             );
             $this->filterCol($fields[$value->COLUMN_NAME], $value->COLUMN_NAME);
         endwhile;
-        #die( '<pre>'. print_r( $fields, 1 ) );
         return $fields;
     }
 }
