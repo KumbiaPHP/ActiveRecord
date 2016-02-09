@@ -15,7 +15,7 @@
  *
  * @category   Kumbia
  *
- * @copyright  Copyright (c) 2005-2014  Kumbia Team (http://www.kumbiaphp.com)
+ * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 namespace Kumbia\ActiveRecord\Metadata;
@@ -43,6 +43,7 @@ class MysqlMetadata extends Metadata
         $describe = Db::get($database)->query($sql);
 
         $fields = [];
+        // TODO mejorar este código
         while (($value = $describe->fetch(PDO::FETCH_OBJ))) {
             $fields[$value->Field] = [
                 'Type'    => $value->Type,
