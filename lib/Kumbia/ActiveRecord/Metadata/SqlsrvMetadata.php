@@ -86,11 +86,11 @@ class SqlsrvMetadata extends Metadata
         $fields = [];
         while (( $value = $describe->fetch(PDO::FETCH_OBJ))) :
             $fields[$value->field_name] = [
-                'Type' => $value->type_field,
-                'Null' => ($value->is_nullable),
-                'Key' => ($value->field_name == $pk) ? 'PRI' : '',
+                'Type'    => $value->type_field,
+                'Null'    => ($value->is_nullable),
+                'Key'     => ($value->field_name == $pk) ? 'PRI' : '',
                 'Default' => str_replace("''", "'", trim($value->default_value, "(')")),
-                'Auto' => ($value->is_auto_increment)
+                'Auto'    => ($value->is_auto_increment)
             ];
             $this->filterCol($fields[$value->field_name], $value->field_name);
         endwhile;
