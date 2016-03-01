@@ -1,6 +1,6 @@
 <?php
 /**
- * KumbiaPHP web & app Framework
+ * KumbiaPHP web & app Framework.
  *
  * LICENSE
  *
@@ -13,8 +13,7 @@
  * to license@kumbiaphp.com so we can send you a copy immediately.
  *
  * @category   Kumbia
- * @package    ActiveRecord
- * @subpackage Metadata
+ *
  * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
@@ -24,13 +23,12 @@ use Kumbia\ActiveRecord\Db;
 use PDO;
 
 /**
- * Adaptador de Metadata para Sqlsrv
- *
+ * Adaptador de Metadata para Sqlsrv.
  */
 class SqlsrvMetadata extends Metadata
 {
     /**
-     * Consultar los campos de la tabla en la base de datos
+     * Consultar los campos de la tabla en la base de datos.
      *
      * @param string $database base de datos
      * @param string $table    tabla
@@ -42,21 +40,22 @@ class SqlsrvMetadata extends Metadata
     {
         $sql = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='$table'";
         $describe = Db::get($database)->query($sql);
-        $fields = array();
+        $fields = [];
         $pk = Db::get($database)->query("exec sp_pkeys @table_name='$table'");
         $pk = $pk->fetch(PDO::FETCH_OBJ);
         $pk = $pk->COLUMN_NAME;
         // TODO mejorar este código, la consulta SQL no usa el $schema
-        while (( $value = $describe->fetch(PDO::FETCH_OBJ))) :
-            $fields[$value->COLUMN_NAME] = array(
-                'Type' => $value->DATA_TYPE,
-                'Null' => $value->IS_NULLABLE,
-                'Key' => ($value->COLUMN_NAME == $pk) ? 'PRI' : '',
+        while (($value = $describe->fetch(PDO::FETCH_OBJ))) :
+            $fields[$value->COLUMN_NAME] = [
+                'Type'    => $value->DATA_TYPE,
+                'Null'    => $value->IS_NULLABLE,
+                'Key'     => ($value->COLUMN_NAME == $pk) ? 'PRI' : '',
                 'Default' => $value->COLUMN_DEFAULT,
-                'Auto' => ''
-            );
-            $this->filterCol($fields[$value->COLUMN_NAME], $value->COLUMN_NAME);
+                'Auto'    => '',
+            ];
+        $this->filterCol($fields[$value->COLUMN_NAME], $value->COLUMN_NAME);
         endwhile;
+
         return $fields;
     }
 }
