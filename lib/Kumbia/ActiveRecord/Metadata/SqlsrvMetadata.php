@@ -82,6 +82,7 @@ class SqlsrvMetadata extends Metadata
      */
     protected function describe(\PDOStatement $describe, $pk)
     {
+        // TODO Mejorar
         $fields = [];
         while (( $value = $describe->fetch(PDO::FETCH_OBJ))) :
             $fields[$value->field_name] = [
