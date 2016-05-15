@@ -165,7 +165,7 @@ class QueryGenerator
         if (self::haveValue($model, $field)) {
             $data[":$field"] = $model->$field;
             $values[] = ":$field";
-        } elseif (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
+        } else{//if (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
             $values[] = 'NULL';
         }
     }
