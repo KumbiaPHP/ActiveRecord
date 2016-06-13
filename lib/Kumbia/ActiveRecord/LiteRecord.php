@@ -146,15 +146,6 @@ class LiteRecord extends BaseRecord
     }
 
     /**
-     * Get the Primary Key value for the object
-     * @return mixed
-     */
-    public function pk(){
-        $pk = static::getPK();
-        return empty($this->$pk) ? null : $this->$pk;
-    }
-
-    /**
      * Retorna el nombre del metodo a llamar durante un save (create o update).
      *
      * @return string

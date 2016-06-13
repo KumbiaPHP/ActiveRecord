@@ -38,6 +38,13 @@ class BaseRecord
      */
     protected static $pk = 'id';
 
+
+    /**
+     * Values of columns
+     * @var array
+     */
+    protected $values = [];
+
     /**
      * Constructor.
      *
@@ -46,6 +53,23 @@ class BaseRecord
     public function __construct(array $data = [])
     {
         $this->dump($data);
+    }
+
+    public function __set($key, $value){
+        $this->values[$key] = $value;
+    }
+
+    public function __get($key){
+        return isset($this->values[$key]) ? $this->values[$key]: NULL;
+    }
+
+    /**
+     * Get the Primary Key value for the object
+     * @return mixed
+     */
+    public function pk(){
+        $pk = static::getPK();
+        return $this->$pk;
     }
 
     /**
@@ -84,7 +108,7 @@ class BaseRecord
     }
 
     /**
-     * Obtiene la llave primaria.
+     * Get the name of the primary key
      *
      * @return string
      */
