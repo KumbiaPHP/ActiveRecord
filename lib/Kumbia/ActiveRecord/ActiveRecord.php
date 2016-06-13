@@ -22,8 +22,68 @@ namespace Kumbia\ActiveRecord;
 /**
  * Implementación de patrón ActiveRecord con ayudantes de consultas sql.
  */
-class ActiveRecord extends LiteRecord
+class ActiveRecord extends LiteRecord implements \JsonSerializable
 {
+
+    const BELONG_TO = 1;
+    const HAS_MANY  = 2;
+    const HAS_ONE   = 3;
+
+    /**
+     * Describe the relationships
+     * @var array
+     */
+    static protected $_rs = [];
+
+    /**
+     * Store all information about relationship for populate methods
+     * @var array
+     */
+    protected $_populate = [];
+
+    static function resolver($rs, $obj){
+        $model = $rs->model;
+        if($rs->type === self::HAS_MANY){
+            return $model::allBy($rs->via, $obj->pk());
+        }
+    }
+
+    static public function hasMany($name, $class, $via = NULL){
+        $str = strtolower($name);
+        $name = static::getTable();
+        static::$_rs[$str] = (object)[
+            'model' => $class,
+            'type'  => self::HAS_MANY,
+            'via'   => $via ? $via : "{$name}_id"
+        ];
+    }
+
+    public function jsonSerialize(){
+       $var = get_object_vars($this);
+       unset($var['_populate']);
+       return array_merge($var, $this->_populate);
+    }
+
+
+    public function __call($name, $arguments){
+        //it's a relationship
+        if (strncmp($name, 'get', 3) === 0){
+            $rel =  strtolower(substr ($name, 3));
+            return static::resolver(static::getRelationship($rel), $this);
+        }
+    }
+
+    static protected function getRelationship($rel){
+        if(!isset(static::$_rs[$rel]))
+            throw new \RuntimeException("Invalid relationship '$rel'", 500);
+        return static::$_rs[$rel];
+    }
+
+    public function populate($rel){
+        $rs = static::getRelationship($rel);
+        $this->_populate[$rel] =  static::resolver($rs, $this);
+    }
+
     /**
      * Actualizar registros.
      *
@@ -77,7 +137,7 @@ class ActiveRecord extends LiteRecord
         if ($sqlItem !== '' && $sqlItem !== null) {
             $sql_temp = \preg_replace('/\s+/', '', $sqlItem);
             if (!\preg_match('/^[a-zA-Z0-9_\.]+$/', $sql_temp)) {
-                throw new \KumbiaException('Se esta tratando de ejecutar una operacion maliciosa!');
+                throw new \RuntimeException('Se esta tratando de ejecutar una operacion maliciosa!');
             }
         }
 
