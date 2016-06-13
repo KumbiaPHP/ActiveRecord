@@ -41,10 +41,12 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      */
     protected $_populate = [];
 
-    static function resolver($rs, $obj){
+    static public function resolver($rs, $obj){
         $model = $rs->model;
         if($rs->type === self::HAS_MANY){
             return $model::allBy($rs->via, $obj->pk());
+        }else{
+            return $model::first($rs->via, $obj->pk());
         }
     }
 
@@ -54,6 +56,16 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
         static::$_rs[$str] = (object)[
             'model' => $class,
             'type'  => self::HAS_MANY,
+            'via'   => $via ? $via : "{$name}_id"
+        ];
+    }
+
+    static public function hasOne($name, $class, $via = NULL){
+        $str = strtolower($name);
+        $name = static::getTable();
+        static::$_rs[$str] = (object)[
+            'model' => $class,
+            'type'  => self::HAS_ONE,
             'via'   => $via ? $via : "{$name}_id"
         ];
     }
