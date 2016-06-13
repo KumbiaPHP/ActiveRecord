@@ -35,12 +35,6 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      */
     static protected $_rs = [];
 
-    /**
-     * Store all information about relationship for populate methods
-     * @var array
-     */
-    protected $_populate = [];
-
     static public function resolver($rs, $obj){
         $model = $rs->model;
         if($rs->type === self::HAS_MANY){
@@ -71,17 +65,18 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     }
 
     public function jsonSerialize(){
-       $var = get_object_vars($this);
-       unset($var['_populate']);
-       return array_merge($var, $this->_populate);
+       return $this->values;
     }
 
-
-    public function __call($name, $arguments){
-        //it's a relationship
-        if (strncmp($name, 'get', 3) === 0){
-            $rel =  strtolower(substr ($name, 3));
-            return static::resolver(static::getRelationship($rel), $this);
+    public function __get($name){
+        $val = parent::__get($name);
+        if($val){
+            return $val;
+        }elseif(isset(static::$_rs[$name])){//it's a relationship
+            $this->populate($name);
+            return $this->values[$name];
+        }else{
+            return null;
         }
     }
 
@@ -93,7 +88,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
 
     public function populate($rel){
         $rs = static::getRelationship($rel);
-        $this->_populate[$rel] =  static::resolver($rs, $this);
+        $this->$rel =  static::resolver($rs, $this);
     }
 
     /**
