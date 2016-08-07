@@ -128,7 +128,8 @@ class BaseRecord
      */
     public static function getTable()
     {
-        return strtolower(preg_replace('/([A-Z])/', '_\\1', lcfirst(\get_called_class())));
+        $split = explode('\\', preg_replace('/([A-Z])/', '_\\1', lcfirst(\get_called_class())));
+        return strtolower(end($split));
     }
 
     /**
