@@ -92,6 +92,22 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     }
 
     /**
+     * Pagination of Results
+     * @param  Array  $params   [description]
+     * @param  Array  $values   [description]
+     * @param  integer $page     [description]
+     * @param  integer $per_page [description]
+     * @return Paginator            [description]
+     */
+    static  public function pagination($params = [], $values = [], $page = 1, $per_page = 10){
+        $model =  get_called_class();
+        unset($params['limit'], $params['offset']);
+        $sql = QueryGenerator::select($model::getSource(), $model::getDriver(), $params);
+        return new Paginator($model, $sql, $page, $per_page, $values);
+    }
+
+
+    /**
      * Actualizar registros.
      *
      * @param array  $fields
