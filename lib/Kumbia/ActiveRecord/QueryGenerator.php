@@ -276,7 +276,7 @@ class QueryGenerator
         }
         $set = \implode(', ', $set);
         $source = $model::getSource();
-        $where = static::where(['where' => $where]);
+        $where = static::where($where);
 
         return "UPDATE $source SET $set $where";
     }
