@@ -22,7 +22,7 @@ namespace Kumbia\ActiveRecord;
 /**
  * Implementación de paginador.
  */
-class Paginator implements \IteratorAggregate, \Countable
+class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
 {
     /**
      * Número de página actual.
@@ -109,6 +109,15 @@ class Paginator implements \IteratorAggregate, \Countable
         // Establece el limit y offset
         $this->_sql = QueryGenerator::query($model::getDriver(), 'limit', $sql, $perPage, ($page - 1) * $perPage);
         $this->items = $model::query($this->_sql, $this->_values)->fetchAll();
+    }
+    
+    /**
+     * Permite que al usar json_encode() con una instacia de Paginator funcione correctamente
+     * retornando los items del paginador.
+     */
+    public function jsonSerialize()
+    {
+        return $this->items;
     }
 
     /**
