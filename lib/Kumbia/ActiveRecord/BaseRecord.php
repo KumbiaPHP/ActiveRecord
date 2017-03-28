@@ -103,7 +103,7 @@ class BaseRecord
     {
         $pk = static::getPK();
         if (empty($this->$pk)) {
-            throw new \KumbiaException(__('No se ha especificado valor para la clave primaria'));
+            throw new \KumbiaException(_('No se ha especificado valor para la clave primaria'));
         }
     }
 
