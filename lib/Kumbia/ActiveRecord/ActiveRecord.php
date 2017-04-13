@@ -103,7 +103,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      * @param  integer $per_page [description]
      * @return Paginator            [description]
      */
-    static  public function pagination($params = [], $values = [], $page = 1, $per_page = 10){
+    static public function pagination($params = [], $values = [], $page = 1, $per_page = 10){
         $model =  get_called_class();
         unset($params['limit'], $params['offset']);
         $sql = QueryGenerator::select($model::getSource(), $model::getDriver(), $params);
@@ -197,9 +197,6 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     /**
      * Obtener la primera coincidencia de las condiciones indicadas.
      *
-     * @param array  $params parametros de bus
-     * @param string $field  campo
-     * @param string $value  valor
      * @param array  $params parametros adicionales
      *                       order: criterio de ordenamiento
      *                       fields: lista de campos
