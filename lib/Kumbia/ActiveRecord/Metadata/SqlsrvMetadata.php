@@ -60,8 +60,8 @@ class SqlsrvMetadata extends Metadata
     /**
      * Optiene el PK
      *
-     * @param  string $database base de datos
-     * @param  string $table    tabla
+     * @param string $database base de datos
+     * @param string $table    tabla
      *
      * @return string
      */
@@ -75,8 +75,8 @@ class SqlsrvMetadata extends Metadata
     /**
      * Genera la metadata
      *
-     * @param \PDOStatement $describe
-     * @param string $pk    Primary key
+     * @param \PDOStatement $describe SQL result
+     * @param string        $pk       Primary key
      *
      * @return array
      */
