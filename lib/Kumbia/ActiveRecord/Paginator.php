@@ -101,7 +101,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
 
         // Valores para consulta
         $this->values = ($values !== null && !is_array($values)) ?
-                    array_slice(func_get_args(), 4) : $values;
+        array_slice(func_get_args(), 4) : $values;
 
         $this->count = $this->countQuery($model, $sql);
         $this->totalPages = (int) max(1, ceil($this->count / $this->perPage));
@@ -110,7 +110,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
         $this->sql = QueryGenerator::query($model::getDriver(), 'limit', $sql, $perPage, ($page - 1) * $perPage);
         $this->items = $model::query($this->sql, $this->values)->fetchAll();
     }
-    
+
     /**
      * Permite que al usar json_encode() con una instacia de Paginator funcione correctamente
      * retornando los items del paginador.
@@ -226,5 +226,25 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     public function page()
     {
         return $this->page;
+    }
+
+    /**
+     * Campos del objeto.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->items[0]->getFields();
+    }
+
+    /**
+     * Alias de Campos del objeto.
+     *
+     * @return array
+     */
+    public function getAlias()
+    {
+        return $this->items[0]->getAlias();
     }
 }
