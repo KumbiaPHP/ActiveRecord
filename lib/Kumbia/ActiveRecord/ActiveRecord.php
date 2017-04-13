@@ -77,7 +77,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     public function __get($key)
     {
 
-        if ($this->$key) {
+        if (property_exists($this, $key)) {
             return $this->$key;
         }
         //it's a relationship
