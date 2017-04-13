@@ -68,6 +68,17 @@ class BaseRecord
             $this->$k = $v;
         }
     }
+ 
+    /**
+     * Listado de los campos.
+     *
+     * @return array
+     */
+    public function getFields()
+    {
+        $fields = function ($obj) { return array_keys(get_object_vars($obj)); };
+        return $fields ($this);
+    }
 
     /**
      * Alias de los campos.
