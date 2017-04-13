@@ -85,9 +85,9 @@ class BaseRecord
      *
      * @return array
      */
-    public static function alias()
+    public function getAlias()
     {
-        return [];
+        return array_map('ucwords', $this->getFields());
     }
 
     /**
