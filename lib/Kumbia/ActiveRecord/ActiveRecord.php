@@ -26,40 +26,43 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
 {
 
     const BELONG_TO = 1;
-    const HAS_MANY  = 2;
-    const HAS_ONE   = 3;
+    const HAS_MANY = 2;
+    const HAS_ONE = 3;
 
     /**
      * Describe the relationships
      * @var array
      */
-    static protected $relations = [];
+    protected static $relations = [];
 
-    static public function resolver($relations, $obj){
+    public static function resolver($relations, $obj)
+    {
         $model = $relations->model;
-        if($relations->type === self::HAS_MANY){
+        if ($relations->type === self::HAS_MANY) {
             return $model::allBy($relations->via, $obj->pk());
         }
         return $model::first($relations->via, $obj->pk());
     }
 
-    static public function hasMany($name, $class, $via = NULL){
+    public static function hasMany($name, $class, $via = null)
+    {
         $str = strtolower($name);
         $name = static::getTable();
-        static::$relations[$str] = (object)[
+        static::$relations[$str] = (object) [
             'model' => $class,
-            'type'  => self::HAS_MANY,
-            'via'   => $via ? $via : "{$name}_id"
+            'type' => self::HAS_MANY,
+            'via' => $via ? $via : "{$name}_id",
         ];
     }
 
-    static public function hasOne($name, $class, $via = NULL){
+    public static function hasOne($name, $class, $via = null)
+    {
         $str = strtolower($name);
         $name = static::getTable();
-        static::$relations[$str] = (object)[
+        static::$relations[$str] = (object) [
             'model' => $class,
-            'type'  => self::HAS_ONE,
-            'via'   => $via ? $via : "{$name}_id"
+            'type' => self::HAS_ONE,
+            'via' => $via ? $via : "{$name}_id",
         ];
     }
 
@@ -71,8 +74,9 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
         return $this; //TODO: populate relations before
     }
 
-    public function __get($key){
- 
+    public function __get($key)
+    {
+
         if ($this->$key) {
             return $this->$key;
         }
@@ -84,15 +88,19 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
         return null; //TODO: change for error
     }
 
-    static protected function getRelationship($rel){
-        if(!isset(static::$relations[$rel]))
+    protected static function getRelationship($rel)
+    {
+        if (!isset(static::$relations[$rel])) {
             throw new \RuntimeException("Invalid relationship '$rel'", 500);
+        }
+
         return static::$relations[$rel];
     }
 
-    public function populate($rel){
+    public function populate($rel)
+    {
         $relations = static::getRelationship($rel);
-        $this->$rel =  static::resolver($relations, $this);
+        $this->$rel = static::resolver($relations, $this);
     }
 
     /**
@@ -103,13 +111,13 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      * @param  integer $per_page [description]
      * @return Paginator            [description]
      */
-    static public function pagination($params = [], $values = [], $page = 1, $per_page = 10){
-        $model =  get_called_class();
+    public static function pagination($params = [], $values = [], $page = 1, $per_page = 10)
+    {
+        $model = get_called_class();
         unset($params['limit'], $params['offset']);
         $sql = QueryGenerator::select($model::getSource(), $model::getDriver(), $params);
         return new Paginator($model, $sql, $page, $per_page, $values);
     }
-
 
     /**
      * Actualizar registros.
@@ -269,7 +277,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     {
         $val = array_shift($array);
 
-        return is_null($val) ?  [] : $val;
+        return is_null($val) ? [] : $val;
     }
 
     /**
@@ -282,7 +290,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     protected static function getValues(array $array)
     {
         return isset($array[0]) ?
-            is_array($array[0]) ? $array[0] : [$array[0]]: $array;
+        is_array($array[0]) ? $array[0] : [$array[0]] : $array;
     }
 
     /**
