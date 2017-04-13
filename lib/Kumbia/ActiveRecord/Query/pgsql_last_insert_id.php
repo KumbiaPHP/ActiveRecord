@@ -29,7 +29,7 @@ namespace Kumbia\ActiveRecord\Query;
  *
  * @return string
  */
-function pgsql_last_insert_id(\PDO $dbh, $pk, $table, $schema = null)
+function pgsql_last_insert_id(\PDO $dbh, $pk, $table, $schema = '')
 {
     $seq = "{$table}_{$pk}_seq";
     if ($schema) {
