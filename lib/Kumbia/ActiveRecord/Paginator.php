@@ -57,21 +57,21 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @var string
      */
-    protected $_model;
+    protected $model;
 
     /**
      * Cadena SQL a ejecutar.
      *
      * @var string
      */
-    protected $_sql;
+    protected $sql;
 
     /**
      * Párametros de la consulta.
      *
-     * @var array
+     * @var array|null
      */
-    protected $_values;
+    protected $values;
 
     /**
      * Items de pagina.
@@ -97,18 +97,18 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
         /*validacion*/
         $this->validPage();
 
-        $this->_model = $model;
+        $this->model = $model;
 
         // Valores para consulta
-        $this->_values = ($values !== null && !is_array($values)) ?
+        $this->values = ($values !== null && !is_array($values)) ?
                     array_slice(func_get_args(), 4) : $values;
 
         $this->count = $this->countQuery($model, $sql);
         $this->totalPages = (int) max(1, ceil($this->count / $this->perPage));
         $this->validCurrent();
         // Establece el limit y offset
-        $this->_sql = QueryGenerator::query($model::getDriver(), 'limit', $sql, $perPage, ($page - 1) * $perPage);
-        $this->items = $model::query($this->_sql, $this->_values)->fetchAll();
+        $this->sql = QueryGenerator::query($model::getDriver(), 'limit', $sql, $perPage, ($page - 1) * $perPage);
+        $this->items = $model::query($this->sql, $this->values)->fetchAll();
     }
     
     /**
@@ -161,7 +161,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      */
     protected function countQuery($model, $sql)
     {
-        $query = $model::query("SELECT COUNT(*) AS count FROM ($sql) AS t", $this->_values)->fetch();
+        $query = $model::query("SELECT COUNT(*) AS count FROM ($sql) AS t", $this->values)->fetch();
 
         return (int) $query->count;
     }
