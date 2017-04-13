@@ -22,7 +22,7 @@ namespace Kumbia\ActiveRecord;
 /**
  * Implementación de patrón ActiveRecord con ayudantes de consultas sql.
  */
-class ActiveRecord extends LiteRecord
+class ActiveRecord extends LiteRecord implements \JsonSerializable
 {
 
     const BELONG_TO = 1;
@@ -33,20 +33,20 @@ class ActiveRecord extends LiteRecord
      * Describe the relationships
      * @var array
      */
-    static protected $rs = [];
+    static protected $relations = [];
 
-    static public function resolver($rs, $obj){
-        $model = $rs->model;
-        if($rs->type === self::HAS_MANY){
-            return $model::allBy($rs->via, $obj->pk());
+    static public function resolver($relations, $obj){
+        $model = $relations->model;
+        if($relations->type === self::HAS_MANY){
+            return $model::allBy($relations->via, $obj->pk());
         }
-        return $model::first($rs->via, $obj->pk());
+        return $model::first($relations->via, $obj->pk());
     }
 
     static public function hasMany($name, $class, $via = NULL){
         $str = strtolower($name);
         $name = static::getTable();
-        static::$rs[$str] = (object)[
+        static::$relations[$str] = (object)[
             'model' => $class,
             'type'  => self::HAS_MANY,
             'via'   => $via ? $via : "{$name}_id"
@@ -56,11 +56,19 @@ class ActiveRecord extends LiteRecord
     static public function hasOne($name, $class, $via = NULL){
         $str = strtolower($name);
         $name = static::getTable();
-        static::$rs[$str] = (object)[
+        static::$relations[$str] = (object)[
             'model' => $class,
             'type'  => self::HAS_ONE,
             'via'   => $via ? $via : "{$name}_id"
         ];
+    }
+
+    /**
+     * json_encode() method
+     */
+    public function jsonSerialize()
+    {
+        return $this; //TODO: populate relations before
     }
 
     public function __get($key){
@@ -69,7 +77,7 @@ class ActiveRecord extends LiteRecord
             return $this->$key;
         }
         //it's a relationship
-        if (isset(static::$rs[$key])) {
+        if (isset(static::$relations[$key])) {
             $this->populate($key);
             return $this->$key;
         }
@@ -77,14 +85,14 @@ class ActiveRecord extends LiteRecord
     }
 
     static protected function getRelationship($rel){
-        if(!isset(static::$rs[$rel]))
+        if(!isset(static::$relations[$rel]))
             throw new \RuntimeException("Invalid relationship '$rel'", 500);
-        return static::$rs[$rel];
+        return static::$relations[$rel];
     }
 
     public function populate($rel){
-        $rs = static::getRelationship($rel);
-        $this->$rel =  static::resolver($rs, $this);
+        $relations = static::getRelationship($rel);
+        $this->$rel =  static::resolver($relations, $this);
     }
 
     /**
