@@ -71,7 +71,7 @@ class ActiveRecord extends LiteRecord
         //it's a relationship
         if (isset(static::$rs[$key])) {
             $this->populate($key);
-            return $this->values[$key];
+            return $this->$key;
         }
         return null; //TODO: change for error
     }
