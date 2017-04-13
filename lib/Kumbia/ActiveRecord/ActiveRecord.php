@@ -22,7 +22,7 @@ namespace Kumbia\ActiveRecord;
 /**
  * Implementación de patrón ActiveRecord con ayudantes de consultas sql.
  */
-class ActiveRecord extends LiteRecord implements \JsonSerializable
+class ActiveRecord extends LiteRecord
 {
 
     const BELONG_TO = 1;
@@ -33,21 +33,20 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      * Describe the relationships
      * @var array
      */
-    static protected $_rs = [];
+    static protected $rs = [];
 
     static public function resolver($rs, $obj){
         $model = $rs->model;
         if($rs->type === self::HAS_MANY){
             return $model::allBy($rs->via, $obj->pk());
-        }else{
-            return $model::first($rs->via, $obj->pk());
         }
+        return $model::first($rs->via, $obj->pk());
     }
 
     static public function hasMany($name, $class, $via = NULL){
         $str = strtolower($name);
         $name = static::getTable();
-        static::$_rs[$str] = (object)[
+        static::$rs[$str] = (object)[
             'model' => $class,
             'type'  => self::HAS_MANY,
             'via'   => $via ? $via : "{$name}_id"
@@ -57,33 +56,30 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     static public function hasOne($name, $class, $via = NULL){
         $str = strtolower($name);
         $name = static::getTable();
-        static::$_rs[$str] = (object)[
+        static::$rs[$str] = (object)[
             'model' => $class,
             'type'  => self::HAS_ONE,
             'via'   => $via ? $via : "{$name}_id"
         ];
     }
 
-    public function jsonSerialize(){
-       return $this->values;
-    }
-
-    public function __get($name){
-        $val = parent::__get($name);
-        if($val){
-            return $val;
-        }elseif(isset(static::$_rs[$name])){//it's a relationship
-            $this->populate($name);
-            return $this->values[$name];
-        }else{
-            return null;
+    public function __get($key){
+ 
+        if ($this->$key) {
+            return $this->$key;
         }
+        //it's a relationship
+        if (isset(static::$rs[$key])) {
+            $this->populate($key);
+            return $this->values[$key];
+        }
+        return null; //TODO: change for error
     }
 
     static protected function getRelationship($rel){
-        if(!isset(static::$_rs[$rel]))
+        if(!isset(static::$rs[$rel]))
             throw new \RuntimeException("Invalid relationship '$rel'", 500);
-        return static::$_rs[$rel];
+        return static::$rs[$rel];
     }
 
     public function populate($rel){
