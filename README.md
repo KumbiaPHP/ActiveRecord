@@ -1,4 +1,4 @@
-![KumbiaPHP](http://proto.kumbiaphp.com/img/kumbiaphp.png)
+![KumbiaPHP](https://proto.kumbiaphp.com/img/kumbiaphp.png)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/badges/quality-score.png?s=f7230602070a9e9605d46544197bcdac46166612)](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/)
 [![Code Coverage](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/badges/coverage.png?s=58997633701e84050c0ebd5334f3eb1bb8b7ad42)](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/)
@@ -46,11 +46,9 @@ Necesita KumbiaPHP > 0.9RC
 
 Necesita KumbiaPHP > 0.9RC
 
-1. Copiar la carpeta lib/Kumbia en vendor.  (vendor/Kumbia/ActiveRecord/..)
+1. Copiar [config/config_databases.php](config/config_databases.php) en app/config/databases.php y configurar
 
-2. Copiar [config_databases.php](/config_databases.php) en app/config/databases.php y configurar
-
-3. Añadir en app/libs/ : [lite_record.php](#literecord) y/o [act_record.php](#actrecord)
+2. (Opcional) Añadir en app/libs/ : [lite_record.php](#literecord) y/o [act_record.php](#actrecord)
 
 
 ### LiteRecord
@@ -72,9 +70,9 @@ Para los que prefieren SQL y las ventajas de un ORM, incluye un mini ActiveRecor
  * @subpackage LiteRecord
  */
 
-use Kumbia\ActiveRecord\LiteRecord as ORM;
+//use Kumbia\ActiveRecord\LiteRecord as ORM;
 
-class LiteRecord extends ORM
+class LiteRecord extends \Kumbia\ActiveRecord\LiteRecord
 {
 
 }
@@ -98,9 +96,9 @@ ActiveRecord completo
  * @subpackage ActiveRecord
  */
 
-use Kumbia\ActiveRecord\ActiveRecord;
+//use Kumbia\ActiveRecord\ActiveRecord;
 
-class ActRecord extends ActiveRecord
+class ActRecord extends \Kumbia\ActiveRecord\ActiveRecord
 {
 
 }
@@ -119,7 +117,16 @@ class Personas extends ActRecord //o LiteRecord según el que prefiera
 
 }
 ```
+O directamente sin clase padre
+```php
+<?php
+//app/models/personas.php
 
+class Personas extends \Kumbia\ActiveRecord\Literecord
+{
+
+}
+```
 ## Controller
 
 ```php
