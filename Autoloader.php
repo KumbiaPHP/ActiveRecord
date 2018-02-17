@@ -24,8 +24,6 @@ namespace Kumbia\ActiveRecord;
  */
 class Autoloader
 {
-    private static $folder;
-
     /**
      * Registra el autoloader.
      *
@@ -34,7 +32,6 @@ class Autoloader
     public static function register($prepend = false)
     {
         spl_autoload_register([__CLASS__, 'autoload'], true, $prepend);
-        self::$folder = dirname(dirname(__DIR__)).'/';
     }
 
     /**
@@ -45,8 +42,8 @@ class Autoloader
         if (0 !== strpos($className, 'Kumbia\\ActiveRecord')) {
             return;
         }
-
+        $className = substr($className, 19);
         $fileName = str_replace(['_', '\\'], DIRECTORY_SEPARATOR, $className).'.php';
-        require self::$folder.$fileName;
+        require __DIR__.$fileName;
     }
 }
