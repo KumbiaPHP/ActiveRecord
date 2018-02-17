@@ -11,10 +11,10 @@ php:
   - master
   - hhvm
 
-  matrix:
-    allow_failures:
-      - php: hhvm
-      - php: master
+matrix:
+  allow_failures:
+    - php: hhvm
+    - php: master
 
 notifications:
   slack: kumbiaphp:51JaKQTXASwf52D8b32OyWb9
