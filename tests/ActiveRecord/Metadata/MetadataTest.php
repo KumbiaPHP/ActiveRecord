@@ -1,6 +1,6 @@
 <?php
 
-class MetadataTest extends PHPUnit_Framework_TestCase
+class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return \Kumbia\ActiveRecord\Metadata\Metadata
