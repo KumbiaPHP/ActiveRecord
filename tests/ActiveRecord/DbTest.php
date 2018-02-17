@@ -2,7 +2,7 @@
 
 use Kumbia\ActiveRecord\Db;
 
-class DbTest extends PHPUnit_Framework_TestCase
+class DbTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetInstance()
     {
