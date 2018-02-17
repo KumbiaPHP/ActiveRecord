@@ -29,7 +29,8 @@
     "require": {
         "php": ">=5.4.0"
     },
+    "target-dir": "Kumbia/ActiveRecord",
     "autoload": {
-        "psr-0": { "Kumbia\\ActiveRecord": "lib/" }
+        "psr-0": { "Kumbia\\ActiveRecord": "." }
     }
 }

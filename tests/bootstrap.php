@@ -2,7 +2,7 @@
 
 use Kumbia\ActiveRecord\Autoloader;
 
-require_once __DIR__.'/../lib/Kumbia/ActiveRecord/Autoloader.php';
+require_once __DIR__.'/Autoloader.php';
 
 define('PRODUCTION', false);
 define('APP_PATH', __DIR__.'/');
