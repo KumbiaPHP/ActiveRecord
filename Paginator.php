@@ -17,6 +17,7 @@
  * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
+
 namespace Kumbia\ActiveRecord;
 
 /**
@@ -89,10 +90,10 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      * @param int    $perPage cantidad de items por pagina
      * @param mixed  $values  valores
      */
-    public function __construct($model, $sql, $page, $perPage, $values = null)
+    public function __construct($model, $sql, int $page, int $perPage, $values = null)
     {
-        $this->perPage = (int) $perPage;
-        $this->page = (int) $page;
+        $this->perPage = $perPage;
+        $this->page = $page;
 
         /*validacion*/
         $this->validPage();
