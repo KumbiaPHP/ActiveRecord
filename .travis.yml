@@ -15,6 +15,7 @@ matrix:
   allow_failures:
     - php: hhvm
     - php: master
+    - php: 5.5
 
 notifications:
   slack: kumbiaphp:51JaKQTXASwf52D8b32OyWb9
