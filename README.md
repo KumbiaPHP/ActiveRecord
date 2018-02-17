@@ -122,7 +122,7 @@ O directamente sin clase padre
 <?php
 //app/models/personas.php
 
-class Personas extends \Kumbia\ActiveRecord\Literecord
+class Personas extends \Kumbia\ActiveRecord\LiteRecord
 {
 
 }
@@ -132,8 +132,6 @@ class Personas extends \Kumbia\ActiveRecord\Literecord
 ```php
 <?php
 //app/controller/personas_controller.php
-
-//Load::models('personas'); No es necesario en v1
 
 class PersonasController extends AppController {
 
