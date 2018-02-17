@@ -17,6 +17,7 @@
  * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
+
 namespace Kumbia\ActiveRecord\Query;
 
 /**
@@ -28,17 +29,9 @@ namespace Kumbia\ActiveRecord\Query;
  *
  * @return string
  */
-function mysql_limit($sql, $limit = null, $offset = null)
+function mysql_limit($sql, int $limit, int $offset = 0)
 {
-    if ($limit !== null) {
-        $limit = (int) $limit;
-        $sql .= " LIMIT $limit";
-    }
-
-    if ($offset !== null) {
-        $offset = (int) $offset;
-        $sql .= " OFFSET $offset";
-    }
+    $sql .= " LIMIT $offset, $limit";
 
     return $sql;
 }

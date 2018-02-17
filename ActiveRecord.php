@@ -17,6 +17,7 @@
  * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
+
 namespace Kumbia\ActiveRecord;
 
 /**
@@ -24,13 +25,13 @@ namespace Kumbia\ActiveRecord;
  */
 class ActiveRecord extends LiteRecord implements \JsonSerializable
 {
-
     const BELONG_TO = 1;
     const HAS_MANY = 2;
     const HAS_ONE = 3;
 
     /**
-     * Describe the relationships
+     * Describe the relationships.
+     *
      * @var array
      */
     protected static $relations = [];
@@ -41,6 +42,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
         if ($relations->type === self::HAS_MANY) {
             return $model::allBy($relations->via, $obj->pk());
         }
+
         return $model::first($relations->via, $obj->pk());
     }
 
@@ -67,7 +69,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     }
 
     /**
-     * json_encode() method
+     * json_encode() method.
      */
     public function jsonSerialize()
     {
@@ -76,15 +78,16 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
 
     public function __get($key)
     {
-
         if (property_exists($this, $key)) {
             return $this->$key;
         }
         //it's a relationship
         if (isset(static::$relations[$key])) {
             $this->populate($key);
+
             return $this->$key;
         }
+
         return null; //TODO: change for error
     }
 
@@ -104,18 +107,21 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     }
 
     /**
-     * Pagination of Results
-     * @param  Array  $params   [description]
-     * @param  Array  $values   [description]
-     * @param  integer $page     [description]
-     * @param  integer $per_page [description]
-     * @return Paginator            [description]
+     * Pagination of Results.
+     *
+     * @param array $params   [description]
+     * @param array $values   [description]
+     * @param int   $page     [description]
+     * @param int   $per_page [description]
+     *
+     * @return Paginator [description]
      */
     public static function pagination($params = [], $values = [], $page = 1, $per_page = 10)
     {
         $model = get_called_class();
         unset($params['limit'], $params['offset']);
         $sql = QueryGenerator::select($model::getSource(), $model::getDriver(), $params);
+
         return new Paginator($model, $sql, $page, $per_page, $values);
     }
 
@@ -172,7 +178,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
         if ($sqlItem !== '' && $sqlItem !== null) {
             $sql_temp = \preg_replace('/\s+/', '', $sqlItem);
             if (!\preg_match('/^[a-zA-Z0-9_\.]+$/', $sql_temp)) {
-                throw new \RuntimeException('Se esta tratando de ejecutar una operacion maliciosa!');
+                throw new \RuntimeException('Se está tratando de ejecutar un SQL peligroso!');
             }
         }
 
@@ -205,14 +211,14 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     /**
      * Obtener la primera coincidencia de las condiciones indicadas.
      *
-     * @param array  $params parametros adicionales
-     *                       order: criterio de ordenamiento
-     *                       fields: lista de campos
-     *                       group: agrupar campos
-     *                       join: joins de tablas
-     *                       having: condiciones de grupo
-     *                       offset: valor offset queda
-     * @param array  $values valores de busqueda
+     * @param array $params parametros adicionales
+     *                      order: criterio de ordenamiento
+     *                      fields: lista de campos
+     *                      group: agrupar campos
+     *                      join: joins de tablas
+     *                      having: condiciones de grupo
+     *                      offset: valor offset queda
+     * @param array $values valores de busqueda
      *
      * @return ActiveRecord
      */
