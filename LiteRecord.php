@@ -29,7 +29,7 @@ class LiteRecord extends BaseRecord
      *
      * @param string $id valor para clave primaria
      *
-     * @return LiteRecord
+     * @return self
      */
     public function __invoke($id)
     {
@@ -56,7 +56,7 @@ class LiteRecord extends BaseRecord
      * @param array $data
      *
      * @return bool
-     * @throws PDOException
+     * @throws \PDOException
      */
     public function create(array $data = [])
     {
