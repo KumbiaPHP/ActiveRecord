@@ -84,11 +84,11 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     /**
      * Constructor.
      *
-     * @param string $model   nombre de clase de modelo
-     * @param string $sql     consulta select sql
-     * @param int    $page    numero de pagina
-     * @param int    $perPage cantidad de items por pagina
-     * @param mixed  $values  valores
+     * @param string $model nombre de clase de modelo
+     * @param string $sql consulta select sql
+     * @param int $page numero de pagina
+     * @param int $perPage cantidad de items por pagina
+     * @param mixed $values valores
      */
     public function __construct($model, $sql, int $page, int $perPage, $values = null)
     {
