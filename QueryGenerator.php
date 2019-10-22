@@ -121,7 +121,7 @@ class QueryGenerator
      */
     protected static function order($order)
     {
-        return \empty($order) ? '' : "ORDER BY $order";
+        return empty($order) ? '' : "ORDER BY $order";
     }
 
     /**
