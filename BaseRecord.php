@@ -80,9 +80,7 @@ class BaseRecord
      */
     public function getFields()
     {
-        $fields = function ($obj) {return \array_keys(\get_object_vars($obj));};
-
-        return $fields($this);
+        return \array_keys(\get_object_vars($this));
     }
 
     /**
