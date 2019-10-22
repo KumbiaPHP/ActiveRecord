@@ -19,6 +19,8 @@
  */
 namespace Kumbia\ActiveRecord;
 
+use KumbiaException;
+
 /**
  * Base del ORM ActiveRecord.
  */
@@ -52,8 +54,10 @@ class BaseRecord
      * Get the Primary Key value for the object
      * @return mixed
      */
-    public function pk(){
+    public function pk()
+    {
         $pk = static::getPK();
+
         return $this->$pk;
     }
 
@@ -68,7 +72,7 @@ class BaseRecord
             $this->$k = $v;
         }
     }
- 
+
     /**
      * Listado de los campos.
      *
@@ -76,8 +80,7 @@ class BaseRecord
      */
     public function getFields()
     {
-        $fields = function ($obj) { return array_keys(get_object_vars($obj)); };
-        return $fields ($this);
+        return \array_keys(\get_object_vars($this));
     }
 
     /**
@@ -87,19 +90,19 @@ class BaseRecord
      */
     public function getAlias()
     {
-        return array_map('ucwords', $this->getFields());
+        return \array_map('ucwords', $this->getFields());
     }
 
     /**
      * Verifica que PK este seteado.
      *
-     * @throws \KumbiaException
+     * @throws KumbiaException
      */
     protected function hasPK()
     {
         $pk = static::getPK();
         if (empty($this->$pk)) {
-            throw new \KumbiaException(_('No se ha especificado valor para la clave primaria'));
+            throw new KumbiaException(_('No se ha especificado valor para la clave primaria'));
         }
     }
 
@@ -124,9 +127,10 @@ class BaseRecord
      */
     public static function getTable()
     {
-        $split = explode('\\', \get_called_class());
-        $table = preg_replace('/[A-Z]/', "_$0", lcfirst(end($split)));
-        return strtolower($table);
+        $split = \explode('\\', \get_called_class());
+        $table = \preg_replace('/[A-Z]/', '_$0', \lcfirst(\end($split)));
+
+        return \strtolower($table);
     }
 
     /**
@@ -182,11 +186,10 @@ class BaseRecord
     /**
      * Obtiene manejador de conexion a la base de datos.
      *
-     * @param bool $force forzar nueva conexion PDO
-     *
+     * @param  bool   $force forzar nueva conexion PDO
      * @return \PDO
      */
-    protected static function dbh($force = false)
+    protected static function dbh($force = \false)
     {
         return Db::get(static::getDatabase(), $force);
     }
@@ -194,10 +197,9 @@ class BaseRecord
     /**
      * Consulta sql preparada.
      *
-     * @param string $sql
-     *
+     * @param  string          $sql
+     * @throws \PDOException
      * @return \PDOStatement
-     * @throw \PDOException
      */
     public static function prepare($sql)
     {
@@ -220,10 +222,9 @@ class BaseRecord
     /**
      * Consulta sql.
      *
-     * @param string $sql
-     *
+     * @param  string          $sql
+     * @throws \PDOException
      * @return \PDOStatement
-     * @throw PDOException
      */
     public static function sql($sql)
     {
@@ -236,35 +237,33 @@ class BaseRecord
     /**
      * Ejecuta consulta sql.
      *
-     * @param string $sql
-     * @param array | string $values valores
-     *
+     * @param  string               $sql
+     * @param  array                |      string $values valores
      * @return bool|\PDOStatement
      */
     public static function query($sql, $values = null)
     {
-        if (func_num_args() === 1) {
+        if (\func_num_args() === 1) {
             return self::sql($sql);
         }
 
         $sth = self::prepare($sql);
-        if (!is_array($values)) {
+        if ( ! \is_array($values)) {
             $values = \array_slice(\func_get_args(), 1);
         }
 
-        return $sth->execute($values) ? $sth : false;
+        return $sth->execute($values) ? $sth : \false;
     }
 
     /**
      * Verifica si existe el registro.
      *
-     * @param string $pk valor para clave primaria
-     *
+     * @param  string $pk valor para clave primaria
      * @return bool
      */
     public static function exists($pk)
     {
-        $source = static::getSource();
+        $source  = static::getSource();
         $pkField = static::getPK();
 
         return self::query("SELECT COUNT(*) AS count FROM $source WHERE $pkField = ?", $pk)->fetch()->count > 0;
@@ -273,11 +272,10 @@ class BaseRecord
     /**
      * Paginar consulta sql.
      *
-     * @param string $sql     consulta select sql
-     * @param int    $page    numero de pagina
-     * @param int    $perPage cantidad de items por pagina
-     * @param array  $values  valores
-     *
+     * @param  string      $sql     consulta select sql
+     * @param  int         $page    numero de pagina
+     * @param  int         $perPage cantidad de items por pagina
+     * @param  array       $values  valores
      * @return Paginator
      */
     public static function paginateQuery($sql, $page, $perPage, $values = [])

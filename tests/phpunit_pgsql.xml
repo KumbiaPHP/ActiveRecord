@@ -8,7 +8,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Hello World Test Suite">
+        <testsuite name="Kumbia ActiveRecord PostreSQL">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>

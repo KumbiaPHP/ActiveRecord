@@ -10,7 +10,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="main">
+        <testsuite name="Kumbia ActiveRecord Mysql">
             <directory>.</directory>
         </testsuite>
     </testsuites>

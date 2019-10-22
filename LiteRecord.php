@@ -27,8 +27,7 @@ class LiteRecord extends BaseRecord
     /**
      * Obtener objeto por clave primaria, $var = Modelo($id).
      *
-     * @param string $id valor para clave primaria
-     *
+     * @param  string $id valor para clave primaria
      * @return self
      */
     public function __invoke($id)
@@ -39,8 +38,7 @@ class LiteRecord extends BaseRecord
     /**
      * Invoca el callback.
      *
-     * @param string $callback
-     *
+     * @param  string  $callback
      * @return mixed
      */
     protected function callback($callback)
@@ -53,29 +51,28 @@ class LiteRecord extends BaseRecord
     /**
      * Crear registro.
      *
-     * @param array $data
-     *
-     * @return bool
+     * @param  array           $data
      * @throws \PDOException
+     * @return bool
      */
     public function create(array $data = [])
     {
         $this->dump($data);
 
         // Callback antes de crear
-        if ($this->callback('_beforeCreate') === false) {
-            return false;
+        if ($this->callback('_beforeCreate') === \false) {
+            return \false;
         }
 
         $sql = QueryGenerator::insert($this, $data);
 
-        if (!self::prepare($sql)->execute($data)) {
-            return false;
+        if ( ! self::prepare($sql)->execute($data)) {
+            return \false;
         }
 
         // Verifica si la PK es autogenerada
         $pk = static::getPK();
-        if (!isset($this->$pk)) {
+        if ( ! isset($this->$pk)) {
             $this->$pk = QueryGenerator::query(
                 static::getDriver(),
                 'last_insert_id',
@@ -88,62 +85,60 @@ class LiteRecord extends BaseRecord
         // Callback despues de crear
         $this->callback('_afterCreate');
 
-        return true;
+        return \true;
     }
 
     /**
      * Actualizar registro.
      *
-     * @param array $data
-     *
-     * @return bool
+     * @param  array              $data
      * @throws \KumbiaException
+     * @return bool
      */
     public function update(array $data = [])
     {
         $this->dump($data);
         // Callback antes de actualizar
-        if ($this->callback('_beforeUpdate') === false) {
-            return false;
+        if ($this->callback('_beforeUpdate') === \false) {
+            return \false;
         }
         $this->hasPK();
         $values = [];
-        $sql = QueryGenerator::update($this, $values);
+        $sql    = QueryGenerator::update($this, $values);
         //var_dump($values);var_dump($sql);die;
-        if (!self::prepare($sql)->execute($values)) {
-            return false;
+        if ( ! self::prepare($sql)->execute($values)) {
+            return \false;
         }
         // Callback despues de actualizar
         $this->callback('_afterUpdate');
 
-        return true;
+        return \true;
     }
 
     /**
      * Guardar registro.
      *
-     * @param array $data
-     *
+     * @param  array  $data
      * @return bool
      */
     public function save(array $data = [])
     {
         $this->dump($data);
 
-        if ($this->callback('_beforeSave') === false) {
-            return false;
+        if ($this->callback('_beforeSave') === \false) {
+            return \false;
         }
 
         $method = $this->saveMethod();
         $result = $this->$method();
 
-        if (!$result) {
-            return false;
+        if ( ! $result) {
+            return \false;
         }
 
         $this->callback('_afterSave');
 
-        return true;
+        return \true;
     }
 
     /**
@@ -155,20 +150,19 @@ class LiteRecord extends BaseRecord
     {
         $pk = static::getPK();
 
-        return (empty($this->$pk) || !static::exists($this->$pk)) ?
-            'create' : 'update';
+        return (empty($this->$pk) || ! static::exists($this->$pk)) ?
+        'create' : 'update';
     }
 
     /**
      * Eliminar registro por pk.
      *
-     * @param int $pk valor para clave primaria
-     *
+     * @param  int    $pk valor para clave primaria
      * @return bool
      */
     public static function delete($pk)
     {
-        $source = static::getSource();
+        $source  = static::getSource();
         $pkField = static::getPK();
 
         return static::query("DELETE FROM $source WHERE $pkField = ?", (int) $pk)->rowCount() > 0;
@@ -177,14 +171,13 @@ class LiteRecord extends BaseRecord
     /**
      * Buscar por clave primaria.
      *
-     * @param string $pk     valor para clave primaria
-     * @param string $fields campos que se desean obtener separados por coma
-     *
+     * @param  string       $pk     valor para clave primaria
+     * @param  string       $fields campos que se desean obtener separados por coma
      * @return LiteRecord
      */
     public static function get($pk, $fields = '*')
     {
-        $source = static::getSource();
+        $source  = static::getSource();
         $pkField = static::getPK();
 
         $sql = "SELECT $fields FROM $source WHERE $pkField = ?";
@@ -195,16 +188,15 @@ class LiteRecord extends BaseRecord
     /**
      * Obtiene todos los registros de la consulta sql.
      *
-     * @param string         $sql
-     * @param string | array $values
-     *
+     * @param  string  $sql
+     * @param  string  |      array $values
      * @return array
      */
-    public static function all($sql = '', $values = null)
+    public static function all($sql = '', $values = \null)
     {
-        if (!$sql) {
+        if ( ! $sql) {
             $source = static::getSource();
-            $sql = "SELECT * FROM $source";
+            $sql    = "SELECT * FROM $source";
         }
 
         return static::query($sql, $values)->fetchAll();
@@ -213,12 +205,11 @@ class LiteRecord extends BaseRecord
     /**
      * Obtiene el primer registro de la consulta sql.
      *
-     * @param string         $sql
-     * @param string | array $values
-     *
+     * @param  string  $sql
+     * @param  string  |      array $values
      * @return array
      */
-    public static function first($sql, $values = null)
+    public static function first($sql, $values = \null)
     {
         return static::query($sql, $values)->fetch();
     }

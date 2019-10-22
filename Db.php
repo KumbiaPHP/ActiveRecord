@@ -43,16 +43,15 @@ abstract class Db
     /**
      * Obtiene manejador de conexión a la base de datos.
      *
-     * @param string $database base de datos a conectar
-     * @param bool   $force    forzar nueva conexion PDO
-     *
-     * @return PDO
      * @throw KumbiaException
+     * @param  string $database base de datos a conectar
+     * @param  bool   $force    forzar nueva conexion PDO
+     * @return PDO
      */
-    public static function get($database = 'default', $force = false)
+    public static function get($database = 'default', $force = \false)
     {
         // Verifica el singleton
-        if (!$force && isset(self::$pool[$database])) {
+        if ( ! $force && isset(self::$pool[$database])) {
             return self::$pool[$database];
         }
 
@@ -66,16 +65,17 @@ abstract class Db
     /**
      * Conexión a la base de datos.
      *
-     * @param array $config Config base de datos a conectar
-     *
+     * @param  array               $config Config base de datos a conectar
+     * @throws \RuntimeException
      * @return PDO
      */
     private static function connect($config)
     {
         try {
             return new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
-        } catch (\PDOException $e) { //TODO: comprobar
-                $message = $e->getMessage();
+        } catch (\PDOException $e) {
+            //TODO: comprobar
+            $message = $e->getMessage();
             throw new \RuntimeException("No se pudo realizar la conexión con '{$config['dsn']}'. {$message}");
         }
     }
@@ -83,27 +83,28 @@ abstract class Db
     /**
      * Obtiene manejador de conexión a la base de datos.
      *
-     * @param string $database base de datos a conectar
-     *
+     * @param  string              $database base de datos a conectar
+     * @throws \RuntimeException
      * @return array
      */
     private static function getConfig($database)
     {
         if (empty(self::$config)) {
             // Leer la configuración de conexión
-            self::$config = require APP_PATH.'config/databases.php';
+            self::$config = require \APP_PATH.'config/databases.php';
         }
-        if (!isset(self::$config[$database])) {
-            throw new \RuntimeException("No existen datos de conexión para la bd '$database' en ".APP_PATH.'config/databases.php');
+        if ( ! isset(self::$config[$database])) {
+            throw new \RuntimeException("No existen datos de conexión para la bd '$database' en ".\APP_PATH.'config/databases.php');
         }
 
-            // Envia y carga los valores por defecto para la conexión, si no existen
-        return self::$config[$database] +  [
-                'dns'      => null,
-                'username' => null,
-                'password' => null,
-                'params'   => [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
-            ];
+        // Envia y carga los valores por defecto para la conexión, si no existen
+
+        return self::$config[$database] + [
+            'dns'      => \null,
+            'username' => \null,
+            'password' => \null,
+            'params'   => [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
+        ];
     }
 
     /**
@@ -113,6 +114,6 @@ abstract class Db
      */
     public static function setConfig(array $value)
     {
-        self::$config = [] +  self::$config + $value;
+        self::$config = [] + self::$config + $value;
     }
 }
