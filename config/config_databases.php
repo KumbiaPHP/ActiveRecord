@@ -48,10 +48,10 @@ return [
         'username' => 'username',
         'password' => 'password',
         'params'   => [
-            PDO::ATTR_PERSISTENT => true, //conexión persistente
-            PDO::ATTR_ERRMODE    => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_AUTOCOMMIT => 1,
-            PDO::ATTR_CASE       => PDO::CASE_LOWER
+            \PDO::ATTR_PERSISTENT => \true, //conexión persistente
+            \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_AUTOCOMMIT => 1,
+            \PDO::ATTR_CASE       => \PDO::CASE_LOWER
         ]
     ]
     //Más conexiones
