@@ -31,7 +31,7 @@ class Autoloader
      */
     public static function register($prepend = false)
     {
-        spl_autoload_register([__CLASS__, 'autoload'], true, $prepend);
+        \spl_autoload_register([__CLASS__, 'autoload'], true, $prepend);
     }
 
     /**
@@ -39,11 +39,11 @@ class Autoloader
      */
     public static function autoload($className)
     {
-        if (0 !== strpos($className, 'Kumbia\\ActiveRecord')) {
+        if (0 !== \strpos($className, 'Kumbia\\ActiveRecord')) {
             return;
         }
-        $className = substr($className, 19);
-        $fileName = str_replace(['_', '\\'], DIRECTORY_SEPARATOR, $className).'.php';
+        $className = \substr($className, 19);
+        $fileName = \str_replace(['_', '\\'], \DIRECTORY_SEPARATOR, $className).'.php';
         require __DIR__.$fileName;
     }
 }
