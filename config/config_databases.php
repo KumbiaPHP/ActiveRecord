@@ -33,7 +33,7 @@ $databses['database3'] = [
         ],
 ];
 
-//Conexion a MSSQL
+//Conexión a MSSQL
 $databases['database4'] = [
         'dsn'      => 'sqlsrv:Server=mihost;Database=midatabase;',
         'username' => 'miusername',
@@ -44,6 +44,18 @@ $databases['database4'] = [
         )*/
 ];
 
+//Conexión a Oracle
+$databases['oracle'] = [
+    'dsn' => "oci:dbname=//localhost:1521/midatabase",
+    'username' => 'username',
+    'password' => 'password',
+    'params' => [
+        PDO::ATTR_PERSISTENT => true, //conexión persistente
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_AUTOCOMMIT => 1,
+        PDO::ATTR_CASE => PDO::CASE_LOWER
+    ]
+];
 //Más conexiones
 
 return $databases; //Siempre al final

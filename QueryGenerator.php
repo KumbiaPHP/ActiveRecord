@@ -65,10 +65,11 @@ class QueryGenerator
     }
 
     /**
-     * Permite construir el WHERE, GROUP BY, HAVING y ORDER BY de una cosnulta SQL
-     * en base a los parametros $param.
+     * Permite construir el WHERE, GROUP BY, HAVING y ORDER BY de una consulta SQL
+     * en base a los parámetros $params.
      *
      * @param array $params
+     * @return array
      */
     protected static function prepareParam(array $params)
     {
@@ -83,6 +84,7 @@ class QueryGenerator
     /**
      * Genera una sentencia where.
      *
+     * @param $where
      * @return string
      */
     protected static function where($where)
@@ -93,6 +95,7 @@ class QueryGenerator
     /**
      * Genera una sentencia GROUP.
      *
+     * @param $group
      * @return string
      */
     protected static function group($group)
@@ -103,6 +106,7 @@ class QueryGenerator
     /**
      * Genera una sentencia HAVING.
      *
+     * @param $having
      * @return string
      */
     protected static function having($having)
@@ -113,6 +117,7 @@ class QueryGenerator
     /**
      * Genera una sentencia ORDER BY.
      *
+     * @param $order
      * @return string
      */
     protected static function order($order)

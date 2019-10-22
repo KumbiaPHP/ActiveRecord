@@ -93,7 +93,7 @@ class BaseRecord
     /**
      * Verifica que PK este seteado.
      *
-     * @throw \KumbiaException
+     * @throws \KumbiaException
      */
     protected function hasPK()
     {
@@ -210,7 +210,7 @@ class BaseRecord
     /**
      * Retorna el último ID insertado.
      *
-     * @return ID
+     * @return string
      */
     public static function lastInsertId()
     {
@@ -236,10 +236,10 @@ class BaseRecord
     /**
      * Ejecuta consulta sql.
      *
-     * @param string         $sql
+     * @param string $sql
      * @param array | string $values valores
      *
-     * @return PDOStatement
+     * @return bool|\PDOStatement
      */
     public static function query($sql, $values = null)
     {
