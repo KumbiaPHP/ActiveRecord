@@ -10,11 +10,9 @@ php:
   - 7.2
   - 7.3
   - master
-  - hhvm
 
 matrix:
   allow_failures:
-    - php: hhvm
     - php: master
     - php: 5.5
 
