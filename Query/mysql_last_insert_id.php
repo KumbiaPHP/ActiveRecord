@@ -22,14 +22,13 @@ namespace Kumbia\ActiveRecord\Query;
 /**
  * Obtiene el último id generado en mysql.
  *
- * @param \PDO   $dbh    conexion pdo
- * @param string $pk     campo clave primaria
- * @param string $table  nombre de tabla
- * @param string $schema esquema
- *
+ * @param  \PDO     $dbh    conexion pdo
+ * @param  string   $pk     campo clave primaria
+ * @param  string   $table  nombre de tabla
+ * @param  string   $schema esquema
  * @return string
  */
-function mysql_last_insert_id(\PDO $dbh, $pk, $table, $schema = null)
+function mysql_last_insert_id(\PDO $dbh, $pk, $table, $schema = \null)
 {
     return $dbh->lastInsertId();
 }

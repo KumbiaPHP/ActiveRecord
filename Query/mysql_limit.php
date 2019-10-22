@@ -23,15 +23,12 @@ namespace Kumbia\ActiveRecord\Query;
 /**
  * Adiciona limit y offset a la consulta sql en mysql.
  *
- * @param string $sql    consulta select
- * @param string $limit  valor limit
- * @param string $offset valor offset
- *
+ * @param  string   $sql    consulta select
+ * @param  int      $limit  valor limit
+ * @param  int      $offset valor offset
  * @return string
  */
 function mysql_limit($sql, int $limit, int $offset = 0)
 {
-    $sql .= " LIMIT $offset, $limit";
-
-    return $sql;
+    return $sql." LIMIT $offset, $limit";
 }
