@@ -19,7 +19,7 @@
  */
 namespace Kumbia\ActiveRecord;
 
-use KumbiaException;
+use \KumbiaException;
 
 /**
  * Base del ORM ActiveRecord.

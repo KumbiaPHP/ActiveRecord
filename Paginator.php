@@ -84,16 +84,16 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     /**
      * Constructor.
      *
-     * @param string $model nombre de clase de modelo
-     * @param string $sql consulta select sql
-     * @param int $page numero de pagina
-     * @param int $perPage cantidad de items por pagina
-     * @param mixed $values valores
+     * @param string $model   nombre de clase de modelo
+     * @param string $sql     consulta select sql
+     * @param int    $page    numero de pagina
+     * @param int    $perPage cantidad de items por pagina
+     * @param mixed  $values  valores
      */
-    public function __construct($model, $sql, int $page, int $perPage, $values = null)
+    public function __construct($model, $sql, int $page, int $perPage, $values = \null)
     {
         $this->perPage = $perPage;
-        $this->page = $page;
+        $this->page    = $page;
 
         /*validacion*/
         $this->validPage();
@@ -101,14 +101,14 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
         $this->model = $model;
 
         // Valores para consulta
-        $this->values = ($values !== null && !is_array($values)) ?
-        array_slice(func_get_args(), 4) : $values;
+        $this->values = ($values !== \null && ! \is_array($values)) ?
+                        \array_slice(\func_get_args(), 4) : $values;
 
-        $this->count = $this->countQuery($model, $sql);
-        $this->totalPages = (int) max(1, ceil($this->count / $this->perPage));
+        $this->count      = $this->countQuery($model, $sql);
+        $this->totalPages = (int) \max(1, \ceil($this->count / $this->perPage));
         $this->validCurrent();
         // Establece el limit y offset
-        $this->sql = QueryGenerator::query($model::getDriver(), 'limit', $sql, $perPage, ($page - 1) * $perPage);
+        $this->sql   = QueryGenerator::query($model::getDriver(), 'limit', $sql, $perPage, ($page - 1) * $perPage);
         $this->items = $model::query($this->sql, $this->values)->fetchAll();
     }
 
@@ -155,10 +155,9 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     /**
      * Cuenta el número de resultados totales.
      *
-     * @param string $model
-     * @param string $sql
-     *
-     * @return int total de resultados
+     * @param  string $model
+     * @param  string $sql
+     * @return int    total de resultados
      */
     protected function countQuery($model, $sql)
     {
@@ -194,7 +193,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      */
     public function nextPage()
     {
-        return ($this->totalPages > $this->page) ? ($this->page + 1) : null;
+        return $this->totalPages > $this->page ? $this->page + 1 : 0;
     }
 
     /**
@@ -204,7 +203,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      */
     public function prevPage()
     {
-        return ($this->page > 1) ? ($this->page - 1) : null;
+        return $this->page > 1 ? $this->page - 1 : 0;
     }
 
     /**
