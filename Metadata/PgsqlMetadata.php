@@ -29,10 +29,9 @@ class PgsqlMetadata extends Metadata
     /**
      * Consultar los campos de la tabla en la base de datos.
      *
-     * @param string $database base de datos
-     * @param string $table    tabla
-     * @param string $schema   squema
-     *
+     * @param  string  $database base de datos
+     * @param  string  $table    tabla
+     * @param  string  $schema   squema
      * @return array
      */
     protected function queryFields($database, $table, $schema = 'public')
@@ -64,8 +63,7 @@ class PgsqlMetadata extends Metadata
     /**
      * Genera la metadata.
      *
-     * @param \PDOStatement $describe
-     *
+     * @param  \PDOStatement $describe
      * @return array
      */
     private static function describe(\PDOStatement $describe)
@@ -75,10 +73,10 @@ class PgsqlMetadata extends Metadata
         foreach ($describe as $value) {
             $fields[$value['field']] = [
                 'Type'    => $value['type'],
-                'Null'    => $value['null'] != 'NO',
-                'Default' => $value['default'] != '',
+                'Null'    => $value['null'] !== 'NO',
+                'Default' => $value['default'] !== '',
                 'Key'     => \substr($value['key'], 0, 3),
-                'Auto'    => \preg_match('/^nextval\(/', $value['default']),
+                'Auto'    => \preg_match('/^nextval\(/', $value['default'])
             ];
         }
 

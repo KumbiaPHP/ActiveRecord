@@ -21,7 +21,7 @@
 namespace Kumbia\ActiveRecord\Metadata;
 
 use Kumbia\ActiveRecord\Db;
-use PDO;
+use \PDO;
 
 /**
  * Adaptador de Metadata para Mysql.
@@ -31,26 +31,25 @@ class MysqlMetadata extends Metadata
     /**
      * Consultar los campos de la tabla en la base de datos.
      *
-     * @param string $database base de datos
-     * @param string $table    tabla
-     * @param string $schema   squema
-     *
+     * @param  string  $database base de datos
+     * @param  string  $table    tabla
+     * @param  string  $schema   squema
      * @return array
      */
-    protected function queryFields($database, $table, $schema = null)
+    protected function queryFields($database, $table, $schema = \null)
     {
-        $sql = $schema ? "DESCRIBE `$schema`.`$table`" : "DESCRIBE `$table`";
+        $sql      = $schema ? "DESCRIBE `$schema`.`$table`" : "DESCRIBE `$table`";
         $describe = Db::get($database)->query($sql);
 
         $fields = [];
         // TODO mejorar este código
-        while (($value = $describe->fetch(PDO::FETCH_OBJ))) {
+        while ($value = $describe->fetch(\PDO::FETCH_OBJ)) {
             $fields[$value->Field] = [
                 'Type'    => $value->Type,
-                'Null'    => $value->Null != 'NO',
+                'Null'    => $value->Null !== 'NO',
                 'Key'     => $value->Key,
-                'Default' => $value->Default != '',
-                'Auto'    => $value->Extra == 'auto_increment',
+                'Default' => $value->Default !== '',
+                'Auto'    => $value->Extra === 'auto_increment'
             ];
             $this->filterCol($fields[$value->Field], $value->Field);
         }

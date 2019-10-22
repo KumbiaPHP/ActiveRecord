@@ -15,13 +15,14 @@
  * @category   Kumbia
  * @package    ActiveRecord
  * @subpackage Metadata
+ *
  * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 namespace Kumbia\ActiveRecord\Metadata;
 
 use Kumbia\ActiveRecord\Db;
-use PDO;
+use \PDO;
 
 /**
  * Adaptador de Metadata para Sqlsrv
@@ -32,10 +33,9 @@ class SqlsrvMetadata extends Metadata
     /**
      * Consultar los campos de la tabla en la base de datos
      *
-     * @param string $database base de datos
-     * @param string $table    tabla
-     * @param string $schema   squema
-     *
+     * @param  string  $database base de datos
+     * @param  string  $table    tabla
+     * @param  string  $schema   squema
      * @return array
      */
     protected function queryFields($database, $table, $schema = 'dbo')
@@ -60,36 +60,35 @@ class SqlsrvMetadata extends Metadata
     /**
      * Optiene el PK
      *
-     * @param string $database base de datos
-     * @param string $table    tabla
-     *
+     * @param  string   $database base de datos
+     * @param  string   $table    tabla
      * @return string
      */
     private static function pk($database, $table)
     {
         $pk = Db::get($database)->query("exec sp_pkeys @table_name='$table'");
-        $pk = $pk->fetch(PDO::FETCH_OBJ);
+        $pk = $pk->fetch(\PDO::FETCH_OBJ);
+
         return $pk->COLUMN_NAME;
     }
 
     /**
      * Genera la metadata
      *
-     * @param \PDOStatement $describe SQL result
-     * @param string        $pk       Primary key
-     *
+     * @param  \PDOStatement $describe SQL result
+     * @param  string        $pk       Primary key
      * @return array
      */
     protected function describe(\PDOStatement $describe, $pk)
     {
         // TODO Mejorar
         $fields = [];
-        while (( $value = $describe->fetch(PDO::FETCH_OBJ))) :
+        while (($value = $describe->fetch( \PDO::FETCH_OBJ))):
             $fields[$value->field_name] = [
                 'Type'    => $value->type_field,
                 'Null'    => ($value->is_nullable),
-                'Key'     => ($value->field_name == $pk) ? 'PRI' : '',
-                'Default' => str_replace("''", "'", trim($value->default_value, "(')")),
+                'Key'     => ($value->field_name === $pk) ? 'PRI' : '',
+                'Default' => \str_replace("''", "'", \trim($value->default_value, "(')")),
                 'Auto'    => ($value->is_auto_increment)
             ];
             $this->filterCol($fields[$value->field_name], $value->field_name);

@@ -70,11 +70,10 @@ abstract class Metadata
     /**
      * Metadata de la tabla.
      *
-     * @param string $type     tipo de controlador
-     * @param string $database
-     * @param string $table
-     * @param string $schema
-     *
+     * @param  string     $type       tipo de controlador
+     * @param  string     $database
+     * @param  string     $table
+     * @param  string     $schema
      * @return Metadata
      */
     public static function get($type, $database, $table, $schema = null)
@@ -90,26 +89,25 @@ abstract class Metadata
      * Obtiene la metadata de la tabla
      * Y la cachea si esta en producción.
      *
-     * @param string $type     tipo de controlador
-     * @param string $database
-     * @param string $table
-     * @param string $schema
-     *
+     * @param  string     $type       tipo de controlador
+     * @param  string     $database
+     * @param  string     $table
+     * @param  string     $schema
      * @return Metadata
      */
     private static function getMetadata($type, $database, $table, $schema)
     {
-        if (PRODUCTION && !(self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
+        if (\PRODUCTION && ! (self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
             return self::$instances["$database.$table.$schema"];
         }
-        $class = ucwords($type).'Metadata';
+        $class = \ucwords($type).'Metadata';
 
         $class = __NAMESPACE__."\\$class";
 
         self::$instances["$database.$table.$schema"] = new $class($database, $table, $schema);
 
-         // Cachea los metadatos
-        if (PRODUCTION) {
+        // Cachea los metadatos
+        if (\PRODUCTION) {
             \Cache::driver()->save(
                 self::$instances["$database.$table.$schema"],
                 \Config::get('config.application.metadata_lifetime'),
@@ -128,17 +126,17 @@ abstract class Metadata
      * @param string $table    tabla
      * @param string $schema   squema
      */
-    private function __construct($database, $table, $schema = null)
+    private function __construct($database, $table, $schema = \null)
     {
-        $this->fields = $this->queryFields($database, $table, $schema);
+        $this->fields     = $this->queryFields($database, $table, $schema);
         $this->fieldsList = \array_keys($this->fields);
     }
 
     /**
      * Permite el filtrado de columna en PK, por Defecto y Autogenerado.
      *
-     * @param $m información de la columna
-     * @param $field nombre de la columna
+     * @param $m     información de la columna
+     * @param $field nombre      de la columna
      */
     protected function filterCol($m, $field)
     {
@@ -154,13 +152,12 @@ abstract class Metadata
     /**
      * Consultar los campos de la tabla en la base de datos.
      *
-     * @param string $database base de datos
-     * @param string $table    tabla
-     * @param string $schema   squema
-     *
+     * @param  string  $database base de datos
+     * @param  string  $table    tabla
+     * @param  string  $schema   squema
      * @return array
      */
-    abstract protected function queryFields($database, $table, $schema = null);
+    abstract protected function queryFields($database, $table, $schema = \null);
 
     /**
      * Obtiene la descripción de los campos.
