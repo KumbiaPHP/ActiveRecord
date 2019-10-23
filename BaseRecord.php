@@ -26,6 +26,9 @@ use \KumbiaException;
  */
 class BaseRecord
 {
+    
+    const VERSION = '0.4.0';
+
     /**
      * Database por defecto usa default.
      *
