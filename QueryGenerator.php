@@ -88,7 +88,7 @@ class QueryGenerator
      */
     protected static function where($where)
     {
-        return \empty($where) ? '' : "WHERE $where";
+        return empty($where) ? '' : "WHERE $where";
     }
 
     /**
