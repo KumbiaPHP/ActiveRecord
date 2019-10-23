@@ -30,7 +30,7 @@ class LiteRecord extends BaseRecord
      * @param  string $id valor para clave primaria
      * @return self
      */
-    public function __invoke($id)
+    public function __invoke($id): self
     {
         return self::get($id);
     }
@@ -39,9 +39,9 @@ class LiteRecord extends BaseRecord
      * Invoca el callback.
      *
      * @param  string  $callback
-     * @return mixed
+     * @return bool
      */
-    protected function callback($callback)
+    protected function callback(string $callback): bool
     {
         if (\method_exists($this, $callback)) {
             return $this->$callback();
@@ -55,7 +55,7 @@ class LiteRecord extends BaseRecord
      * @throws \PDOException
      * @return bool
      */
-    public function create(array $data = [])
+    public function create(array $data = []): bool
     {
         $this->dump($data);
 
@@ -95,7 +95,7 @@ class LiteRecord extends BaseRecord
      * @throws \KumbiaException
      * @return bool
      */
-    public function update(array $data = [])
+    public function update(array $data = []): bool
     {
         $this->dump($data);
         // Callback antes de actualizar
@@ -121,7 +121,7 @@ class LiteRecord extends BaseRecord
      * @param  array  $data
      * @return bool
      */
-    public function save(array $data = [])
+    public function save(array $data = []): bool
     {
         $this->dump($data);
 
@@ -146,7 +146,7 @@ class LiteRecord extends BaseRecord
      *
      * @return string
      */
-    protected function saveMethod()
+    protected function saveMethod(): string
     {
         $pk = static::getPK();
 
@@ -157,15 +157,15 @@ class LiteRecord extends BaseRecord
     /**
      * Eliminar registro por pk.
      *
-     * @param  int    $pk valor para clave primaria
+     * @param  string    $pk valor para clave primaria
      * @return bool
      */
-    public static function delete($pk)
+    public static function delete($pk): bool
     {
         $source  = static::getSource();
         $pkField = static::getPK();
 
-        return static::query("DELETE FROM $source WHERE $pkField = ?", (int) $pk)->rowCount() > 0;
+        return static::query("DELETE FROM $source WHERE $pkField = ?", $pk)->rowCount() > 0;
     }
 
     /**
@@ -173,9 +173,9 @@ class LiteRecord extends BaseRecord
      *
      * @param  string       $pk     valor para clave primaria
      * @param  string       $fields campos que se desean obtener separados por coma
-     * @return LiteRecord
+     * @return self
      */
-    public static function get($pk, $fields = '*')
+    public static function get($pk, $fields = '*'): self
     {
         $source  = static::getSource();
         $pkField = static::getPK();
@@ -192,7 +192,7 @@ class LiteRecord extends BaseRecord
      * @param  string  |      array $values
      * @return array
      */
-    public static function all($sql = '', $values = \null)
+    public static function all($sql = '', $values = \null): array
     {
         if ( ! $sql) {
             $source = static::getSource();
@@ -205,11 +205,11 @@ class LiteRecord extends BaseRecord
     /**
      * Obtiene el primer registro de la consulta sql.
      *
-     * @param  string  $sql
-     * @param  string  |      array $values
+     * @param  string       $sql
+     * @param  string|array $values
      * @return array
      */
-    public static function first($sql, $values = \null)
+    public static function first($sql, $values = \null): array
     {
         return static::query($sql, $values)->fetch();
     }

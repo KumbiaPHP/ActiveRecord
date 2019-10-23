@@ -50,7 +50,7 @@ class BaseRecord
      *
      * @param array $data
      */
-    public function __construct(array $data = []) : void
+    public function __construct(array $data = [])
     {
         $this->dump($data);
     }
@@ -59,7 +59,7 @@ class BaseRecord
      * Get the Primary Key value for the object
      * @return string
      */
-    public function pk() : string
+    public function pk(): string
     {
         $pk = static::getPK();
 
@@ -71,7 +71,7 @@ class BaseRecord
      *
      * @param array $data
      */
-    public function dump(array $data = []) : void
+    public function dump(array $data = []): void
     {
         foreach ($data as $k => $v) {
             $this->$k = $v;
@@ -83,7 +83,7 @@ class BaseRecord
      *
      * @return string[]
      */
-    public function getFields() : array
+    public function getFields(): array
     {
         return \array_keys(\get_object_vars($this));
     }
@@ -93,7 +93,7 @@ class BaseRecord
      *
      * @return string[]
      */
-    public function getAlias() : array
+    public function getAlias(): array
     {
         return \array_map('ucwords', $this->getFields());
     }
@@ -116,7 +116,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getPK() : string
+    public static function getPK(): string
     {
         if (static::$pk) {
             return static::$pk;
@@ -130,7 +130,7 @@ class BaseRecord
      *
      * @return string smallcase del nombre de la clase
      */
-    public static function getTable() : string
+    public static function getTable(): string
     {
         $split = \explode('\\', \get_called_class());
         $table = \preg_replace('/[A-Z]/', '_$0', \lcfirst(\end($split)));
@@ -143,7 +143,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getSchema() : string
+    public static function getSchema(): string
     {
         return '';
     }
@@ -153,7 +153,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getSource() : string
+    public static function getSource(): string
     {
         $source = static::getTable();
         if ($schema = static::getSchema()) {
@@ -168,7 +168,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getDatabase() : string
+    public static function getDatabase(): string
     {
         return static::$database;
     }
@@ -178,7 +178,7 @@ class BaseRecord
      *
      * @return Metadata\Metadata
      */
-    public static function metadata() : Metadata\Metadata
+    public static function metadata(): Metadata\Metadata
     {
         return Metadata\Metadata::get(
             static::getDriver(),
@@ -194,7 +194,7 @@ class BaseRecord
      * @param  bool   $force forzar nueva conexion PDO
      * @return PDO
      */
-    protected static function dbh(bool $force = \false) : PDO
+    protected static function dbh(bool $force = \false): PDO
     {
         return Db::get(static::getDatabase(), $force);
     }
@@ -206,7 +206,7 @@ class BaseRecord
      * @throws \PDOException
      * @return PDOStatement
      */
-    public static function prepare(string $sql) : PDOStatement
+    public static function prepare(string $sql): PDOStatement
     {
         $sth = self::dbh()->prepare($sql);
         $sth->setFetchMode(\PDO::FETCH_CLASS, \get_called_class());
@@ -219,7 +219,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function lastInsertId() : string
+    public static function lastInsertId(): string
     {
         return self::dbh()->lastInsertId();
     }
@@ -231,7 +231,7 @@ class BaseRecord
      * @throws \PDOException
      * @return PDOStatement
      */
-    public static function sql(string $sql) : PDOStatement
+    public static function sql(string $sql): PDOStatement
     {
         $sth = self::dbh()->query($sql);
         $sth->setFetchMode(\PDO::FETCH_CLASS, \get_called_class());
@@ -266,7 +266,7 @@ class BaseRecord
      * @param  string $pk valor para clave primaria
      * @return bool
      */
-    public static function exists($pk) : bool
+    public static function exists($pk): bool
     {
         $source  = static::getSource();
         $pkField = static::getPK();
@@ -283,7 +283,7 @@ class BaseRecord
      * @param  array       $values  valores
      * @return Paginator
      */
-    public static function paginateQuery(string $sql, int $page, int $perPage, $values = []) : Paginator
+    public static function paginateQuery(string $sql, int $page, int $perPage, $values = []): Paginator
     {
         return new Paginator(\get_called_class(), $sql, $page, $perPage, $values);
     }
@@ -293,7 +293,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getDriver() : string
+    public static function getDriver(): string
     {
         return self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
     }
@@ -303,7 +303,7 @@ class BaseRecord
      *
      * @return bool
      */
-    public static function begin() : bool
+    public static function begin(): bool
     {
         return self::dbh()->beginTransaction();
     }
@@ -313,7 +313,7 @@ class BaseRecord
      *
      * @return bool
      */
-    public static function rollback() : bool
+    public static function rollback(): bool
     {
         return self::dbh()->rollBack();
     }
@@ -323,7 +323,7 @@ class BaseRecord
      *
      * @return bool
      */
-    public static function commit() : bool
+    public static function commit(): bool
     {
         return self::dbh()->commit();
     }
