@@ -73,8 +73,8 @@ class PgsqlMetadata extends Metadata
         foreach ($describe as $value) {
             $fields[$value['field']] = [
                 'Type'    => $value['type'],
-                'Null'    => $value['null'] !== 'NO',
-                'Default' => $value['default'] !== '',
+                'Null'    => $value['null'] != 'NO',
+                'Default' => $value['default'] != '',
                 'Key'     => \substr($value['key'], 0, 3),
                 'Auto'    => \preg_match('/^nextval\(/', $value['default'])
             ];

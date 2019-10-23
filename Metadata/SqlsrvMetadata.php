@@ -87,7 +87,7 @@ class SqlsrvMetadata extends Metadata
             $fields[$value->field_name] = [
                 'Type'    => $value->type_field,
                 'Null'    => ($value->is_nullable),
-                'Key'     => ($value->field_name === $pk) ? 'PRI' : '',
+                'Key'     => ($value->field_name == $pk) ? 'PRI' : '',
                 'Default' => \str_replace("''", "'", \trim($value->default_value, "(')")),
                 'Auto'    => ($value->is_auto_increment)
             ];

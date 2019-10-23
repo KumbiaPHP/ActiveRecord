@@ -46,10 +46,10 @@ class MysqlMetadata extends Metadata
         while ($value = $describe->fetch(\PDO::FETCH_OBJ)) {
             $fields[$value->Field] = [
                 'Type'    => $value->Type,
-                'Null'    => $value->Null !== 'NO',
+                'Null'    => $value->Null != 'NO',
                 'Key'     => $value->Key,
-                'Default' => $value->Default !== '',
-                'Auto'    => $value->Extra === 'auto_increment'
+                'Default' => $value->Default != '',
+                'Auto'    => $value->Extra == 'auto_increment'
             ];
             $this->filterCol($fields[$value->Field], $value->Field);
         }
