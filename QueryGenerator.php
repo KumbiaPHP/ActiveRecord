@@ -161,14 +161,12 @@ class QueryGenerator
      */
     protected static function insertField($field, LiteRecord $model, array &$data, array &$values)
     {
-        $meta        = $model::metadata();
-        $withDefault = $meta->getWithDefault();
-        $autoFields  = $meta->getAutoFields();
+        //$meta        = $model::metadata();
         if (self::haveValue($model, $field)) {
             $data[":$field"] = $model->$field;
             $values[]        = ":$field";
         } else {
-//if (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
+            //if (!\in_array($field, $meta->getWithDefault()) && !\in_array($field, $meta->getAutoFields())) {
             $values[] = 'NULL';
         }
     }
