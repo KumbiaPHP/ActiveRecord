@@ -99,7 +99,7 @@ class QueryGenerator
      */
     protected static function group($group)
     {
-        return \empty($group) ? '' : "GROUP BY $group";
+        return empty($group) ? '' : "GROUP BY $group";
     }
 
     /**
@@ -110,7 +110,7 @@ class QueryGenerator
      */
     protected static function having($having)
     {
-        return \empty($having) ? '' : "HAVING $having";
+        return empty($having) ? '' : "HAVING $having";
     }
 
     /**
