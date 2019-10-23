@@ -68,7 +68,7 @@ class QueryGenerator
      * en base a los parámetros $params.
      *
      * @param  array   $params
-     * @return array
+     * @return string[]
      */
     protected static function prepareParam(array $params)
     {
