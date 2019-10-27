@@ -120,7 +120,7 @@ class BaseRecord
     {
         if (static::$pk) {
             return static::$pk;
-        }
+    }
 
         return self::metadata()->getPK();
     }
@@ -209,7 +209,7 @@ class BaseRecord
     public static function prepare(string $sql): PDOStatement
     {
         $sth = self::dbh()->prepare($sql);
-        $sth->setFetchMode(\PDO::FETCH_CLASS, \get_called_class());
+        $sth->setFetchMode(\PDO::FETCH_CLASS, static::class);
 
         return $sth;
     }
@@ -234,7 +234,7 @@ class BaseRecord
     public static function sql(string $sql): PDOStatement
     {
         $sth = self::dbh()->query($sql);
-        $sth->setFetchMode(\PDO::FETCH_CLASS, \get_called_class());
+        $sth->setFetchMode(\PDO::FETCH_CLASS, static::class);
 
         return $sth;
     }
@@ -285,7 +285,7 @@ class BaseRecord
      */
     public static function paginateQuery(string $sql, int $page, int $perPage, $values = []): Paginator
     {
-        return new Paginator(\get_called_class(), $sql, $page, $perPage, $values);
+        return new Paginator(static::class, $sql, $page, $perPage, $values);
     }
 
     /**

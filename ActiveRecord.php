@@ -118,7 +118,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      */
     public static function pagination($params = [], $values = [], $page = 1, $per_page = 10)
     {
-        $model = get_called_class();
+        $model = static::class;
         unset($params['limit'], $params['offset']);
         $sql = QueryGenerator::select($model::getSource(), $model::getDriver(), $params);
 
@@ -139,7 +139,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
         if ($values !== null && !is_array($values)) {
             $values = \array_slice(\func_get_args(), 2);
         }
-        $sql = QueryGenerator::updateAll(\get_called_class(), $fields, $values, $where);
+        $sql = QueryGenerator::updateAll(static::class, $fields, $values, $where);
         $sth = self::prepare($sql);
         $sth->execute($values);
 
@@ -353,7 +353,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      *
      * @return Paginator
      */
-    public static function paginate(array $params, $page, $perPage, $values = null)
+    public static function paginate(array $params, int $page, int $perPage, $values = null)
     {
         unset($params['limit'], $params['offset']);
         $sql = QueryGenerator::select(static::getSource(), static::getDriver(), $params);
@@ -363,7 +363,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
             $values = \array_slice(func_get_args(), 3);
         }
 
-        return new Paginator(\get_called_class(), $sql, (int) $page, (int) $perPage, $values);
+        return new Paginator(static::class, $sql, $page, $perPage, $values);
     }
 
     /**
