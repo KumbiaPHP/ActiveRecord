@@ -14,7 +14,7 @@
  *
  * @category   Kumbia
  *
- * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
+ * @copyright  2005 - 2020  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 namespace Kumbia\ActiveRecord\Query;
