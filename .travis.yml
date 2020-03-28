@@ -16,6 +16,8 @@ notifications:
 #    email:
 #    - programador.manuel@gmail.com
 
+services:
+  - mysql
 
 env:
   - DB=mysql
