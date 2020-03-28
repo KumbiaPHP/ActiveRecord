@@ -242,20 +242,17 @@ class BaseRecord
     /**
      * Ejecuta consulta sql.
      *
-     * @param  string               $sql
-     * @param  array|string         $values valores
+     * @param  string        $sql
+     * @param  array         $values valores
      * @return bool|\PDOStatement
      */
-    public static function query(string $sql, $values = \null)
+    public static function query(string $sql, array $values = [])
     {
-        if (\func_num_args() === 1) {
+        if (empty($values)) {
             return self::sql($sql);
         }
 
         $sth = self::prepare($sql);
-        if ( ! \is_array($values)) {
-            $values = \array_slice(\func_get_args(), 1);
-        }
 
         return $sth->execute($values) ? $sth : \false;
     }

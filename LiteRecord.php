@@ -189,11 +189,11 @@ class LiteRecord extends BaseRecord
      * Obtiene todos los registros de la consulta sql.
      *
      * @param  string       $sql
-     * @param  string|array $values
+     * @param  array        $values
      * 
      * @return array
      */
-    public static function all($sql = '', $values = \null): array
+    public static function all(string $sql = '', array $values = []): array
     {
         if ( ! $sql) {
             $sql = 'SELECT * FROM '.static::getSource();
@@ -206,11 +206,11 @@ class LiteRecord extends BaseRecord
      * Obtiene el primer registro de la consulta sql.
      *
      * @param  string       $sql
-     * @param  string|array $values
+     * @param  array        $values
      * 
-     * @return array
+     * @return self
      */
-    public static function first($sql, $values = \null): self
+    public static function first(string $sql, array $values = []): self
     {
         return static::query($sql, $values)->fetch();
     }
