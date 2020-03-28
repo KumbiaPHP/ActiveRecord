@@ -45,21 +45,11 @@ abstract class Db
      *
      * @throw KumbiaException
      * @param  string $database base de datos a conectar
-     * @param  bool   $force    forzar nueva conexion PDO
      * @return PDO
      */
-    public static function get($database = 'default', $force = \false)
+    public static function get($database = 'default')
     {
-        // Verifica el singleton
-        if ( ! $force && isset(self::$pool[$database])) {
-            return self::$pool[$database];
-        }
-
-        if ($force) {
-            return self::connect(self::getConfig($database));
-        }
-
-        return self::$pool[$database] = self::connect(self::getConfig($database));
+        return self::$pool[$database] ?? self::$pool[$database] = self::connect(self::getConfig($database));
     }
 
     /**
