@@ -59,7 +59,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->fieldData($fields['id'], 'int(11)', false, 'PRI', true, false);
         $this->fieldData($fields['nombre'], 'varchar(50)', false, '', false, false);
         $this->fieldData($fields['email'], 'varchar(100)', false, '', false, false);
-        $this->fieldData($fields['activo'], 'tinyint(1)', true, '', true, false);
+        $this->fieldData($fields['activo'], 'smallint(1)', true, '', true, false);
     }
 
     protected function fieldData($field, $type, $null, $key, $default, $auto)
