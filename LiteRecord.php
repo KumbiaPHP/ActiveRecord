@@ -42,7 +42,7 @@ class LiteRecord extends BaseRecord
      * 
      * @return bool
      */
-    protected function callback(string $callback): bool
+    protected function callback(string $callback): ?bool
     {
         if (\method_exists($this, $callback)) {
             return $this->$callback();
