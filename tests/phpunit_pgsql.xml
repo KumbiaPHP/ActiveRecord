@@ -2,7 +2,8 @@
 
 <phpunit bootstrap="Tests/bootstrap.php" colors="true">
     <php>
-        <var name="db_dsn" value="pgsql:dbname=hello_world_test;host=localhost"/>
+        <var name="config_database" value="pgsql"/>
+        <var name="metadata_class" value="Kumbia\ActiveRecord\Metadata\PgsqlMetadata"/>
         <var name="db_username" value="postgres"/>
         <var name="db_password" value=""/>
     </php>

@@ -27,7 +27,7 @@ env:
 before_script:
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'DROP DATABASE IF EXISTS test;' -U postgres; fi"
   - sh -c "if [ '$DB' = 'pgsql' ]; then psql -c 'CREATE DATABASE test;
-                                                CREATE TABLE IF NOT EXISTS test.usuario ( id int(11) NOT NULL DEFAULT 0, nombre  varchar(50) NOT NULL , email varchar(100) NOT NULL , activo tinyint(1) NULL DEFAULT 1 , PRIMARY KEY (id) );' -U postgres
+                                                 CREATE TABLE IF NOT EXISTS test.usuario ( id int(11) NOT NULL DEFAULT 0, nombre  varchar(50) NOT NULL , email varchar(100) NOT NULL , activo tinyint(1) NULL DEFAULT 1 , PRIMARY KEY (id) );' -U postgres
                                                 ; fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS test;
                                                   CREATE TABLE IF NOT EXISTS test.usuario ( id int(11) NOT NULL DEFAULT 0, nombre  varchar(50) NOT NULL , email varchar(100) NOT NULL , activo tinyint(1) NULL DEFAULT 1 , PRIMARY KEY (id) );'

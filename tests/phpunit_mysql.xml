@@ -2,7 +2,7 @@
 
 <phpunit bootstrap="bootstrap.php" colors="true">
     <php>
-        <var name="config_database" value="default"/>
+        <var name="config_database" value="mysql"/>
         <var name="metadata_class" value="Kumbia\ActiveRecord\Metadata\MysqlMetadata"/>
         <var name="metadata_type" value="mysql"/>
         <var name="metadata_table" value="usuario"/>
