@@ -18,9 +18,5 @@ class DbTest extends \PHPUnit\Framework\TestCase
         $instance2 = Db::get($GLOBALS['config_database']);
 
         $this->assertEquals($instance, $instance2);
-
-        $instance3 = Db::get($GLOBALS['config_database'], true);
-
-        $this->assertFalse($instance === $instance3);
     }
 }
