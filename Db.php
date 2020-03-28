@@ -19,7 +19,7 @@
  */
 namespace Kumbia\ActiveRecord;
 
-use PDO;
+use \PDO;
 
 /**
  * Manejador de conexiones de base de datos.
@@ -47,7 +47,7 @@ abstract class Db
      * @param  string $database base de datos a conectar
      * @return PDO
      */
-    public static function get(string $database = 'default')
+    public static function get(string $database = 'default'): PDO
     {
         return self::$pool[$database] ?? self::$pool[$database] = self::connect(self::getConfig($database));
     }
@@ -59,7 +59,7 @@ abstract class Db
      * @throws \RuntimeException
      * @return PDO
      */
-    private static function connect(array $config)
+    private static function connect(array $config): PDO
     {
         try {
             return new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
@@ -77,7 +77,7 @@ abstract class Db
      * @throws \RuntimeException
      * @return array
      */
-    private static function getConfig(string $database)
+    private static function getConfig(string $database): array
     {
         if (empty(self::$config)) {
             // Leer la configuración de conexión
@@ -104,6 +104,6 @@ abstract class Db
      */
     public static function setConfig(array $value)
     {
-        self::$config = [] + self::$config + $value; //TODO retornar PDOstatement
+        self::$config = [] + self::$config + $value; //TODO retornar PDO
     }
 }
