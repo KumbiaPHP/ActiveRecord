@@ -243,10 +243,10 @@ class BaseRecord
      * Ejecuta consulta sql.
      *
      * @param  string        $sql
-     * @param  array         $values valores
+     * @param  array|null         $values valores
      * @return bool|\PDOStatement
      */
-    public static function query(string $sql, array $values = [])
+    public static function query(string $sql, ?array $values = [])
     {
         if (empty($values)) {
             return self::sql($sql);
@@ -268,7 +268,7 @@ class BaseRecord
         $source  = static::getSource();
         $pkField = static::getPK();
 
-        return self::query("SELECT COUNT(*) AS count FROM $source WHERE $pkField = ?", $pk)->fetch()->count > 0;
+        return self::query("SELECT COUNT(*) AS count FROM $source WHERE $pkField = ?", [$pk])->fetch()->count > 0;
     }
 
     /**

@@ -167,7 +167,7 @@ class LiteRecord extends BaseRecord
         $source  = static::getSource();
         $pkField = static::$pk;
         // use pdo->execute()
-        return static::query("DELETE FROM $source WHERE $pkField = ?", $pk)->rowCount() > 0;
+        return static::query("DELETE FROM $source WHERE $pkField = ?", [$pk])->rowCount() > 0;
     }
 
     /**
@@ -182,7 +182,7 @@ class LiteRecord extends BaseRecord
     {
         $sql = "SELECT $fields FROM ".static::getSource().' WHERE '.static::$pk.' = ?';
 
-        return static::query($sql, $pk)->fetch();
+        return static::query($sql, [$pk])->fetch();
     }
 
     /**
