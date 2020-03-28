@@ -61,9 +61,7 @@ class BaseRecord
      */
     public function pk(): string
     {
-        $pk = static::getPK();
-
-        return $this->$pk;
+        return $this->{static::$pk};
     }
 
     /**
@@ -105,8 +103,7 @@ class BaseRecord
      */
     protected function hasPK()
     {
-        $pk = static::getPK();
-        if (empty($this->$pk)) {
+        if (empty($this->{static::$pk})) {
             throw new KumbiaException(_('No se ha especificado valor para la clave primaria'));
         }
     }
@@ -118,11 +115,7 @@ class BaseRecord
      */
     public static function getPK(): string
     {
-        if (static::$pk) {
-            return static::$pk;
-    }
-
-        return self::metadata()->getPK();
+        return static::$pk ?? static::$pk = self::metadata()->getPK();
     }
 
     /**
@@ -191,12 +184,11 @@ class BaseRecord
     /**
      * Obtiene manejador de conexion a la base de datos.
      *
-     * @param  bool   $force forzar nueva conexion PDO
      * @return PDO
      */
-    protected static function dbh(bool $force = \false): PDO
+    protected static function dbh(): PDO
     {
-        return Db::get(static::getDatabase(), $force);
+        return Db::get(static::getDatabase());
     }
 
     /**
