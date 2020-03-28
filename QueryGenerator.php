@@ -193,7 +193,7 @@ class QueryGenerator
     public static function update(LiteRecord $model, array &$data)
     {
         $set = [];
-        $pk  = $model::getPK();
+        $pk  = $model::$pk;
         /*elimina la clave primaria*/
         $list = \array_diff($model::metadata()->getFieldsList(), [$pk]);
         foreach ($list as $field) {
