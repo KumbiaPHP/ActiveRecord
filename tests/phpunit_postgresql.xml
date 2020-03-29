@@ -4,6 +4,7 @@
     <php>
         <var name="config_database" value="pgsql"/>
         <var name="metadata_class" value="Kumbia\ActiveRecord\Metadata\PgsqlMetadata"/>
+        <var name="metadata_type" value="pgsql"/>
         <var name="db_username" value="postgres"/>
         <var name="db_password" value=""/>
     </php>
