@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="Tests/bootstrap.php" colors="true">
+<phpunit bootstrap="bootstrap.php" colors="true">
     <php>
         <var name="config_database" value="pgsql"/>
         <var name="metadata_class" value="Kumbia\ActiveRecord\Metadata\PgsqlMetadata"/>
