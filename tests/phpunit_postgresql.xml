@@ -10,7 +10,7 @@
 
     <testsuites>
         <testsuite name="Kumbia ActiveRecord PostreSQL">
-            <directory>./Tests/</directory>
+            <directory>.</directory>
         </testsuite>
     </testsuites>
 
