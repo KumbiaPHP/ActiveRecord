@@ -32,8 +32,8 @@ before_script:
                                                         id serial PRIMARY KEY, 
                                                         nombre  varchar(50) NOT NULL , 
                                                         email varchar(100) NOT NULL , 
-                                                        activo smallint NULL DEFAULT 1 , 
-                                                        PRIMARY KEY (id) );' 
+                                                        activo smallint NULL DEFAULT 1 
+                                                      );' 
                                                   -U postgres;
                                                 fi"
   - sh -c "if [ '$DB' = 'mysql' ]; then mysql -e 'CREATE DATABASE IF NOT EXISTS test;
