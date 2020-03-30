@@ -43,7 +43,7 @@ class Autoloader
             return;
         }
         $className = \substr($className, 19);
-        $fileName = \str_replace(['_', '\\'], \DIRECTORY_SEPARATOR, $className).'.php';
+        $fileName = \str_replace('\\', \DIRECTORY_SEPARATOR, $className).'.php';
         require __DIR__.$fileName;
     }
 }
