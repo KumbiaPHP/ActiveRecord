@@ -81,6 +81,7 @@ class PgsqlMetadata extends Metadata
                 'Key'     => \substr($value->Key, 0, 3),
                 'Auto'    => \preg_match('/^nextval\(/', $value->Default)
             ];
+            $this->filterCol($fields[$value->Field], $value->Field);
         }
 
         return $fields;
