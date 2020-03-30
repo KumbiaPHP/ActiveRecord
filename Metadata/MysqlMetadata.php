@@ -34,22 +34,23 @@ class MysqlMetadata extends Metadata
      * @param  string  $database base de datos
      * @param  string  $table    tabla
      * @param  string  $schema   squema
+     * 
      * @return array
      */
-    protected function queryFields($database, $table, $schema = \null)
+    protected function queryFields(string $database, string $table, string $schema = '')
     {
         $sql      = $schema ? "DESCRIBE `$schema`.`$table`" : "DESCRIBE `$table`";
-        $describe = Db::get($database)->query($sql);
+        $describe = Db::get($database)->query($sql, \PDO::FETCH_OBJ);
 
         $fields = [];
         // TODO mejorar este código
-        while ($value = $describe->fetch(\PDO::FETCH_OBJ)) {
+        while ($value = $describe->fetch()) {
             $fields[$value->Field] = [
                 'Type'    => $value->Type,
-                'Null'    => $value->Null != 'NO',
+                'Null'    => $value->Null !== 'NO',
                 'Key'     => $value->Key,
                 'Default' => $value->Default != '',
-                'Auto'    => $value->Extra == 'auto_increment'
+                'Auto'    => $value->Extra === 'auto_increment'
             ];
             $this->filterCol($fields[$value->Field], $value->Field);
         }
