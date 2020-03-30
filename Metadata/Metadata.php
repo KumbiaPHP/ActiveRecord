@@ -35,7 +35,7 @@ abstract class Metadata
     /**
      * Descripción de los campos.
      *
-     * @var string[]
+     * @var array
      */
     protected $fields = [];
 
