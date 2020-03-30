@@ -7,7 +7,7 @@
     "license": "BSD-3-Clause",
     "support": {
         "issues": "https://github.com/KumbiaPHP/ActiveRecord/issues",
-        "irc": "irc://irc.freenode.org/kumbiaphp"
+        "slack": "irc://irc.freenode.org/kumbiaphp"
     },
     "authors": [
         {
@@ -31,5 +31,9 @@
     },
     "autoload": {
         "psr-4": { "Kumbia\\ActiveRecord": "." }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
     }
 }
