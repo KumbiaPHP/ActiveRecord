@@ -331,13 +331,11 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      *
      * @return int
      */
-    public static function count($where = null, $values = null)
+    public static function count(string $where = '', array $values = [])
     {
         $source = static::getSource();
         $sql = QueryGenerator::count($source, $where);
-        if ($values !== null && !is_array($values)) {
-            $values = \array_slice(\func_get_args(), 1);
-        }
+
         $sth = static::query($sql, $values);
 
         return $sth->fetch()->count;
