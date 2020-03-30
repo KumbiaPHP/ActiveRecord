@@ -99,7 +99,7 @@ abstract class Metadata
         if (\PRODUCTION && ! (self::$instances[$key] = \Cache::driver()->get($key, 'ActiveRecord.Metadata'))) {
             return self::$instances[$key];
         }
-        $class = \ucwords($type).'Metadata';
+        $class = \ucfirst($type).'Metadata';
 
         $class = __NAMESPACE__."\\$class";
 
