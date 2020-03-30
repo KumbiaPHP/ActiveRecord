@@ -42,8 +42,8 @@ class Autoloader
         if (0 !== \strpos($className, 'Kumbia\\ActiveRecord')) {
             return;
         }
-        $className = \substr($className, 19);
-        $fileName = \str_replace('\\', \DIRECTORY_SEPARATOR, $className).'.php';
+
+        $fileName = \str_replace('\\', \DIRECTORY_SEPARATOR, \substr($className, 19)).'.php';
         require __DIR__.$fileName;
     }
 }
