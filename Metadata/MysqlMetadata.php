@@ -37,7 +37,7 @@ class MysqlMetadata extends Metadata
      * 
      * @return array
      */
-    protected function queryFields(string $database, string $table, string $schema = '')
+    protected function queryFields(string $database, string $table, string $schema = ''): array
     {
         $sql      = $schema ? "DESCRIBE `$schema`.`$table`" : "DESCRIBE `$table`";
         $describe = Db::get($database)->query($sql, \PDO::FETCH_OBJ);
