@@ -21,6 +21,7 @@ namespace Kumbia\ActiveRecord;
 
 use \PDO;
 use \PDOStatement;
+use \PDOException;
 use \KumbiaException;
 
 /**
@@ -37,6 +38,13 @@ class BaseRecord
      * @var string
      */
     protected static $database = 'default';
+
+    /**
+     * Nombre de la tabla.
+     *
+     * @var string
+     */
+    protected static $table = '';
 
     /**
      * PK por defecto, si no existe mira en metadata.
@@ -93,6 +101,7 @@ class BaseRecord
      */
     public function getAlias(): array
     {
+        //$humanize = function ()
         return \array_map('\ucwords', $this->getFields());
     }
 
@@ -103,7 +112,7 @@ class BaseRecord
      */
     protected function hasPK()
     {
-        if (empty($this->{static::$pk})) {
+        if (! isset($this->{static::$pk})) {
             throw new KumbiaException(_('No se ha especificado valor para la clave primaria'));
         }
     }
@@ -125,10 +134,14 @@ class BaseRecord
      */
     public static function getTable(): string
     {
+        if (static::$table) {
+            return static::$table;
+        }
+        
         $split = \explode('\\', \get_called_class());
         $table = \preg_replace('/[A-Z]/', '_$0', \lcfirst(\end($split)));
 
-        return \strtolower($table);
+        return static::$table = \strtolower($table);
     }
 
     /**
@@ -184,9 +197,9 @@ class BaseRecord
     /**
      * Obtiene manejador de conexion a la base de datos.
      *
-     * @return PDO
+     * @return \PDO
      */
-    protected static function dbh(): PDO
+    protected static function dbh(): \PDO
     {
         return Db::get(static::getDatabase());
     }
@@ -195,8 +208,9 @@ class BaseRecord
      * Consulta sql preparada.
      *
      * @param  string          $sql
+     * 
      * @throws \PDOException
-     * @return PDOStatement
+     * @return \PDOStatement
      */
     public static function prepare(string $sql): PDOStatement
     {
@@ -220,25 +234,25 @@ class BaseRecord
      * Consulta sql.
      *
      * @param  string          $sql
+     * 
      * @throws \PDOException
-     * @return PDOStatement
+     * @return \PDOStatement
      */
     public static function sql(string $sql): PDOStatement
     {
-        $sth = self::dbh()->query($sql);
-        $sth->setFetchMode(\PDO::FETCH_CLASS, static::class);
-
-        return $sth;
+        return self::dbh()->query($sql, \PDO::FETCH_CLASS, static::class);
     }
 
     /**
      * Ejecuta consulta sql.
      *
      * @param  string        $sql
-     * @param  array|null         $values valores
-     * @return bool|\PDOStatement
+     * @param  array         $values valores
+     * 
+     * @throws PDOException 
+     * @return bool|PDOStatement
      */
-    public static function query(string $sql, ?array $values = [])
+    public static function query(string $sql, array $values = [])
     {
         if (empty($values)) {
             return self::sql($sql);
@@ -272,7 +286,7 @@ class BaseRecord
      * @param  array       $values  valores
      * @return Paginator
      */
-    public static function paginateQuery(string $sql, int $page, int $perPage, $values = []): Paginator
+    public static function paginateQuery(string $sql, int $page, int $perPage, array $values = []): Paginator
     {
         return new Paginator(static::class, $sql, $page, $perPage, $values);
     }
@@ -290,6 +304,7 @@ class BaseRecord
     /**
      * Comienza una trasacción.
      *
+     * @throws PDOException If there is already a transaction started or the driver does not support transactions
      * @return bool
      */
     public static function begin(): bool
@@ -300,6 +315,7 @@ class BaseRecord
     /**
      * Da marcha atrás a una trasacción.
      *
+     * @throws PDOException if there is no active transaction.
      * @return bool
      */
     public static function rollback(): bool
@@ -310,6 +326,7 @@ class BaseRecord
     /**
      * Realiza el commit de  una trasacción.
      *
+     * @throws \PDOException if there is no active transaction.
      * @return bool
      */
     public static function commit(): bool
