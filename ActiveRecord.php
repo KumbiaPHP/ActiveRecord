@@ -134,11 +134,8 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      *
      * @return int numero de registros actualizados
      */
-    public static function updateAll(array $fields, $where = null, array $values = [])
+    public static function updateAll(array $fields, string $where = '', array $values = [])
     {
-        if ($values !== null && !is_array($values)) {
-            $values = \array_slice(\func_get_args(), 2);
-        }
         $sql = QueryGenerator::updateAll(static::class, $fields, $values, $where);
         $sth = self::prepare($sql);
         $sth->execute($values);
