@@ -40,11 +40,11 @@ class PgsqlMetadata extends Metadata
         // Nota: Se excluyen claves compuestas
         $describe = Db::get($database)->query(
             "SELECT DISTINCT
-                c.column_name AS Field,
-                c.udt_name AS Type,
-                tc.constraint_type AS Key,
-                c.column_default AS Default,
-                c.is_nullable AS Null
+                c.column_name AS field,
+                c.udt_name AS type,
+                tc.constraint_type AS key,
+                c.column_default AS default,
+                c.is_nullable AS null
             FROM information_schema.columns c
             LEFT OUTER JOIN information_schema.key_column_usage cu ON (
                 cu.column_name = c.column_name AND cu.table_name = c.table_name AND (
@@ -74,14 +74,14 @@ class PgsqlMetadata extends Metadata
         $fields = [];
         // TODO mejorar este código
         foreach ($describe as $value) {
-            $fields[$value->Field] = [
-                'Type'    => $value->Type,
-                'Null'    => $value->Null !== 'NO',
-                'Default' => $value->Default != '',
-                'Key'     => \substr($value->Key, 0, 3),
-                'Auto'    => \preg_match('/^nextval\(/', $value->Default)
+            $fields[$value->field] = [
+                'Type'    => $value->type,
+                'Null'    => $value->null !== 'NO',
+                'Default' => $value->default != '',
+                'Key'     => \substr($value->key, 0, 3),
+                'Auto'    => \preg_match('/^nextval\(/', $value->default)
             ];
-            $this->filterCol($fields[$value->Field], $value->Field);
+            $this->filterCol($fields[$value->field], $value->field);
         }
 
         return $fields;
