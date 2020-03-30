@@ -29,7 +29,7 @@ abstract class Db
     /**
      * Pool de conexiones.
      *
-     * @var array
+     * @var PDO[]
      */
     private static $pool = [];
 
@@ -43,8 +43,8 @@ abstract class Db
     /**
      * Obtiene manejador de conexión a la base de datos.
      *
-     * @throw KumbiaException
      * @param  string $database base de datos a conectar
+     * 
      * @return PDO
      */
     public static function get(string $database = 'default'): PDO
@@ -56,6 +56,7 @@ abstract class Db
      * Conexión a la base de datos.
      *
      * @param  array               $config Config base de datos a conectar
+     * 
      * @throws \RuntimeException
      * @return PDO
      */
@@ -74,6 +75,7 @@ abstract class Db
      * Obtiene manejador de conexión a la base de datos.
      *
      * @param  string              $database base de datos a conectar
+     * 
      * @throws \RuntimeException
      * @return array
      */
