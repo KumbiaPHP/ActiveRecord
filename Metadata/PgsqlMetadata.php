@@ -40,11 +40,11 @@ class PgsqlMetadata extends Metadata
         // Nota: Se excluyen claves compuestas
         $describe = Db::get($database)->query(
             "SELECT DISTINCT
-                c.column_name AS field,
-                c.udt_name AS type,
-                tc.constraint_type AS key,
-                c.column_default AS default,
-                c.is_nullable AS null
+                c.column_name AS Field,
+                c.udt_name AS Type,
+                tc.constraint_type AS Key,
+                c.column_default AS Default,
+                c.is_nullable AS Null
             FROM information_schema.columns c
             LEFT OUTER JOIN information_schema.key_column_usage cu ON (
                 cu.column_name = c.column_name AND cu.table_name = c.table_name AND (
