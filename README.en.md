@@ -9,7 +9,7 @@ ENGLISH - [SPANISH](/README.md)
 
 # ActiveRecord
 
-New ActiveRecord in development, requires PHP > 5.4
+New ActiveRecord in development
 
 Don't use in production
 
