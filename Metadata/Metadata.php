@@ -74,6 +74,7 @@ abstract class Metadata
      * @param  string     $database
      * @param  string     $table
      * @param  string     $schema
+     * 
      * @return self
      */
     public static function get(string $type, string $database, string $table, string $schema = ''): self
@@ -94,26 +95,27 @@ abstract class Metadata
      */
     private static function getMetadata(string $type, string $database, string $table, string $schema): self
     {
-        if (\PRODUCTION && ! (self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
-            return self::$instances["$database.$table.$schema"];
+        $key = "$database.$table.$schema";
+        if (\PRODUCTION && ! (self::$instances[$key] = \Cache::driver()->get($key, 'ActiveRecord.Metadata'))) {
+            return self::$instances[$key];
         }
         $class = \ucwords($type).'Metadata';
 
         $class = __NAMESPACE__."\\$class";
 
-        self::$instances["$database.$table.$schema"] = new $class($database, $table, $schema);
+        self::$instances[$key] = new $class($database, $table, $schema);
 
         // Cachea los metadatos
         if (\PRODUCTION) {
             \Cache::driver()->save(
-                self::$instances["$database.$table.$schema"],
+                self::$instances[$key],
                 \Config::get('config.application.metadata_lifetime'),
-                "$database.$table.$schema",
+                $key,
                 'ActiveRecord.Metadata'
             );
         }
 
-        return self::$instances["$database.$table.$schema"];
+        return self::$instances[$key];
     }
 
     /**
