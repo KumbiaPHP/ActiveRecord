@@ -31,7 +31,7 @@ class PgsqlMetadata extends Metadata
      *
      * @param  string  $database base de datos
      * @param  string  $table    tabla
-     * @param  string  $schema   squema
+     * @param  string  $schema   esquema, por defecto 'public'
      * 
      * @return array
      */
