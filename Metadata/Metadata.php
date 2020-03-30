@@ -28,21 +28,21 @@ abstract class Metadata
     /**
      * Singleton de metadata.
      *
-     * @var array
+     * @var self[]
      */
     private static $instances = [];
 
     /**
      * Descripción de los campos.
      *
-     * @var array
+     * @var string[]
      */
     protected $fields = [];
 
     /**
      * Lista de campos.
      *
-     * @var array
+     * @var string[]
      */
     protected $fieldsList = [];
 
@@ -56,14 +56,14 @@ abstract class Metadata
     /**
      * Campos con valor predeterminado.
      *
-     * @var array
+     * @var string[]
      */
     protected $withDefault = [];
 
     /**
      * Campos con valor autogenerado.
      *
-     * @var array
+     * @var string[]
      */
     protected $autoFields = [];
 
@@ -74,15 +74,11 @@ abstract class Metadata
      * @param  string     $database
      * @param  string     $table
      * @param  string     $schema
-     * @return Metadata
+     * @return self
      */
-    public static function get($type, $database, $table, $schema = null)
+    public static function get(string $type, string $database, string $table, string $schema = ''): self
     {
-        if (isset(self::$instances["$database.$table.$schema"])) {
-            return self::$instances["$database.$table.$schema"];
-        }
-
-        return self::getMetadata($type, $database, $table, $schema);
+        return self::$instances["$database.$table.$schema"] ?? self::getMetadata($type, $database, $table, $schema);
     }
 
     /**
@@ -93,9 +89,10 @@ abstract class Metadata
      * @param  string     $database
      * @param  string     $table
      * @param  string     $schema
-     * @return Metadata
+     * 
+     * @return self
      */
-    private static function getMetadata($type, $database, $table, $schema)
+    private static function getMetadata(string $type, string $database, string $table, string $schema): self
     {
         if (\PRODUCTION && ! (self::$instances["$database.$table.$schema"] = \Cache::driver()->get("$database.$table.$schema", 'ActiveRecord.Metadata'))) {
             return self::$instances["$database.$table.$schema"];
@@ -126,7 +123,7 @@ abstract class Metadata
      * @param string $table    tabla
      * @param string $schema   squema
      */
-    private function __construct($database, $table, $schema = \null)
+    private function __construct(string $database, string $table, string $schema = '')
     {
         $this->fields     = $this->queryFields($database, $table, $schema);
         $this->fieldsList = \array_keys($this->fields);
@@ -135,16 +132,16 @@ abstract class Metadata
     /**
      * Permite el filtrado de columna en PK, por Defecto y Autogenerado.
      *
-     * @param $m     información de la columna
-     * @param $field nombre      de la columna
+     * @param array     $meta  información de la columna
+     * @param string    $field nombre      de la columna
      */
-    protected function filterCol($m, $field)
+    protected function filterCol(array $meta, string $field): void
     {
-        if ($m['Key'] == 'PRI') {
+        if ($meta['Key'] === 'PRI') {
             $this->pk = $field;
-        } elseif ($m['Default']) {
+        } elseif ($meta['Default']) {
             $this->withDefault[] = $field;
-        } elseif ($m['Auto']) {
+        } elseif ($meta['Auto']) {
             $this->autoFields[] = $field;
         }
     }
@@ -155,16 +152,17 @@ abstract class Metadata
      * @param  string  $database base de datos
      * @param  string  $table    tabla
      * @param  string  $schema   squema
+     * 
      * @return array
      */
-    abstract protected function queryFields($database, $table, $schema = \null);
+    abstract protected function queryFields(string $database, string $table, string $schema = ''): array;
 
     /**
      * Obtiene la descripción de los campos.
      *
-     * @return array
+     * @return string[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }
@@ -172,9 +170,9 @@ abstract class Metadata
     /**
      * Obtiene la lista de campos.
      *
-     * @return array
+     * @return string[]
      */
-    public function getFieldsList()
+    public function getFieldsList(): array
     {
         return $this->fieldsList;
     }
@@ -184,7 +182,7 @@ abstract class Metadata
      *
      * @return string
      */
-    public function getPK()
+    public function getPK(): string
     {
         return $this->pk;
     }
@@ -192,9 +190,9 @@ abstract class Metadata
     /**
      * Obtiene los campos con valor predeterminado.
      *
-     * @return array
+     * @return string[]
      */
-    public function getWithDefault()
+    public function getWithDefault(): array
     {
         return $this->withDefault;
     }
@@ -202,9 +200,9 @@ abstract class Metadata
     /**
      * Obtiene los campos con valor generado automatico.
      *
-     * @return array
+     * @return string[]
      */
-    public function getAutoFields()
+    public function getAutoFields(): array
     {
         return $this->autoFields;
     }
