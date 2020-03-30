@@ -7,7 +7,7 @@
     "license": "BSD-3-Clause",
     "support": {
         "issues": "https://github.com/KumbiaPHP/ActiveRecord/issues",
-        "slack": "irc://irc.freenode.org/kumbiaphp"
+        "slack": "https://slack.kumbiaphp.com"
     },
     "authors": [
         {
