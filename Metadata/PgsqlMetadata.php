@@ -32,11 +32,11 @@ class PgsqlMetadata extends Metadata
      * @param  string  $database base de datos
      * @param  string  $table    tabla
      * @param  string  $schema   squema
+     * 
      * @return array
      */
-    protected function queryFields($database, $table, $schema = 'public')
+    protected function queryFields(string $database, string $table, string $schema = 'public'): array
     {
-
         // Nota: Se excluyen claves compuestas
         $describe = Db::get($database)->query(
             "SELECT DISTINCT
@@ -54,29 +54,32 @@ class PgsqlMetadata extends Metadata
             LEFT OUTER JOIN information_schema.table_constraints tc
             ON (cu.constraint_name = tc.constraint_name AND tc.constraint_type
             IN ('PRIMARY KEY', 'UNIQUE'))
-            WHERE c.table_name = '$table' AND c.table_schema = '$schema';"
+            WHERE c.table_name = '$table' AND c.table_schema = '$schema';",
+            
+            \PDO::FETCH_OBJ
         );
 
-        return self::describe($describe);
+        return self::describe($describe->fetchAll());
     }
 
     /**
      * Genera la metadata.
      *
-     * @param  \PDOStatement $describe
+     * @param  array $describe
+     * 
      * @return array
      */
-    private static function describe(\PDOStatement $describe)
+    private function describe(array $describe): array
     {
         $fields = [];
         // TODO mejorar este código
         foreach ($describe as $value) {
-            $fields[$value['field']] = [
-                'Type'    => $value['type'],
-                'Null'    => $value['null'] != 'NO',
-                'Default' => $value['default'] != '',
-                'Key'     => \substr($value['key'], 0, 3),
-                'Auto'    => \preg_match('/^nextval\(/', $value['default'])
+            $fields[$value->Field] = [
+                'Type'    => $value->Type,
+                'Null'    => $value->Null !== 'NO',
+                'Default' => $value->Default != '',
+                'Key'     => \substr($value->Key, 0, 3),
+                'Auto'    => \preg_match('/^nextval\(/', $value->Default)
             ];
         }
 
