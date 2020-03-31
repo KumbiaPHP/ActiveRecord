@@ -34,16 +34,15 @@ class MetadataTest extends TestCase
 
     public function testGetPK()
     {
-        $metadata = $this->createClass();
-        $pk = $metadata->getPK();
+        $pk = $this->createClass()->getPK();
 
         $this->assertEquals('id', $pk);
     }
 
     public function testGetWithDefault()
     {
-        $metadata = $this->createClass();
-        $withDefault = $metadata->getWithDefault();
+
+        $withDefault = $this->createClass()->getWithDefault();
 
         $this->assertEquals(1, count($withDefault));
         $this->assertEquals('activo', $withDefault[0]);
@@ -51,8 +50,7 @@ class MetadataTest extends TestCase
 
     public function testGetFields()
     {
-        $metadata = $this->createClass();
-        $fields = $metadata->getFields();
+        $fields = $this->createClass()->getFields();
 
         $this->assertEquals(4, count($fields));
 
@@ -80,8 +78,7 @@ class MetadataTest extends TestCase
 
     public function testGetFieldsList()
     {
-        $metadata = $this->createClass();
-        $fields = $metadata->getFieldsList();
+        $fields = $this->createClass()->getFieldsList();
 
         $this->assertEquals(4, count($fields));
 
@@ -90,9 +87,7 @@ class MetadataTest extends TestCase
 
     public function testGetAutoFields()
     {
-        $metadata = $this->createClass();
-        $fields = $metadata->getAutoFields();
-
+        $fields = $this->createClass()->getAutoFields();
         
         $this->assertEquals(1, count($fields));
 
