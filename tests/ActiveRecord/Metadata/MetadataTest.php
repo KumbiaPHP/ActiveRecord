@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Kumbia\ActiveRecord\Metadata\Metadata;
 
-class MetadataTest extends \PHPUnit\Framework\TestCase
+class MetadataTest extends TestCase
 {
     /**
      * @return \Kumbia\ActiveRecord\Metadata\Metadata
@@ -13,7 +14,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $tableName = $GLOBALS['metadata_table'];
         $schemaName = $GLOBALS['metadata_schema'];
 
-        return Metadada::get($databaseName, $tableName, $schemaName);
+        return Metadata::get($databaseName, $tableName, $schemaName);
     }
 
     public function testInstanceOf()
