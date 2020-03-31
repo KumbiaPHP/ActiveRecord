@@ -17,11 +17,19 @@ class MetadataTest extends TestCase
         return Metadata::get($databaseName, $tableName, $schemaName);
     }
 
-    public function testInstanceOf()
+    public function testInstanceOfMetadata()
     {
         $metadata = $this->createClass();
 
         $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\Metadata', $metadata);
+    }
+
+    public function testInstanceOfDriverDb()
+    {
+        $metadata = $this->createClass();
+        $dbDriverClass = \ucfirst(getenv($DB)).'Metadata';
+
+        $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\'.$dbDriverClass, $metadata);
     }
 
     public function testGetPK()
