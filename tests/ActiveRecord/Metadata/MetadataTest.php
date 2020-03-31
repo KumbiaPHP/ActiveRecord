@@ -93,10 +93,9 @@ class MetadataTest extends TestCase
         $metadata = $this->createClass();
         $fields = $metadata->getAutoFields();
 
-        $this->assertTrue(is_array($fields), 'Debe retornar un array');
-        // @TODO: Revisar, está devolviendo un array vacio
-//        $this->assertEquals(4, count($fields));
-//
-//        $this->assertEquals(array('id', 'nombre', 'email', 'activo'), $fields);
+        
+        $this->assertEquals(1, count($fields));
+
+        $this->assertEquals(['id'], $fields);
     }
 }
