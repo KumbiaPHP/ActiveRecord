@@ -22,13 +22,6 @@ class MetadataTest extends TestCase
         return Metadata::get($databaseName, $tableName, $schemaName);
     }
 
-    public function testInstanceOfMetadata()
-    {
-        $metadata = $this->createClass();
-
-        $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\Metadata', $metadata);
-    }
-
     public function testInstanceOfDriverDb()
     {
         $metadata = $this->createClass();
