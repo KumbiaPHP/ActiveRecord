@@ -103,7 +103,7 @@ abstract class Metadata
         
         $pdo = Db::get($database);
 
-        $driverClass = __NAMESPACE__."\\".\ucfirst($pdo->getAttribute(\PDO::ATTR_DRIVER_NAME)).'Metadata';
+        $driverClass = \ucfirst($pdo->getAttribute(\PDO::ATTR_DRIVER_NAME)).'Metadata';
 
         self::$instances[$key] = new $driverClass($pdo, $table, $schema);
 
