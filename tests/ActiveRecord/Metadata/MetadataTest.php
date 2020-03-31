@@ -14,7 +14,7 @@ class MetadataTest extends TestCase
     public function setUp(): void
     {
         $this->dbName     = getenv('DB');
-        
+
         $this->tableName  = $GLOBALS['metadata_table'];
         $this->schemaName = $GLOBALS['metadata_schema'];
     }
@@ -37,7 +37,6 @@ class MetadataTest extends TestCase
         $metadata = $this->createClass();
         $pk = $metadata->getPK();
 
-        $this->assertTrue(is_string($pk), 'Debe retornar un string');
         $this->assertEquals('id', $pk);
     }
 
@@ -46,7 +45,6 @@ class MetadataTest extends TestCase
         $metadata = $this->createClass();
         $withDefault = $metadata->getWithDefault();
 
-        $this->assertTrue(is_array($withDefault), 'Debe retornar un array');
         $this->assertEquals(1, count($withDefault));
         $this->assertEquals('activo', $withDefault[0]);
     }
@@ -56,7 +54,6 @@ class MetadataTest extends TestCase
         $metadata = $this->createClass();
         $fields = $metadata->getFields();
 
-        $this->assertTrue(is_array($fields), 'Debe retornar un array');
         $this->assertEquals(4, count($fields));
 
         $fieldList = array_keys($fields);
@@ -86,7 +83,6 @@ class MetadataTest extends TestCase
         $metadata = $this->createClass();
         $fields = $metadata->getFieldsList();
 
-        $this->assertTrue(is_array($fields), 'Debe retornar un array');
         $this->assertEquals(4, count($fields));
 
         $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fields);
