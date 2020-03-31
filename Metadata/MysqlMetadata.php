@@ -49,7 +49,7 @@ class MysqlMetadata extends Metadata
                 'Null'    => $value->Null !== 'NO',
                 'Key'     => $value->Key,
                 'Default' => $value->Default != '',
-                'Auto'    => \strtolower($value->Extra) === 'auto_increment'
+                'Auto'    => $value->Extra === 'auto_increment'
             ];
             $this->filterColumn($fields[$value->Field], $value->Field);
         }
