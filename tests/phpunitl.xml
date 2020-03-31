@@ -2,13 +2,12 @@
 
 <phpunit bootstrap="bootstrap.php" colors="true">
     <php>
-        <var name="config_database" value="mysql"/>
         <var name="metadata_table" value="usuario"/>
         <var name="metadata_schema" value=""/>
     </php>
 
     <testsuites>
-        <testsuite name="Kumbia ActiveRecord Mysql">
+        <testsuite name="Kumbia ActiveRecord">
             <directory>.</directory>
         </testsuite>
     </testsuites>

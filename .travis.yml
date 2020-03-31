@@ -47,6 +47,6 @@ before_script:
                                                   ; fi"
                                                 
 script: 
-  - phpunit --configuration tests/phpunit_$DB.xml --coverage-text --colors --coverage-clover=coverage.clover
+  - phpunit --configuration tests/phpunit.xml --coverage-text --colors --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
