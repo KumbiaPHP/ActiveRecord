@@ -63,7 +63,7 @@ class MetadataTest extends TestCase
             $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields[$fieldName]));
         }
 
-        $this->fieldData($fields['id'], 'int', false, 'PRI', false, true);
+        $this->fieldData($fields['id'], 'bigint(20)', false, 'PRI', false, true);
         $this->fieldData($fields['nombre'], 'varchar(50)', false, '', false, false);
         $this->fieldData($fields['email'], 'varchar(100)', false, '', false, false);
         $this->fieldData($fields['activo'], 'smallint(1)', true, '', true, false);
