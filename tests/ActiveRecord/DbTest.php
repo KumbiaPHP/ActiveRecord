@@ -7,7 +7,7 @@ class DbTest extends TestCase
 {
     public function testGetInstance()
     {
-        $instance = Db::get(getenv('DB'););
+        $instance = Db::get(getenv('DB'));
 
         $this->assertInstanceOf('PDO', $instance);
     }
