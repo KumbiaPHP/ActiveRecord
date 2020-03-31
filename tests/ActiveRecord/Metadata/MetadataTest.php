@@ -6,20 +6,22 @@ use Kumbia\ActiveRecord\Metadata\Metadata;
 class MetadataTest extends TestCase
 {
     protected $dbName;
+
+    protected $tableName;
+
+    protected $schemaName;
     
     public function setUp(): void
     {
-        $this->dbName = getenv('DB');
-
+        $this->dbName     = getenv('DB');
+        
+        $this->tableName  = $GLOBALS['metadata_table'];
+        $this->schemaName = $GLOBALS['metadata_schema'];
     }
 
     protected function createClass(): Metadata
     {
-        $databaseName = getenv('DB');
-        $tableName = $GLOBALS['metadata_table'];
-        $schemaName = $GLOBALS['metadata_schema'];
-
-        return Metadata::get($databaseName, $tableName, $schemaName);
+        return Metadata::get($this->dbName, $this->tableName, $this->schemaName);
     }
 
     public function testInstanceOfDriverDb()
