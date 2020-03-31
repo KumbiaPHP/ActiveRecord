@@ -7,16 +7,16 @@ class DbTest extends TestCase
 {
     public function testGetInstance()
     {
-        $instance = Db::get($GLOBALS['config_database']);
+        $instance = Db::get(getenv('DB'););
 
         $this->assertInstanceOf('PDO', $instance);
     }
 
     public function testGet()
     {
-        $instance = Db::get($GLOBALS['config_database']);
+        $instance = Db::get(getenv('DB'));
 
-        $instance2 = Db::get($GLOBALS['config_database']);
+        $instance2 = Db::get(getenv('DB'));
 
         $this->assertEquals($instance, $instance2);
     }
