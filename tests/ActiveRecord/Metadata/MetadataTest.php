@@ -13,7 +13,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $tableName = $GLOBALS['metadata_table'];
         $schemaName = $GLOBALS['metadata_schema'];
 
-        return Medatada::get($databaseName, $tableName, $schemaName);
+        return Metadada::get($databaseName, $tableName, $schemaName);
     }
 
     public function testInstanceOf()
