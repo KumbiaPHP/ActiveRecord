@@ -3,8 +3,6 @@
 <phpunit bootstrap="bootstrap.php" colors="true">
     <php>
         <var name="config_database" value="pgsql"/>
-        <var name="metadata_class" value="Kumbia\ActiveRecord\Metadata\PgsqlMetadata"/>
-        <var name="metadata_type" value="pgsql"/>
         <var name="metadata_table" value="usuario"/>
         <var name="metadata_schema" value=""/>
         <var name="db_username" value="postgres"/>

@@ -1,5 +1,7 @@
 <?php
 
+use Kumbia\ActiveRecord\Metadata\Metadata;
+
 class MetadataTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -8,12 +10,10 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     protected function createClass()
     {
         $databaseName = $GLOBALS['config_database'];
-        $metadataClass = $GLOBALS['metadata_class'];
-        $typeName = $GLOBALS['metadata_type'];
         $tableName = $GLOBALS['metadata_table'];
         $schemaName = $GLOBALS['metadata_schema'];
 
-        return $metadataClass::get($typeName, $databaseName, $tableName, $schemaName);
+        return Medatada::get($databaseName, $tableName, $schemaName);
     }
 
     public function testInstanceOf()
@@ -23,7 +23,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\Metadata', $metadata);
     }
 
-    public function testMethod_getPK()
+    public function testGetPK()
     {
         $metadata = $this->createClass();
         $pk = $metadata->getPK();
@@ -32,7 +32,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('id', $pk);
     }
 
-    public function testMethod_getWithDefault()
+    public function testGetWithDefault()
     {
         $metadata = $this->createClass();
         $withDefault = $metadata->getWithDefault();
@@ -42,7 +42,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('activo', $withDefault[0]);
     }
 
-    public function testMethod_getFields()
+    public function testGetFields()
     {
         $metadata = $this->createClass();
         $fields = $metadata->getFields();
@@ -71,7 +71,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($auto, $field['Auto']);
     }
 
-    public function testMethod_getFieldsList()
+    public function testGetFieldsList()
     {
         $metadata = $this->createClass();
         $fields = $metadata->getFieldsList();
@@ -82,7 +82,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fields);
     }
 
-    public function testMethod_getAutoFields()
+    public function testGetAutoFields()
     {
         $metadata = $this->createClass();
         $fields = $metadata->getAutoFields();
