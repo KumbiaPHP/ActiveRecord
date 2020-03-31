@@ -27,7 +27,7 @@ class MetadataTest extends TestCase
     public function testInstanceOfDriverDb()
     {
         $metadata = $this->createClass();
-        $dbDriverClass = \ucfirst(getenv($DB)).'Metadata';
+        $dbDriverClass = \ucfirst(getenv('DB')).'Metadata';
 
         $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\'.$dbDriverClass, $metadata);
     }
