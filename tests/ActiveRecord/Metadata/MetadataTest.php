@@ -5,10 +5,15 @@ use Kumbia\ActiveRecord\Metadata\Metadata;
 
 class MetadataTest extends TestCase
 {
-    /**
-     * @return \Kumbia\ActiveRecord\Metadata\Metadata
-     */
-    protected function createClass()
+    protected $dbName;
+    
+    public function setUp()
+    {
+        $this->dbName = getenv('DB');
+
+    }
+
+    protected function createClass(): Metadata
     {
         $databaseName = getenv('DB');
         $tableName = $GLOBALS['metadata_table'];
@@ -27,7 +32,7 @@ class MetadataTest extends TestCase
     public function testInstanceOfDriverDb()
     {
         $metadata = $this->createClass();
-        $dbDriverClass = \ucfirst(getenv('DB')).'Metadata';
+        $dbDriverClass = \ucfirst($this->dbName).'Metadata';
 
         $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\'.$dbDriverClass, $metadata);
     }
@@ -59,11 +64,12 @@ class MetadataTest extends TestCase
         $this->assertTrue(is_array($fields), 'Debe retornar un array');
         $this->assertEquals(4, count($fields));
 
-        $this->assertEquals(['id', 'nombre', 'email', 'activo'], array_keys($fields));
-        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['id']));
-        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['nombre']));
-        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['email']));
-        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['activo']));
+        $fieldList = array_keys($fields);
+        $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fieldList);
+        
+        foreach($fieldList as $fieldName) {
+            $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields[$fieldName]));
+        }
 
         $this->fieldData($fields['id'], 'int(11)', false, 'PRI', true, false);
         $this->fieldData($fields['nombre'], 'varchar(50)', false, '', false, false);
