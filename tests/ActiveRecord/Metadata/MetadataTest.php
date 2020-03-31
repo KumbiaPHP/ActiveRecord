@@ -44,15 +44,12 @@ class MetadataTest extends TestCase
 
         $withDefault = $this->getMetadata()->getWithDefault();
 
-        $this->assertEquals(1, count($withDefault));
-        $this->assertEquals('activo', $withDefault[0]);
+        $this->assertEquals(['activo'], $withDefault);
     }
 
     public function testGetFields()
     {
         $fields = $this->getMetadata()->getFields();
-
-        $this->assertEquals(4, count($fields));
 
         $fieldList = array_keys($fields);
         $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fieldList);
@@ -80,8 +77,6 @@ class MetadataTest extends TestCase
     {
         $fields = $this->getMetadata()->getFieldsList();
 
-        $this->assertEquals(4, count($fields));
-
         $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fields);
     }
 
@@ -89,8 +84,6 @@ class MetadataTest extends TestCase
     {
         $fields = $this->getMetadata()->getAutoFields();
         
-        $this->assertEquals(1, count($fields));
-
         $this->assertEquals(['id'], $fields);
     }
 }
