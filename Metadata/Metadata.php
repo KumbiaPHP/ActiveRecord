@@ -123,13 +123,13 @@ abstract class Metadata
     /**
      * Constructor.
      *
-     * @param string $database base de datos
+     * @param \PDO   $pdo      base de datos
      * @param string $table    tabla
      * @param string $schema   squema
      */
-    private function __construct(string $database, string $table, string $schema = '')
+    private function __construct(\PDO $pdo, string $table, string $schema = '')
     {
-        $this->fields     = $this->queryFields($database, $table, $schema);
+        $this->fields     = $this->queryFields($pdo, $table, $schema);
         $this->fieldsList = \array_keys($this->fields);
     }
 
