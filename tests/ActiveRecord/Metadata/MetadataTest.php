@@ -19,14 +19,14 @@ class MetadataTest extends TestCase
         $this->schemaName = $GLOBALS['metadata_schema'];
     }
 
-    protected function createClass(): Metadata
+    protected function getMetadata(): Metadata
     {
         return Metadata::get($this->dbName, $this->tableName, $this->schemaName);
     }
 
     public function testInstanceOfDriverDb()
     {
-        $metadata = $this->createClass();
+        $metadata = $this->getMetdata();
         $dbDriverClass = \ucfirst($this->dbName).'Metadata';
 
         $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\'.$dbDriverClass, $metadata);
@@ -34,7 +34,7 @@ class MetadataTest extends TestCase
 
     public function testGetPK()
     {
-        $pk = $this->createClass()->getPK();
+        $pk = $this->getMetdata()->getPK();
 
         $this->assertEquals('id', $pk);
     }
@@ -42,7 +42,7 @@ class MetadataTest extends TestCase
     public function testGetWithDefault()
     {
 
-        $withDefault = $this->createClass()->getWithDefault();
+        $withDefault = $this->getMetdata()->getWithDefault();
 
         $this->assertEquals(1, count($withDefault));
         $this->assertEquals('activo', $withDefault[0]);
@@ -50,7 +50,7 @@ class MetadataTest extends TestCase
 
     public function testGetFields()
     {
-        $fields = $this->createClass()->getFields();
+        $fields = $this->getMetdata()->getFields();
 
         $this->assertEquals(4, count($fields));
 
@@ -78,7 +78,7 @@ class MetadataTest extends TestCase
 
     public function testGetFieldsList()
     {
-        $fields = $this->createClass()->getFieldsList();
+        $fields = $this->getMetdata()->getFieldsList();
 
         $this->assertEquals(4, count($fields));
 
@@ -87,7 +87,7 @@ class MetadataTest extends TestCase
 
     public function testGetAutoFields()
     {
-        $fields = $this->createClass()->getAutoFields();
+        $fields = $this->getMetdata()->getAutoFields();
         
         $this->assertEquals(1, count($fields));
 
