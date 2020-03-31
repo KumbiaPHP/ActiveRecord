@@ -7,7 +7,7 @@ class MetadataTest extends TestCase
 {
     protected $dbName;
     
-    public function setUp()
+    public function setUp(): void
     {
         $this->dbName = getenv('DB');
 
