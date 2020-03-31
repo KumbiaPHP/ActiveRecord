@@ -1,8 +1,9 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Kumbia\ActiveRecord\Db;
 
-class DbTest extends \PHPUnit\Framework\TestCase
+class DbTest extends TestCase
 {
     public function testGetInstance()
     {
