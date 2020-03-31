@@ -19,7 +19,7 @@
  */
 namespace Kumbia\ActiveRecord\Metadata;
 
-use Kumbia\ActiveRecord\Db;
+use \PDO;
 
 /**
  * Adaptador de Metadata para Pgsql.
@@ -29,16 +29,16 @@ class PgsqlMetadata extends Metadata
     /**
      * Consultar los campos de la tabla en la base de datos.
      *
-     * @param  string  $database base de datos
+     * @param  \PDO    $pdo      base de datos
      * @param  string  $table    tabla
      * @param  string  $schema   esquema, por defecto 'public'
      * 
      * @return array
      */
-    protected function queryFields(string $database, string $table, string $schema = 'public'): array
+    protected function queryFields(\PDO $pdo, string $table, string $schema = 'public'): array
     {
         // Nota: Se excluyen claves compuestas
-        $describe = Db::get($database)->query(
+        $describe = $pdo->query(
             "SELECT DISTINCT
                 c.column_name AS field,
                 c.udt_name AS type,
@@ -81,7 +81,7 @@ class PgsqlMetadata extends Metadata
                 'Key'     => \substr($value->key, 0, 3),
                 'Auto'    => \preg_match('/^nextval\(/', $value->default)
             ];
-            $this->filterCol($fields[$value->field], $value->field);
+            $this->filterColumn($fields[$value->field], $value->field);
         }
 
         return $fields;

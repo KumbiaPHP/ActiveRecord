@@ -187,7 +187,6 @@ class BaseRecord
     public static function metadata(): Metadata\Metadata
     {
         return Metadata\Metadata::get(
-            static::getDriver(),
             static::getDatabase(),
             static::getTable(),
             static::getSchema()

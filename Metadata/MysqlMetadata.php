@@ -20,7 +20,6 @@
  */
 namespace Kumbia\ActiveRecord\Metadata;
 
-use Kumbia\ActiveRecord\Db;
 use \PDO;
 
 /**
@@ -31,16 +30,16 @@ class MysqlMetadata extends Metadata
     /**
      * Consultar los campos de la tabla en la base de datos.
      *
-     * @param  string  $database base de datos
+     * @param  \PDO    $pdo      base de datos
      * @param  string  $table    tabla
      * @param  string  $schema   squema
      * 
      * @return array
      */
-    protected function queryFields(string $database, string $table, string $schema = ''): array
+    protected function queryFields(\PDO $pdo, string $table, string $schema = ''): array
     {
         $sql      = $schema ? "DESCRIBE `$schema`.`$table`" : "DESCRIBE `$table`";
-        $describe = Db::get($database)->query($sql, \PDO::FETCH_OBJ);
+        $describe = $pdo->query($sql, \PDO::FETCH_OBJ);
 
         $fields = [];
         // TODO mejorar este código
@@ -52,7 +51,7 @@ class MysqlMetadata extends Metadata
                 'Default' => $value->Default != '',
                 'Auto'    => $value->Extra === 'auto_increment'
             ];
-            $this->filterCol($fields[$value->Field], $value->Field);
+            $this->filterColumn($fields[$value->Field], $value->Field);
         }
 
         return $fields;

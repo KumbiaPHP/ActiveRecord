@@ -20,6 +20,8 @@
  */
 namespace Kumbia\ActiveRecord\Metadata;
 
+use Kumbia\ActiveRecord\Db;
+
 /**
  * Metadata de tabla.
  */
@@ -70,40 +72,40 @@ abstract class Metadata
     /**
      * Metadata de la tabla.
      *
-     * @param  string     $type       tipo de controlador
      * @param  string     $database
      * @param  string     $table
      * @param  string     $schema
      * 
      * @return self
      */
-    public static function get(string $type, string $database, string $table, string $schema = ''): self
+    public static function get(string $database, string $table, string $schema = ''): self
     {
-        return self::$instances["$database.$table.$schema"] ?? self::getMetadata($type, $database, $table, $schema);
+        return self::$instances["$database.$table.$schema"] ?? self::getMetadata($database, $table, $schema);
     }
 
     /**
      * Obtiene la metadata de la tabla
      * Y la cachea si esta en producción.
      *
-     * @param  string     $type       tipo de controlador
      * @param  string     $database
      * @param  string     $table
      * @param  string     $schema
      * 
      * @return self
      */
-    private static function getMetadata(string $type, string $database, string $table, string $schema): self
+    private static function getMetadata(string $database, string $table, string $schema): self
     {
         $key = "$database.$table.$schema";
+        //TODO añadir cache propia
         if (\PRODUCTION && ! (self::$instances[$key] = \Cache::driver()->get($key, 'ActiveRecord.Metadata'))) {
             return self::$instances[$key];
         }
-        $class = \ucfirst($type).'Metadata';
+        
+        $pdo = Db::get($database);
 
-        $class = __NAMESPACE__."\\$class";
+        $driverClass = __NAMESPACE__."\\".\ucfirst($pdo->getAttribute(\PDO::ATTR_DRIVER_NAME)).'Metadata';
 
-        self::$instances[$key] = new $class($database, $table, $schema);
+        self::$instances[$key] = new $driverClass($pdo, $table, $schema);
 
         // Cachea los metadatos
         if (\PRODUCTION) {
@@ -137,7 +139,7 @@ abstract class Metadata
      * @param array     $meta  información de la columna
      * @param string    $field nombre      de la columna
      */
-    protected function filterCol(array $meta, string $field): void
+    protected function filterColumn(array $meta, string $field): void
     {
         if ($meta['Key'] === 'PRI') {
             $this->pk = $field;
@@ -151,13 +153,13 @@ abstract class Metadata
     /**
      * Consultar los campos de la tabla en la base de datos.
      *
-     * @param  string  $database base de datos
+     * @param  \PDO    $pdo      base de datos
      * @param  string  $table    tabla
      * @param  string  $schema   squema
      * 
      * @return array
      */
-    abstract protected function queryFields(string $database, string $table, string $schema = ''): array;
+    abstract protected function queryFields(\PDO $pdo, string $table, string $schema = ''): array;
 
     /**
      * Obtiene la descripción de los campos.

@@ -21,7 +21,6 @@
  */
 namespace Kumbia\ActiveRecord\Metadata;
 
-use Kumbia\ActiveRecord\Db;
 use \PDO;
 
 /**
@@ -33,14 +32,14 @@ class SqlsrvMetadata extends Metadata
     /**
      * Consultar los campos de la tabla en la base de datos
      *
-     * @param  string  $database base de datos
+     * @param  \PDO    $pdo base de datos
      * @param  string  $table    tabla
      * @param  string  $schema   squema
      * @return array
      */
-    protected function queryFields($database, $table, $schema = 'dbo')
+    protected function queryFields(\PDO $pdo, string $table, string $schema = 'dbo'): array
     {
-        $describe = Db::get($database)->query(
+        $describe = $pdo->query(
             "SELECT
                 c.name AS field_name,
                 c.is_identity AS is_auto_increment,
@@ -52,7 +51,7 @@ class SqlsrvMetadata extends Metadata
             WHERE object_id = object_id('$schema.$table')"
         );
 
-        $pk = self::pk($database, $table);
+        $pk = self::pk($pdo, $table);
 
         return self::describe($describe, $pk);
     }
@@ -60,13 +59,13 @@ class SqlsrvMetadata extends Metadata
     /**
      * Optiene el PK
      *
-     * @param  string   $database base de datos
+     * @param  \PDO     $pdo      base de datos
      * @param  string   $table    tabla
      * @return string
      */
-    private static function pk($database, $table)
+    private static function pk(\PDO $pdo, string $table): string
     {
-        $pk = Db::get($database)->query("exec sp_pkeys @table_name='$table'");
+        $pk = $pdo->query("exec sp_pkeys @table_name='$table'");
         $pk = $pk->fetch(\PDO::FETCH_OBJ);
 
         return $pk->COLUMN_NAME;
@@ -79,20 +78,20 @@ class SqlsrvMetadata extends Metadata
      * @param  string        $pk       Primary key
      * @return array
      */
-    protected function describe(\PDOStatement $describe, $pk)
+    protected function describe(\PDOStatement $describe, string $pk): array
     {
         // TODO Mejorar
         $fields = [];
-        while (($value = $describe->fetch( \PDO::FETCH_OBJ))):
+        while ($value = $describe->fetch()) {
             $fields[$value->field_name] = [
                 'Type'    => $value->type_field,
                 'Null'    => ($value->is_nullable),
-                'Key'     => ($value->field_name == $pk) ? 'PRI' : '',
+                'Key'     => ($value->field_name === $pk) ? 'PRI' : '',
                 'Default' => \str_replace("''", "'", \trim($value->default_value, "(')")),
                 'Auto'    => ($value->is_auto_increment)
             ];
-            $this->filterCol($fields[$value->field_name], $value->field_name);
-        endwhile;
+            $this->filterColumn($fields[$value->field_name], $value->field_name);
+        }
 
         return $fields;
     }
