@@ -143,9 +143,11 @@ abstract class Metadata
     {
         if ($meta['Key'] === 'PRI') {
             $this->pk = $field;
-        } elseif ($meta['Default']) {
+        }
+        if ($meta['Default']) {
             $this->withDefault[] = $field;
-        } elseif ($meta['Auto']) {
+        }
+        if ($meta['Auto']) {
             $this->autoFields[] = $field;
         }
     }
