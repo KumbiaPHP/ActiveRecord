@@ -10,7 +10,7 @@ class MetadataTest extends TestCase
      */
     protected function createClass()
     {
-        $databaseName = $GLOBALS['config_database'];
+        $databaseName = getenv('DB');
         $tableName = $GLOBALS['metadata_table'];
         $schemaName = $GLOBALS['metadata_schema'];
 

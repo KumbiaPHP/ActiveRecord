@@ -23,13 +23,13 @@ services:
 
 env:
   - DB=mysql
-  - DB=postgresql
+  - DB=pgsql
 #  - DB=sqlite
 
 before_script:
-  - sh -c "if [ '$DB' = 'postgresql' ]; then psql -c 'DROP DATABASE IF EXISTS test;' -U postgres; fi"
-  - sh -c "if [ '$DB' = 'postgresql' ]; then psql -c 'CREATE DATABASE test;' -U postgres; fi"
-  - sh -c "if [ '$DB' = 'postgresql' ]; then psql -c 'CREATE TABLE IF NOT EXISTS usuario ( 
+  - sh -c "if [ '$DB' = 'psql' ]; then psql -c 'DROP DATABASE IF EXISTS test;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'psql' ]; then psql -c 'CREATE DATABASE test;' -U postgres; fi"
+  - sh -c "if [ '$DB' = 'psql' ]; then psql -c 'CREATE TABLE IF NOT EXISTS usuario ( 
                                                         id serial PRIMARY KEY, 
                                                         nombre  varchar(50) NOT NULL , 
                                                         email varchar(100) NOT NULL , 
