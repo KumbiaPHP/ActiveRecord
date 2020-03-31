@@ -1,7 +1,7 @@
 <?php
 
 return [
-    //Conexión a Mysql
+    //Mysql
     'mysql' => [
         'dsn'      => 'mysql:host=127.0.0.1;dbname=test;charset=utf8',
         'username' => 'root',
@@ -11,7 +11,7 @@ return [
             \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION
         ]
     ],
-    //Conexión a pgsql
+    //Pgsql
     'pgsql' => [
         'dsn'      => 'pgsql:dbname=test;host=localhost',
         'username' => 'postgres',
@@ -23,5 +23,5 @@ return [
     ],
 
 
-    //Más conexiones
+    //More connections
 ];
