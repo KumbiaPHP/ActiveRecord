@@ -39,7 +39,7 @@ before_script:
                                                 fi
   - if [[ "$DB" == "mysql" ]]; then mysql -e 'CREATE DATABASE IF NOT EXISTS test;
                                                   CREATE TABLE IF NOT EXISTS test.usuario ( 
-                                                    id int(11) NOT NULL AUTO_INCREMENT DEFAULT 0, 
+                                                    id int NOT NULL AUTO_INCREMENT, 
                                                     nombre  varchar(50) NOT NULL , 
                                                     email varchar(100) NOT NULL , 
                                                     activo smallint(1) NULL DEFAULT 1 , 
