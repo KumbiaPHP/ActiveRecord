@@ -40,7 +40,7 @@ class PgsqlMetadata extends Metadata
         $schema = $schema === '' ? 'public' : $schema; // default to public
         // Nota: Se excluyen claves compuestas
         $describe = $pdo->query(
-            "SELECT DISTINCT
+            "SELECT
                 c.column_name AS field,
                 c.udt_name AS type,
                 tc.constraint_type AS key,
