@@ -90,7 +90,7 @@ class MetadataTest extends TestCase
     {
         $fields = $this->getMetadata()->getFields();
 
-        $this->assertsEquals(self::ExpectedGetFields(), $fields);
+        $this->assertEquals(self::ExpectedGetFields(), $fields);
 
         /* $fieldList = array_keys($fields);
         $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fieldList);
