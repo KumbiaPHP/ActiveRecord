@@ -53,11 +53,46 @@ class MetadataTest extends TestCase
         $this->assertEquals(['activo'], $withDefault);
     }
 
+    protected static function ExpectedGetFields(): array
+    {
+        return [
+            [activo] => [
+                    [Type] => 'smallint(1)'
+                    [Null] => true
+                    [Default] => true
+                    [Key] => ''
+                    [Auto] => false
+                ]
+            [email] => [
+                    [Type] => 'varchar(100)'
+                    [Null] => false
+                    [Default] => false
+                    [Key] => ''
+                    [Auto] => false
+                ]
+            [id] => [
+                    [Type] => 'bigint(20)'
+                    [Null] => false
+                    [Default] => false
+                    [Key] => 'PRI'
+                    [Auto] => true
+                ]
+            [nombre] => [
+                    [Type] => 'varchar(50)'
+                    [Null] => false
+                    [Default] => false
+                    [Key] => ''
+                    [Auto] => false
+                ]
+            ];
+    }
     public function testGetFields()
     {
         $fields = $this->getMetadata()->getFields();
 
-        $fieldList = array_keys($fields);
+        $this->assertsEquals(self::ExpectedGetFields(), $fields);
+
+        /* $fieldList = array_keys($fields);
         $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fieldList);
         
         foreach($fieldList as $fieldName) {
@@ -67,17 +102,17 @@ class MetadataTest extends TestCase
         $this->fieldData($fields['id'], 'bigint(20)', false, 'PRI', false, true);
         $this->fieldData($fields['nombre'], 'varchar(50)', false, '', false, false);
         $this->fieldData($fields['email'], 'varchar(100)', false, '', false, false);
-        $this->fieldData($fields['activo'], 'smallint(1)', true, '', true, false);
+        $this->fieldData($fields['activo'], 'smallint(1)', true, '', true, false); */
     }
 
-    protected function fieldData($field, $type, $null, $key, $default, $auto)
+    /* protected function fieldData($field, $type, $null, $key, $default, $auto)
     {
         $this->assertEquals($type, $field['Type']);
         $this->assertEquals($null, $field['Null']);
         $this->assertEquals($key, $field['Key']);
         $this->assertEquals($default, $field['Default']);
         $this->assertEquals($auto, $field['Auto']);
-    }
+    } */
 
     public function testGetFieldsList()
     {
