@@ -91,28 +91,7 @@ class MetadataTest extends TestCase
         $fields = $this->getMetadata()->getFields();
 
         $this->assertEquals(self::ExpectedGetFields(), $fields);
-
-        /* $fieldList = array_keys($fields);
-        $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fieldList);
-        
-        foreach($fieldList as $fieldName) {
-            $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields[$fieldName]));
-        }
-
-        $this->fieldData($fields['id'], 'bigint(20)', false, 'PRI', false, true);
-        $this->fieldData($fields['nombre'], 'varchar(50)', false, '', false, false);
-        $this->fieldData($fields['email'], 'varchar(100)', false, '', false, false);
-        $this->fieldData($fields['activo'], 'smallint(1)', true, '', true, false); */
     }
-
-    /* protected function fieldData($field, $type, $null, $key, $default, $auto)
-    {
-        $this->assertEquals($type, $field['Type']);
-        $this->assertEquals($null, $field['Null']);
-        $this->assertEquals($key, $field['Key']);
-        $this->assertEquals($default, $field['Default']);
-        $this->assertEquals($auto, $field['Auto']);
-    } */
 
     public function testGetFieldsList()
     {
