@@ -5,6 +5,7 @@ use Kumbia\ActiveRecord\Metadata\Metadata;
 
 class MetadataTest extends TestCase
 {
+    
     protected $dbName;
 
     protected $tableName;
@@ -17,7 +18,7 @@ class MetadataTest extends TestCase
 
         if (!extension_loaded('pdo_'.$this->dbName)) {
             $this->markTestSkipped(
-              'The pdo_'.$this->dbName.' extension is not available.'
+              "The pdo_{$this->dbName} extension is not available."
             );
         }
 
@@ -56,33 +57,33 @@ class MetadataTest extends TestCase
     protected static function expectedGetFields(): array
     {
         return [
-            'activo' => [
-                    'Type' => 'smallint(1)',
-                    'Null' => true,
-                    'Default' => true,
-                    'Key' => '',
-                    'Auto' => false
-            ],
-            'email' => [
-                    'Type' => 'varchar(100)',
-                    'Null' => false,
-                    'Default' => false,
-                    'Key' => '',
-                    'Auto' => false,
-            ],
-            'id' => [
-                    'Type' => 'bigint(20)',
-                    'Null' => false,
-                    'Default' => false,
-                    'Key' => 'PRI',
-                    'Auto' => true,
-            ],
-            'nombre' => [
-                    'Type' => 'varchar(50)',
-                    'Null' => false,
-                    'Default' => false,
-                    'Key' => '',
-                    'Auto' => false,
+                'id' => [
+                        'Type' => 'bigint(20)',
+                        'Null' => false,
+                        'Default' => false,
+                        'Key' => 'PRI',
+                        'Auto' => true,
+                ],
+                'nombre' => [
+                        'Type' => 'varchar(50)',
+                        'Null' => false,
+                        'Default' => false,
+                        'Key' => '',
+                        'Auto' => false,
+                ],
+                'email' => [
+                        'Type' => 'varchar(100)',
+                        'Null' => false,
+                        'Default' => false,
+                        'Key' => '',
+                        'Auto' => false,
+                ],
+                'activo' => [
+                        'Type' => 'smallint(1)',
+                        'Null' => true,
+                        'Default' => true,
+                        'Key' => '',
+                        'Auto' => false
                 ]
             ];
     }
