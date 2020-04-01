@@ -29,7 +29,7 @@ env:
 before_script:
   - if [[ "$DB" == "pgsql" ]]; then psql -c "DROP DATABASE IF EXISTS kumbia_test;" -U postgres; fi
   - if [[ "$DB" == "pgsql" ]]; then psql -c 'CREATE DATABASE kumbia_test;' -U postgres; fi
-  - if [[ "$DB" == "pgsql" ]]; then psql -c 'CREATE TABLE IF NOT EXISTS user ( 
+  - if [[ "$DB" == "pgsql" ]]; then psql -c 'CREATE TABLE IF NOT EXISTS test ( 
                                                         id serial PRIMARY KEY, 
                                                         nombre  varchar(50) NOT NULL , 
                                                         email varchar(100) NOT NULL , 
@@ -38,7 +38,7 @@ before_script:
                                                   -U postgres;
                                                 fi
   - if [[ "$DB" == "mysql" ]]; then mysql -e 'CREATE DATABASE IF NOT EXISTS kumbia_test;
-                                                  CREATE TABLE IF NOT EXISTS kumbia_test.user ( 
+                                                  CREATE TABLE IF NOT EXISTS kumbia_test.test ( 
                                                     id BIGINT(20) NOT NULL AUTO_INCREMENT, 
                                                     nombre  varchar(50) NOT NULL , 
                                                     email varchar(100) NOT NULL , 
