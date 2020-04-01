@@ -56,33 +56,33 @@ class MetadataTest extends TestCase
     protected static function ExpectedGetFields(): array
     {
         return [
-            [activo] => [
-                    [Type] => 'smallint(1)'
-                    [Null] => true
-                    [Default] => true
-                    [Key] => ''
-                    [Auto] => false
-                ]
-            [email] => [
-                    [Type] => 'varchar(100)'
-                    [Null] => false
-                    [Default] => false
-                    [Key] => ''
-                    [Auto] => false
-                ]
-            [id] => [
-                    [Type] => 'bigint(20)'
-                    [Null] => false
-                    [Default] => false
-                    [Key] => 'PRI'
-                    [Auto] => true
-                ]
-            [nombre] => [
-                    [Type] => 'varchar(50)'
-                    [Null] => false
-                    [Default] => false
-                    [Key] => ''
-                    [Auto] => false
+            'activo' => [
+                    'Type' => 'smallint(1)',
+                    'Null' => true,
+                    'Default' => true,
+                    'Key' => '',
+                    'Auto' => false
+            ],
+            'email' => [
+                    'Type' => 'varchar(100)',
+                    'Null' => false,
+                    'Default' => false,
+                    'Key' => '',
+                    'Auto' => false,
+            ],
+            'id' => [
+                    'Type' => 'bigint(20)',
+                    'Null' => false,
+                    'Default' => false,
+                    'Key' => 'PRI',
+                    'Auto' => true,
+            ],
+            'nombre' => [
+                    'Type' => 'varchar(50)',
+                    'Null' => false,
+                    'Default' => false,
+                    'Key' => '',
+                    'Auto' => false,
                 ]
             ];
     }
