@@ -2,7 +2,7 @@
 
 <phpunit bootstrap="bootstrap.php" colors="true">
     <php>
-        <var name="metadata_table" value="usuario"/>
+        <var name="metadata_table" value="user"/>
         <var name="metadata_schema" value=""/>
     </php>
 
@@ -17,6 +17,7 @@
             <directory>.</directory>
             <exclude>
                 <directory>./tests</directory>
+                <directory>./temp</directory>
             </exclude>
         </whitelist>
     </filter>
