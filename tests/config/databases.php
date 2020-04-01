@@ -3,7 +3,7 @@
 return [
     //Mysql
     'mysql' => [
-        'dsn'      => 'mysql:host=127.0.0.1;dbname=test;charset=utf8',
+        'dsn'      => 'mysql:host=127.0.0.1;dbname=kumbia_test;charset=utf8',
         'username' => 'root',
         'password' => '',
         'params'   => [
@@ -13,7 +13,7 @@ return [
     ],
     //Pgsql
     'pgsql' => [
-        'dsn'      => 'pgsql:dbname=test;host=localhost',
+        'dsn'      => 'pgsql:dbname=kumbia_test;host=localhost',
         'username' => 'postgres',
         'password' => '',
         'params'   => [
