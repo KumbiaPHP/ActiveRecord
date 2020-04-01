@@ -57,7 +57,7 @@ class MetadataTest extends TestCase
     {
         return [
             'activo' => [
-                    'Type' => 'smallint',
+                    'Type' => 'smallint(1)',
                     'Null' => true,
                     'Default' => true,
                     'Key' => '',
