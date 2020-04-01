@@ -53,11 +53,11 @@ class MetadataTest extends TestCase
         $this->assertEquals(['activo'], $withDefault);
     }
 
-    protected static function ExpectedGetFields(): array
+    protected static function expectedGetFields(): array
     {
         return [
             'activo' => [
-                    'Type' => 'smallint(1)',
+                    'Type' => 'smallint',
                     'Null' => true,
                     'Default' => true,
                     'Key' => '',
@@ -90,7 +90,7 @@ class MetadataTest extends TestCase
     {
         $fields = $this->getMetadata()->getFields();
 
-        $this->assertEquals(self::ExpectedGetFields(), $fields);
+        $this->assertEquals(self::expectedGetFields(), $fields);
     }
 
     public function testGetFieldsList()
