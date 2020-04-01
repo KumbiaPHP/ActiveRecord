@@ -15,6 +15,12 @@ class MetadataTest extends TestCase
     {
         $this->dbName     = getenv('DB');
 
+        if (!extension_loaded('pdo_'.$this->dbName)) {
+            $this->markTestSkipped(
+              'The pdo_'.$this->dbName.' extension is not available.'
+            );
+        }
+
         $this->tableName  = $GLOBALS['metadata_table'];
         $this->schemaName = $GLOBALS['metadata_schema'];
     }
