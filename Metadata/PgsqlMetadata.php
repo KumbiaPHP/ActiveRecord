@@ -81,7 +81,7 @@ class PgsqlMetadata extends Metadata
                 'Null'    => $value->null !== 'NO',
                 'Default' => $value->default != '',
                 'Key'     => \substr($value->key, 0, 3),
-                'Auto'    => \preg_match('/^nextval\(/', $value->default)
+                'Auto'    => (bool) \preg_match('/^nextval\(/', $value->default)
             ];
             $this->filterColumn($fields[$value->field], $value->field);
         }
