@@ -14,7 +14,7 @@ abstract class MetadataTest extends TestCase
 
     protected $expectedGetFields = [
                 'id' => [
-                        'Type' => 'int',
+                        'Type' => 'int(11)',
                         'Null' => false,
                         'Default' => false,
                         'Key' => 'PRI',
