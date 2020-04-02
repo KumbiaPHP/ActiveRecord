@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Kumbia\ActiveRecord\Metadata\Metadata;
 
-class MetadataTest extends TestCase
+abstract class MetadataTest extends TestCase
 {
     
     protected $dbName;
@@ -11,54 +11,10 @@ class MetadataTest extends TestCase
     protected $tableName;
 
     protected $schemaName;
-    
-    public function setUp(): void
-    {
-        $this->dbName     = getenv('DB');
 
-        if (!extension_loaded('pdo_'.$this->dbName)) {
-            $this->markTestSkipped(
-              "The pdo_{$this->dbName} extension is not available."
-            );
-        }
-
-        $this->tableName  = $GLOBALS['metadata_table'];
-        $this->schemaName = $GLOBALS['metadata_schema'];
-    }
-
-    protected function getMetadata(): Metadata
-    {
-        return Metadata::get($this->dbName, $this->tableName, $this->schemaName);
-    }
-
-    public function testInstanceOfDriverDb()
-    {
-        $metadata = $this->getMetadata();
-        $dbDriverClass = \ucfirst($this->dbName).'Metadata';
-
-        $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\'.$dbDriverClass, $metadata);
-    }
-
-    public function testGetPK()
-    {
-        $pk = $this->getMetadata()->getPK();
-
-        $this->assertEquals('id', $pk);
-    }
-
-    public function testGetWithDefault()
-    {
-
-        $withDefault = $this->getMetadata()->getWithDefault();
-
-        $this->assertEquals(['activo'], $withDefault);
-    }
-
-    protected static function expectedGetFields(): array
-    {
-        return [
+    protected $expectedGetFields = [
                 'id' => [
-                        'Type' => 'bigint(20)',
+                        'Type' => 'int',
                         'Null' => false,
                         'Default' => false,
                         'Key' => 'PRI',
@@ -86,12 +42,48 @@ class MetadataTest extends TestCase
                         'Auto' => false
                 ]
             ];
+ 
+            
+
+    public function setUp(): void
+    {
+        $this->tableName  = getenv('metadata_table');
+        $this->schemaName = getenv('metadata_schema');
     }
+
+    protected function getMetadata(): Metadata
+    {
+        return Metadata::get($this->dbName, $this->tableName, $this->schemaName);
+    }
+
+    public function testInstanceOfDriverDb()
+    {
+        $metadata = $this->getMetadata();
+        $dbDriverClass = \ucfirst($this->dbName).'Metadata';
+
+        $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\'.$dbDriverClass, $metadata);
+    }
+
+    public function testGetPK()
+    {
+        $pk = $this->getMetadata()->getPK();
+
+        $this->assertEquals('id', $pk);
+    }
+
+    public function testGetWithDefault()
+    {
+        $withDefault = $this->getMetadata()->getWithDefault();
+
+        $this->assertEquals(['activo'], $withDefault);
+    }
+
+    
     public function testGetFields()
     {
         $fields = $this->getMetadata()->getFields();
 
-        $this->assertEquals(self::expectedGetFields(), $fields);
+        $this->assertEquals($this->expectedGetFields, $fields);
     }
 
     public function testGetFieldsList()
@@ -108,3 +100,5 @@ class MetadataTest extends TestCase
         $this->assertEquals(['id'], $fields);
     }
 }
+//TODO add validation when don't connect to bd and don't get the metadata
+// now fail silently
