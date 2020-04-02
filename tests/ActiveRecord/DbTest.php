@@ -31,9 +31,18 @@ class DbTest extends TestCase
     public function testGetThatDontExistInConfig()
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageRegExp('/No existen datos de conexión para la bd$/');
+        $this->expectExceptionMessageRegExp('/^No existen datos de conexión para la bd/');
         
         $instance = Db::get('no_exist');
 
     }
+/* 
+    public function testGetWithBadCredentialsInConfig()
+    {
+        //$this->expectException(RuntimeException::class);
+        //$this->expectExceptionMessageRegExp('/No existen datos de conexión para la bd$/');
+        
+        $instance = Db::get('bad_credentials');
+
+     }*/
 }
