@@ -191,7 +191,7 @@ class LiteRecord extends BaseRecord
      * @param  string       $sql
      * @param  array        $values
      * 
-     * @return array
+     * @return static[]
      */
     public static function all(string $sql = '', array $values = []): array
     {
@@ -208,9 +208,9 @@ class LiteRecord extends BaseRecord
      * @param  string       $sql
      * @param  array        $values
      * 
-     * @return self
+     * @return static
      */
-    public static function first(string $sql, array $values = []): self
+    public static function first(string $sql, array $values = [])//: static in php 8
     {
         return static::query($sql, $values)->fetch();
     }
