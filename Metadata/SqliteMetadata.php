@@ -43,12 +43,13 @@ class SqliteMetadata extends Metadata
         $fields = [];
         foreach ($describe as $value) {
             $fields[$value->name] = [
-                'Type' => $value->type,
-                'Null' => $value->notnull !== 'NO',
-                'Default' => $value->dflt_value,
-                'Key' => $value->pk === 1 ? 'PRI' : '',
-                'Auto' => ($value->type === 'int' && $value->pk === 1)
+                'Type' => \strtolower(\str_replace(' ', '', $value->type)),
+                'Null' => $value->notnull == 0,
+                'Default' => (bool) $value->dflt_value,
+                'Key' => $value->pk == 1 ? 'PRI' : '',
+                'Auto' => (\strtolower($value->type) == 'int' && $value->pk == 1)
             ];
+            $this->filterColumn($fields[$value->name], $value->name);
         }
 
         return $fields;
