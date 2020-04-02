@@ -108,13 +108,11 @@ class BaseRecord
     /**
      * Verifica que PK este seteado.
      *
-     * @throws KumbiaException
+     * @return bool
      */
-    protected function hasPK()
+    protected function hasPK(): bool
     {
-        if (! isset($this->{static::$pk})) {
-            throw new KumbiaException(_('No se ha especificado valor para la clave primaria'));
-        }
+        return isset($this->{static::$pk});
     }
 
     /**
