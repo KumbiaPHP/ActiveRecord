@@ -47,7 +47,7 @@ class SqliteMetadata extends Metadata
                 'Null' => $value->notnull == 0,
                 'Default' => (bool) $value->dflt_value,
                 'Key' => $value->pk == 1 ? 'PRI' : '',
-                'Auto' => (\strtolower($value->type) == 'int' && $value->pk == 1)
+                'Auto' => (\strtolower($value->type) == 'int' && $value->pk == 1) // using rowid
             ];
             $this->filterColumn($fields[$value->name], $value->name);
         }
