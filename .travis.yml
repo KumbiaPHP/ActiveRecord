@@ -21,11 +21,6 @@ services:
   - mysql
   - postgresql
 
-env:
-  - DB=mysql
-  - DB=pgsql
-#  - DB=sqlite
-
 before_script:
   - "mysql -e 'DROP DATABASE IF EXISTS kumbia_test;'"
   - "mysql -e 'create database kumbia_test;'"
