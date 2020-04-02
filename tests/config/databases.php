@@ -21,6 +21,11 @@ return [
             \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION
             ]
     ],
+    'sqlite' => [
+        'dsn' => 'sqlite::memory:',
+        'username' => '',
+        'password' => '',
+    ]
 
 
     //More connections
