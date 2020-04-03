@@ -15,16 +15,29 @@ return [
     'pgsql' => [
         'dsn'      => 'pgsql:dbname=kumbia_test;host=localhost',
         'username' => 'postgres',
-        'password' => '',
+        'password' => '414141',
         'params'   => [
             \PDO::ATTR_PERSISTENT => \true, //conexión persistente
             \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION
             ]
     ],
+    //Sqlite
     'sqlite' => [
         'dsn' => 'sqlite::memory:',
         'username' => '',
         'password' => '',
+    ],
+
+    // bad connections to tests errors
+    'no_dsn' => [
+        'dsn' => ''
+    ],
+    'no_password' => [
+        'dsn' => 'pgsql:dbname=no_exist;host=localhost'
+    ],
+    'bad_credentials' => [
+        'dsn' => 'pgsql:dbname=no_exist;host=localhost',
+        'password' => 'as'
     ]
 
 

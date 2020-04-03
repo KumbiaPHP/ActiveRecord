@@ -36,12 +36,12 @@ class DbTest extends TestCase
         $instance = Db::get('no_exist');
     }
 
-    public function testGetWithBadCredentialsInConfig()
+    public function testGetConfigWithoutPassword()
     {
         $this->expectException(RuntimeException::class);
-        //$this->expectExceptionMessageRegExp('/No existen datos de conexión para la bd$/');
+        $this->expectExceptionMessageRegExp('/No se pudo realizar la conexión con/');
         
-        $instance = Db::get('bad_credentials');
+        $instance = Db::get('no_password');
     }
 
      public function testSetConfig()
