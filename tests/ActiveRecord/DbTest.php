@@ -34,9 +34,8 @@ class DbTest extends TestCase
         $this->expectExceptionMessageRegExp('/^No existen datos de conexión para la bd/');
         
         $instance = Db::get('no_exist');
-
     }
-/* 
+
     public function testGetWithBadCredentialsInConfig()
     {
         //$this->expectException(RuntimeException::class);
@@ -44,5 +43,22 @@ class DbTest extends TestCase
         
         $instance = Db::get('bad_credentials');
 
-     }*/
+     public function testSetConfig()
+    {
+        $config = ['dynamic' => [
+            'dsn'      => 'pgsql:dbname=kumbia_test;host=localhost',
+            'username' => 'postgres',
+            'password' => '',
+            'params'   => [
+                \PDO::ATTR_PERSISTENT => \true, //conexión persistente
+                \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION
+                ]
+            ]
+        ];
+        
+        Db::setConfig($config);
+        $instance = Db::get('dynamic');
+
+        $this->assertInstanceOf('PDO', $instance);
+     }
 }
