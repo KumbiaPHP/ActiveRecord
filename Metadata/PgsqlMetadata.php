@@ -14,12 +14,12 @@
  *
  * @category   Kumbia
  *
- * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
+ * @copyright  2005 - 2020  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 namespace Kumbia\ActiveRecord\Metadata;
 
-use Kumbia\ActiveRecord\Db;
+use \PDO;
 
 /**
  * Adaptador de Metadata para Pgsql.
@@ -29,18 +29,18 @@ class PgsqlMetadata extends Metadata
     /**
      * Consultar los campos de la tabla en la base de datos.
      *
-     * @param string $database base de datos
-     * @param string $table    tabla
-     * @param string $schema   squema
-     *
+     * @param  \PDO    $pdo      base de datos
+     * @param  string  $table    tabla
+     * @param  string  $schema   esquema, por defecto 'public'
+     * 
      * @return array
      */
-    protected function queryFields($database, $table, $schema = 'public')
+    protected function queryFields(\PDO $pdo, string $table, string $schema = ''): array
     {
-
+        $schema = $schema === '' ? 'public' : $schema; // default to public
         // Nota: Se excluyen claves compuestas
-        $describe = Db::get($database)->query(
-            "SELECT DISTINCT
+        $describe = $pdo->query(
+            "SELECT
                 c.column_name AS field,
                 c.udt_name AS type,
                 tc.constraint_type AS key,
@@ -55,31 +55,35 @@ class PgsqlMetadata extends Metadata
             LEFT OUTER JOIN information_schema.table_constraints tc
             ON (cu.constraint_name = tc.constraint_name AND tc.constraint_type
             IN ('PRIMARY KEY', 'UNIQUE'))
-            WHERE c.table_name = '$table' AND c.table_schema = '$schema';"
+            WHERE c.table_name = '$table' AND c.table_schema = '$schema'
+            ;",
+            
+            \PDO::FETCH_OBJ
         );
 
-        return self::describe($describe);
+        return self::describe($describe->fetchAll());
     }
 
     /**
      * Genera la metadata.
      *
-     * @param \PDOStatement $describe
-     *
+     * @param  array $describe
+     * 
      * @return array
      */
-    private static function describe(\PDOStatement $describe)
+    private function describe(array $describe): array
     {
         $fields = [];
         // TODO mejorar este código
         foreach ($describe as $value) {
-            $fields[$value['field']] = [
-                'Type'    => $value['type'],
-                'Null'    => $value['null'] != 'NO',
-                'Default' => $value['default'] != '',
-                'Key'     => \substr($value['key'], 0, 3),
-                'Auto'    => \preg_match('/^nextval\(/', $value['default']),
+            $fields[$value->field] = [
+                'Type'    => $value->type,
+                'Null'    => $value->null !== 'NO',
+                'Default' => $value->default != '',
+                'Key'     => \substr($value->key, 0, 3),
+                'Auto'    => (bool) \preg_match('/^nextval\(/', $value->default)
             ];
+            $this->filterColumn($fields[$value->field], $value->field);
         }
 
         return $fields;

@@ -1,96 +1,104 @@
 <?php
 
-class MetadataTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Kumbia\ActiveRecord\Metadata\Metadata;
+
+abstract class MetadataTest extends TestCase
 {
-    /**
-     * @return \Kumbia\ActiveRecord\Metadata\Metadata
-     */
-    protected function createClass()
-    {
-        $databaseName = $GLOBALS['config_database'];
-        $metadataClass = $GLOBALS['metadata_class'];
-        $typeName = $GLOBALS['metadata_type'];
-        $tableName = $GLOBALS['metadata_table'];
-        $schemaName = $GLOBALS['metadata_schema'];
+    
+    protected $dbName;
 
-        return $metadataClass::get($typeName, $databaseName, $tableName, $schemaName);
+    protected $tableName;
+
+    protected $schemaName;
+
+    protected $expectedGetFields = [
+                'id' => [
+                        'Type' => 'int(11)',
+                        'Null' => false,
+                        'Default' => false,
+                        'Key' => 'PRI',
+                        'Auto' => true,
+                ],
+                'nombre' => [
+                        'Type' => 'varchar(50)',
+                        'Null' => false,
+                        'Default' => false,
+                        'Key' => '',
+                        'Auto' => false,
+                ],
+                'email' => [
+                        'Type' => 'varchar(100)',
+                        'Null' => false,
+                        'Default' => false,
+                        'Key' => '',
+                        'Auto' => false,
+                ],
+                'activo' => [
+                        'Type' => 'smallint(1)',
+                        'Null' => true,
+                        'Default' => true,
+                        'Key' => '',
+                        'Auto' => false
+                ]
+            ];
+ 
+            
+
+    public function setUp(): void
+    {
+        $this->tableName  = getenv('metadata_table');
+        $this->schemaName = getenv('metadata_schema');
     }
 
-    public function testInstanceOf()
+    protected function getMetadata(): Metadata
     {
-        $metadata = $this->createClass();
-
-        $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\Metadata', $metadata);
+        return Metadata::get($this->dbName, $this->tableName, $this->schemaName);
     }
 
-    public function testMethod_getPK()
+    public function testInstanceOfDriverDb()
     {
-        $metadata = $this->createClass();
-        $pk = $metadata->getPK();
+        $metadata = $this->getMetadata();
+        $dbDriverClass = \ucfirst($this->dbName).'Metadata';
 
-        $this->assertTrue(is_string($pk), 'Debe retornar un string');
+        $this->assertInstanceOf('\\Kumbia\\ActiveRecord\\Metadata\\'.$dbDriverClass, $metadata);
+    }
+
+    public function testGetPK()
+    {
+        $pk = $this->getMetadata()->getPK();
+
         $this->assertEquals('id', $pk);
     }
 
-    public function testMethod_getWithDefault()
+    public function testGetWithDefault()
     {
-        $metadata = $this->createClass();
-        $withDefault = $metadata->getWithDefault();
+        $withDefault = $this->getMetadata()->getWithDefault();
 
-        $this->assertTrue(is_array($withDefault), 'Debe retornar un array');
-        $this->assertEquals(1, count($withDefault));
-        $this->assertEquals('activo', $withDefault[0]);
+        $this->assertEquals(['activo'], $withDefault);
     }
 
-    public function testMethod_getFields()
+    
+    public function testGetFields()
     {
-        $metadata = $this->createClass();
-        $fields = $metadata->getFields();
+        $fields = $this->getMetadata()->getFields();
 
-        $this->assertTrue(is_array($fields), 'Debe retornar un array');
-        $this->assertEquals(4, count($fields));
-
-        $this->assertEquals(['id', 'nombre', 'email', 'activo'], array_keys($fields));
-        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['id']));
-        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['nombre']));
-        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['email']));
-        $this->assertEquals(['Type', 'Null', 'Key', 'Default', 'Auto'], array_keys($fields['activo']));
-
-        $this->fieldData($fields['id'], 'int(11)', false, 'PRI', true, false);
-        $this->fieldData($fields['nombre'], 'varchar(50)', false, '', false, false);
-        $this->fieldData($fields['email'], 'varchar(100)', false, '', false, false);
-        $this->fieldData($fields['activo'], 'tinyint(1)', true, '', true, false);
+        $this->assertEquals($this->expectedGetFields, $fields);
     }
 
-    protected function fieldData($field, $type, $null, $key, $default, $auto)
+    public function testGetFieldsList()
     {
-        $this->assertEquals($type, $field['Type']);
-        $this->assertEquals($null, $field['Null']);
-        $this->assertEquals($key, $field['Key']);
-        $this->assertEquals($default, $field['Default']);
-        $this->assertEquals($auto, $field['Auto']);
-    }
-
-    public function testMethod_getFieldsList()
-    {
-        $metadata = $this->createClass();
-        $fields = $metadata->getFieldsList();
-
-        $this->assertTrue(is_array($fields), 'Debe retornar un array');
-        $this->assertEquals(4, count($fields));
+        $fields = $this->getMetadata()->getFieldsList();
 
         $this->assertEquals(['id', 'nombre', 'email', 'activo'], $fields);
     }
 
-    public function testMethod_getAutoFields()
+    public function testGetAutoFields()
     {
-        $metadata = $this->createClass();
-        $fields = $metadata->getAutoFields();
-
-        $this->assertTrue(is_array($fields), 'Debe retornar un array');
-        // @TODO: Revisar, está devolviendo un array vacio
-//        $this->assertEquals(4, count($fields));
-//
-//        $this->assertEquals(array('id', 'nombre', 'email', 'activo'), $fields);
+        $fields = $this->getMetadata()->getAutoFields();
+        
+        $this->assertEquals(['id'], $fields);
     }
 }
+//TODO add validation when don't connect to bd and don't get the metadata
+// now fail silently

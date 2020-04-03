@@ -14,7 +14,7 @@
  *
  * @category   Kumbia
  *
- * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
+ * @copyright  2005 - 2020  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 namespace Kumbia\ActiveRecord\Query;
@@ -22,11 +22,10 @@ namespace Kumbia\ActiveRecord\Query;
 /**
  * Obtiene el último id generado en pgsql.
  *
- * @param \PDO   $dbh    conexion pdo
- * @param string $pk     campo clave primaria
- * @param string $table  nombre de tabla
- * @param string $schema esquema
- *
+ * @param  \PDO     $dbh    conexion pdo
+ * @param  string   $pk     campo clave primaria
+ * @param  string   $table  nombre de tabla
+ * @param  string   $schema esquema
  * @return string
  */
 function pgsql_last_insert_id(\PDO $dbh, $pk, $table, $schema = '')

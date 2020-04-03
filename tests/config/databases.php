@@ -1,24 +1,45 @@
 <?php
 
-//Copiar en app/config/databases.php
-//Conexión a Mysql
-$databases['mysql'] = $databases['default'] = [
-        'dsn'      => 'mysql:host=127.0.0.1;dbname=test;charset=utf8',
+return [
+    //Mysql
+    'mysql' => [
+        'dsn'      => 'mysql:host=127.0.0.1;dbname=kumbia_test;charset=utf8',
         'username' => 'root',
         'password' => '',
         'params'   => [
-            //PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8', //UTF8 en PHP < 5.3.6
-            PDO::ATTR_PERSISTENT => true, //conexión persistente
-            PDO::ATTR_ERRMODE    => PDO::ERRMODE_EXCEPTION,
-        ],
+            \PDO::ATTR_PERSISTENT => \true, //conexión persistente
+            \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION
+        ]
+    ],
+    //Pgsql
+    'pgsql' => [
+        'dsn'      => 'pgsql:dbname=kumbia_test;host=localhost',
+        'username' => 'postgres',
+        'password' => '414141',
+        'params'   => [
+            \PDO::ATTR_PERSISTENT => \true, //conexión persistente
+            \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION
+            ]
+    ],
+    //Sqlite
+    'sqlite' => [
+        'dsn' => 'sqlite::memory:',
+        'username' => '',
+        'password' => '',
+    ],
+
+    // bad connections to tests errors
+    'no_dsn' => [
+        'dsn' => ''
+    ],
+    'no_password' => [
+        'dsn' => 'pgsql:dbname=no_exist;host=localhost'
+    ],
+    'bad_credentials' => [
+        'dsn' => 'pgsql:dbname=no_exist;host=localhost',
+        'password' => 'as'
+    ]
+
+
+    //More connections
 ];
-
-////Conexión a sqlite ejemplo
-//$databases['pgsql'] = array(
-//    'dsn' => "sqlite:{APP_PATH}/temp/mydb.sq3",
-//    'username' => NULL,
-//    'password' => NULL,
-//    'params' => array(PDO::ATTR_PERSISTENT => true)
-//);
-
-return $databases;

@@ -14,7 +14,7 @@
  *
  * @category   Kumbia
  *
- * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
+ * @copyright  2005 - 2020  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 namespace Kumbia\ActiveRecord\Query;
@@ -22,21 +22,18 @@ namespace Kumbia\ActiveRecord\Query;
 /**
  * Adiciona limit y offset a la consulta sql en pgsql.
  *
- * @param string $sql    consulta select
- * @param string $limit  valor limit
- * @param string $offset valor offset
- *
+ * @param  string   $sql    consulta select
+ * @param  int      $limit  valor limit
+ * @param  int      $offset valor offset
  * @return string
  */
-function pgsql_limit($sql, $limit = null, $offset = null)
+function pgsql_limit($sql, int $limit = \null, int $offset = \null)
 {
-    if ($limit !== null) {
-        $limit = (int) $limit;
+    if ($limit !== \null) {
         $sql .= " LIMIT $limit";
     }
 
-    if ($offset !== null) {
-        $offset = (int) $offset;
+    if ($offset !== \null) {
         $sql .= " OFFSET $offset";
     }
 

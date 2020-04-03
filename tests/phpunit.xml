@@ -2,15 +2,12 @@
 
 <phpunit bootstrap="bootstrap.php" colors="true">
     <php>
-        <var name="config_database" value="default"/>
-        <var name="metadata_class" value="Kumbia\ActiveRecord\Metadata\MysqlMetadata"/>
-        <var name="metadata_type" value="mysql"/>
-        <var name="metadata_table" value="usuario"/>
-        <var name="metadata_schema" value=""/>
+        <env name="metadata_table" value="test"/>
+        <env name="metadata_schema" value=""/>
     </php>
 
     <testsuites>
-        <testsuite name="Kumbia ActiveRecord Mysql">
+        <testsuite name="Kumbia ActiveRecord">
             <directory>.</directory>
         </testsuite>
     </testsuites>
@@ -20,6 +17,7 @@
             <directory>.</directory>
             <exclude>
                 <directory>./tests</directory>
+                <directory>./temp</directory>
             </exclude>
         </whitelist>
     </filter>

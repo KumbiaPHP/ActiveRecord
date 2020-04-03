@@ -14,7 +14,7 @@
  *
  * @category   Kumbia
  *
- * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
+ * @copyright  2005 - 2020  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 namespace Kumbia\ActiveRecord;
@@ -27,7 +27,6 @@ class QueryGenerator
     /**
      * Construye una consulta select desde una lista de parametros.
      *
-     * @param array  $params parametros de consulta select
      *                       where: condiciones where
      *                       order: criterio de ordenamiento
      *                       fields: lista de campos
@@ -36,9 +35,9 @@ class QueryGenerator
      *                       having: condiciones de grupo
      *                       limit: valor limit
      *                       offset: valor offset
-     * @param string $source
-     * @param string $type
-     *
+     * @param  array     $params    parametros de consulta select
+     * @param  string    $source
+     * @param  string    $type
      * @return string
      */
     public static function select($source, $type, array $params)
@@ -46,18 +45,18 @@ class QueryGenerator
         $params = array_merge([
             'fields' => '*',
             'join'   => '',
-            'limit'  => null,
-            'offset' => null,
-            'where'  => null,
-            'group'  => null,
-            'having' => null,
-            'order'  => null,
+            'limit'  => \null,
+            'offset' => \null,
+            'where'  => \null,
+            'group'  => \null,
+            'having' => \null,
+            'order'  => \null
         ], $params);
 
         list($where, $group, $having, $order) = static::prepareParam($params);
-        $sql = "SELECT {$params['fields']} FROM $source {$params['join']} $where $group $having $order";
+        $sql                                  = "SELECT {$params['fields']} FROM $source {$params['join']} $where $group $having $order";
 
-        if (!is_null($params['limit']) || !is_null($params['offset'])) {
+        if ( ! \is_null($params['limit']) || ! \is_null($params['offset'])) {
             $sql = self::query($type, 'limit', $sql, $params['limit'], $params['offset']);
         }
 
@@ -68,8 +67,8 @@ class QueryGenerator
      * Permite construir el WHERE, GROUP BY, HAVING y ORDER BY de una consulta SQL
      * en base a los parámetros $params.
      *
-     * @param array $params
-     * @return array
+     * @param  array   $params
+     * @return string[]
      */
     protected static function prepareParam(array $params)
     {
@@ -77,68 +76,67 @@ class QueryGenerator
             static::where($params['where']),
             static::group($params['group']),
             static::having($params['having']),
-            static::order($params['order']),
+            static::order($params['order'])
         ];
     }
 
     /**
      * Genera una sentencia where.
      *
-     * @param $where
+     * @param  string $where
      * @return string
      */
     protected static function where($where)
     {
-        return empty($where)  ? '' : "WHERE $where";
+        return empty($where) ? '' : "WHERE $where";
     }
 
     /**
      * Genera una sentencia GROUP.
      *
-     * @param $group
+     * @param  string $group
      * @return string
      */
     protected static function group($group)
     {
-        return empty($group)  ? '' : "GROUP BY $group";
+        return empty($group) ? '' : "GROUP BY $group";
     }
 
     /**
      * Genera una sentencia HAVING.
      *
-     * @param $having
+     * @param  string $having
      * @return string
      */
     protected static function having($having)
     {
-        return empty($having)  ? '' : "HAVING $having";
+        return empty($having) ? '' : "HAVING $having";
     }
 
     /**
      * Genera una sentencia ORDER BY.
      *
-     * @param $order
+     * @param  string $order
      * @return string
      */
     protected static function order($order)
     {
-        return empty($order)  ? '' : "ORDER BY $order";
+        return empty($order) ? '' : "ORDER BY $order";
     }
 
     /**
      * Construye una consulta INSERT.
      *
-     * @param \Kumbia\ActiveRecord\LiteRecord $model Modelo a actualizar
-     * @param array                           $data  Datos pasados a la consulta preparada
-     *
+     * @param  LiteRecord $model Modelo a actualizar
+     * @param  array      $data  Datos pasados a la consulta preparada
      * @return string
      */
-    public static function insert(\Kumbia\ActiveRecord\LiteRecord $model, &$data)
+    public static function insert(LiteRecord $model, array &$data)
     {
-        $meta = $model::metadata();
-        $data = [];
+        $meta    = $model::metadata();
+        $data    = [];
         $columns = [];
-        $values = [];
+        $values  = [];
 
         // Preparar consulta
         foreach ($meta->getFieldsList() as $field) {
@@ -146,8 +144,8 @@ class QueryGenerator
             static::insertField($field, $model, $data, $values);
         }
         $columns = \implode(',', $columns);
-        $values = \implode(',', $values);
-        $source = $model::getSource();
+        $values  = \implode(',', $values);
+        $source  = $model::getSource();
 
         return "INSERT INTO $source ($columns) VALUES ($values)";
     }
@@ -155,22 +153,20 @@ class QueryGenerator
     /**
      * Agrega un campo a para generar una consulta preparada para un INSERT.
      *
-     * @param string     $field  Nombre del campo
-     * @param LiteRecord $model  valor del campo
-     * @param array      $data   array de datos
-     * @param array      $values array de valores
-     *
+     * @param  string     $field  Nombre del campo
+     * @param  LiteRecord $model  valor del campo
+     * @param  array      $data   array de datos
+     * @param  array      $values array de valores
      * @return void
      */
     protected static function insertField($field, LiteRecord $model, array &$data, array &$values)
     {
-        $meta = $model::metadata();
-        $withDefault = $meta->getWithDefault();
-        $autoFields = $meta->getAutoFields();
+        //$meta        = $model::metadata();
         if (self::haveValue($model, $field)) {
             $data[":$field"] = $model->$field;
-            $values[] = ":$field";
-        } else{//if (!\in_array($field, $withDefault) && !\in_array($field, $autoFields)) {
+            $values[]        = ":$field";
+        } else {
+            //if (!\in_array($field, $meta->getWithDefault()) && !\in_array($field, $meta->getAutoFields())) {
             $values[] = 'NULL';
         }
     }
@@ -178,9 +174,8 @@ class QueryGenerator
     /**
      * Permite conocer si la columna debe definirse como nula.
      *
-     * @param LiteRecord $model
-     * @param string     $field
-     *
+     * @param  LiteRecord $model
+     * @param  string     $field
      * @return bool
      */
     protected static function haveValue(LiteRecord $model, $field)
@@ -191,23 +186,22 @@ class QueryGenerator
     /**
      * Construye una consulta UPDATE.
      *
-     * @param \Kumbia\ActiveRecord\LiteRecord $model Modelo a actualizar
-     * @param array                           $data  Datos pasados a la consulta preparada
-     *
+     * @param  LiteRecord $model Modelo a actualizar
+     * @param  array      $data  Datos pasados a la consulta preparada
      * @return string
      */
-    public static function update(\Kumbia\ActiveRecord\LiteRecord $model, array &$data)
+    public static function update(LiteRecord $model, array &$data)
     {
         $set = [];
-        $pk = $model::getPK();
+        $pk  = $model::getPK();
         /*elimina la clave primaria*/
-        $list = array_diff($model::metadata()->getFieldsList(), [$pk]);
+        $list = \array_diff($model::metadata()->getFieldsList(), [$pk]);
         foreach ($list as $field) {
-            $value = isset($model->$field) ? $model->$field : null;
+            $value = isset($model->$field) ? $model->$field : \null;
             static::updateField($field, $value, $data, $set);
         }
-        $set = \implode(', ', $set);
-        $source = $model::getSource();
+        $set          = \implode(', ', $set);
+        $source       = $model::getSource();
         $data[":$pk"] = $model->$pk;
 
         return "UPDATE $source SET $set WHERE $pk = :$pk";
@@ -216,9 +210,8 @@ class QueryGenerator
     /**
      * Generate SQL for DELETE sentence.
      *
-     * @param string $source source
-     * @param string $where  condition
-     *
+     * @param  string $source source
+     * @param  string $where  condition
      * @return string SQL
      */
     public static function deleteAll($source, $where)
@@ -229,9 +222,8 @@ class QueryGenerator
     /**
      * Generate SQL for COUNT sentence.
      *
-     * @param string $source source
-     * @param string $where  condition
-     *
+     * @param  string $source source
+     * @param  string $where  condition
      * @return string SQL
      */
     public static function count($source, $where)
@@ -242,18 +234,17 @@ class QueryGenerator
     /**
      * Agrega un campo a para generar una consulta preparada para un UPDATE.
      *
-     * @param string $field Nombre del campo
-     * @param mixed  $value valor
-     * @param array  $data  array de datos
-     * @param array  $set   array de valores
-     *
+     * @param  string $field Nombre del campo
+     * @param  mixed  $value valor
+     * @param  array  $data  array de datos
+     * @param  array  $set   array de valores
      * @return void
      */
     protected static function updateField($field, $value, array &$data, array &$set)
     {
-        if (!empty($value)) {
+        if ( ! empty($value)) {
             $data[":$field"] = $value;
-            $set[] = "$field = :$field";
+            $set[]           = "$field = :$field";
         } else {
             $set[] = "$field = NULL";
         }
@@ -262,13 +253,11 @@ class QueryGenerator
     /**
      * Construye una consulta UPDATE.
      *
-     * @param string      $model  nombre del modelo a actualizar
-     * @param array       $fields campos a actualizar
-     * @param array       $data   Datos pasados a la consulta preparada
-     * @param string|null $where
-     *
      * @todo ¿Hay que escapar los nombres de los campos?
-     *
+     * @param  string      $model   nombre del modelo a actualizar
+     * @param  array       $fields  campos a actualizar
+     * @param  array       $data    Datos pasados a la consulta preparada
+     * @param  string|null $where
      * @return string
      */
     public static function updateAll($model, array $fields, array &$data, $where)
@@ -279,9 +268,9 @@ class QueryGenerator
         foreach ($fields as $field => $value) {
             static::updateField($field, $value, $data, $set);
         }
-        $set = \implode(', ', $set);
+        $set    = \implode(', ', $set);
         $source = $model::getSource();
-        $where = static::where($where);
+        $where  = static::where($where);
 
         return "UPDATE $source SET $set $where";
     }
@@ -289,11 +278,10 @@ class QueryGenerator
     /**
      * Ejecuta una consulta.
      *
-     * @param string $type           tipo de driver
-     * @param string $query_function nombre de funcion
-     *
-     * @return mixed
      * @thow KumbiaException
+     * @param  string  $type           tipo de driver
+     * @param  string  $query_function nombre de funcion
+     * @return mixed
      */
     public static function query($type, $query_function)
     {
@@ -303,6 +291,6 @@ class QueryGenerator
 
         $args = \array_slice(\func_get_args(), 2);
 
-        return call_user_func_array(__NAMESPACE__."\\Query\\$query_function", $args);
+        return \call_user_func_array(__NAMESPACE__."\\Query\\$query_function", $args);
     }
 }

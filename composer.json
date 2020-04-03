@@ -2,12 +2,16 @@
     "name": "kumbia/activerecord",
     "type": "library",
     "description": "Fast ActiveRecord",
-    "keywords": ["ActiveRecord","database","ORM"],
+    "keywords": [
+        "ActiveRecord",
+        "database",
+        "ORM"
+    ],
     "homepage": "https://github.com/KumbiaPHP/ActiveRecord",
     "license": "BSD-3-Clause",
     "support": {
         "issues": "https://github.com/KumbiaPHP/ActiveRecord/issues",
-        "irc": "irc://irc.freenode.org/kumbiaphp"
+        "slack": "https://slack.kumbiaphp.com"
     },
     "authors": [
         {
@@ -27,10 +31,22 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.2.0",
+        "ext-pdo": "*"
     },
-    "target-dir": "Kumbia/ActiveRecord",
     "autoload": {
-        "psr-0": { "Kumbia\\ActiveRecord": "." }
-    }
+        "psr-4": {
+            "Kumbia\\ActiveRecord": "."
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "funding": [
+        {
+            "type": "Open Collective",
+            "url": "https://opencollective.com/kumbiaphp"
+        }
+    ]
 }

@@ -1,4 +1,4 @@
-![KumbiaPHP](https://proto.kumbiaphp.com/img/kumbiaphp.png)
+![KumbiaPHP](https://proto.kumbiaphp.com/img/kumbiaphp.svg)
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/badges/quality-score.png?s=f7230602070a9e9605d46544197bcdac46166612)](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/)
 [![Code Coverage](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/badges/coverage.png?s=58997633701e84050c0ebd5334f3eb1bb8b7ad42)](https://scrutinizer-ci.com/g/KumbiaPHP/ActiveRecord/)
@@ -9,7 +9,7 @@ ESPAÑOL - [ENGLISH](/README.en.md)
 
 # ActiveRecord
 
-Nuevo ActiveRecord en desarrollo, requiere PHP 5.4
+Nuevo ActiveRecord en desarrollo.
 
 No usar en producción
 

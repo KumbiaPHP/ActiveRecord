@@ -15,6 +15,7 @@
  * @category   Kumbia
  * @package    ActiveRecord
  * @subpackage Query
+ *
  * @copyright  Copyright (c) 2005-2016  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
@@ -24,20 +25,18 @@ namespace Kumbia\ActiveRecord\Query;
 /**
  * Adiciona limit y offset a la consulta sql en mssql
  *
- * @param string $sql consulta select
- * @param string $limit valor limit
- * @param string $offset valor offset
+ * @param  string   $sql    consulta select
+ * @param  int   $limit  valor limit
+ * @param  int   $offset valor offset
  * @return string
  */
-function sqlsrv_limit($sql, $limit = null, $offset = null)
+function sqlsrv_limit($sql, int $limit = \null, int $offset = \null)
 {
     if ($limit !== null) {
-        $limit = (int) $limit;
-        $sql = preg_replace('/(DELETE|INSERT|SELECT|UPDATE)/i', '${1} TOP ' . $limit, $sql);
+        $sql   = \preg_replace('/(DELETE|INSERT|SELECT|UPDATE)/i', '${1} TOP '.$limit, $sql);
     }
 
-    if ($offset !== null) {
-        $offset = (int) $offset;
+    if ($offset !== \null) {
         $sql .= " OFFSET $offset";
     }
 

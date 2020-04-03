@@ -19,19 +19,32 @@
  */
 namespace Kumbia\ActiveRecord;
 
-use KumbiaException;
+use \PDO;
+use \PDOStatement;
+use \PDOException;
+use \KumbiaException;
 
 /**
  * Base del ORM ActiveRecord.
  */
 class BaseRecord
 {
+    
+    const VERSION = '0.4.0';
+
     /**
      * Database por defecto usa default.
      *
      * @var string
      */
     protected static $database = 'default';
+
+    /**
+     * Nombre de la tabla.
+     *
+     * @var string
+     */
+    protected static $table = '';
 
     /**
      * PK por defecto, si no existe mira en metadata.
@@ -52,13 +65,11 @@ class BaseRecord
 
     /**
      * Get the Primary Key value for the object
-     * @return mixed
+     * @return string
      */
-    public function pk()
+    public function pk(): string
     {
-        $pk = static::getPK();
-
-        return $this->$pk;
+        return $this->{static::$pk};
     }
 
     /**
@@ -66,7 +77,7 @@ class BaseRecord
      *
      * @param array $data
      */
-    public function dump(array $data = [])
+    public function dump(array $data = []): void
     {
         foreach ($data as $k => $v) {
             $this->$k = $v;
@@ -76,9 +87,9 @@ class BaseRecord
     /**
      * Listado de los campos.
      *
-     * @return array
+     * @return string[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return \array_keys(\get_object_vars($this));
     }
@@ -86,24 +97,22 @@ class BaseRecord
     /**
      * Alias de los campos.
      *
-     * @return array
+     * @return string[]
      */
-    public function getAlias()
+    public function getAlias(): array
     {
-        return \array_map('ucwords', $this->getFields());
+        //$humanize = function ()
+        return \array_map('\ucwords', $this->getFields());
     }
 
     /**
      * Verifica que PK este seteado.
      *
-     * @throws KumbiaException
+     * @return bool
      */
-    protected function hasPK()
+    protected function hasPK(): bool
     {
-        $pk = static::getPK();
-        if (empty($this->$pk)) {
-            throw new KumbiaException(_('No se ha especificado valor para la clave primaria'));
-        }
+        return isset($this->{static::$pk});
     }
 
     /**
@@ -111,13 +120,9 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getPK()
+    public static function getPK(): string
     {
-        if (static::$pk) {
-            return static::$pk;
-        }
-
-        return self::metadata()->getPK();
+        return static::$pk ?? static::$pk = self::metadata()->getPK();
     }
 
     /**
@@ -125,12 +130,16 @@ class BaseRecord
      *
      * @return string smallcase del nombre de la clase
      */
-    public static function getTable()
+    public static function getTable(): string
     {
+        if (static::$table) {
+            return static::$table;
+        }
+        
         $split = \explode('\\', \get_called_class());
         $table = \preg_replace('/[A-Z]/', '_$0', \lcfirst(\end($split)));
 
-        return \strtolower($table);
+        return static::$table = \strtolower($table);
     }
 
     /**
@@ -138,7 +147,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getSchema()
+    public static function getSchema(): string
     {
         return '';
     }
@@ -148,7 +157,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getSource()
+    public static function getSource(): string
     {
         $source = static::getTable();
         if ($schema = static::getSchema()) {
@@ -163,7 +172,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getDatabase()
+    public static function getDatabase(): string
     {
         return static::$database;
     }
@@ -173,10 +182,9 @@ class BaseRecord
      *
      * @return Metadata\Metadata
      */
-    public static function metadata()
+    public static function metadata(): Metadata\Metadata
     {
         return Metadata\Metadata::get(
-            static::getDriver(),
             static::getDatabase(),
             static::getTable(),
             static::getSchema()
@@ -186,25 +194,25 @@ class BaseRecord
     /**
      * Obtiene manejador de conexion a la base de datos.
      *
-     * @param  bool   $force forzar nueva conexion PDO
      * @return \PDO
      */
-    protected static function dbh($force = \false)
+    protected static function dbh(): \PDO
     {
-        return Db::get(static::getDatabase(), $force);
+        return Db::get(static::getDatabase());
     }
 
     /**
      * Consulta sql preparada.
      *
      * @param  string          $sql
+     * 
      * @throws \PDOException
      * @return \PDOStatement
      */
-    public static function prepare($sql)
+    public static function prepare(string $sql): PDOStatement
     {
         $sth = self::dbh()->prepare($sql);
-        $sth->setFetchMode(\PDO::FETCH_CLASS, \get_called_class());
+        $sth->setFetchMode(\PDO::FETCH_CLASS, static::class);
 
         return $sth;
     }
@@ -214,7 +222,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function lastInsertId()
+    public static function lastInsertId(): string
     {
         return self::dbh()->lastInsertId();
     }
@@ -223,34 +231,31 @@ class BaseRecord
      * Consulta sql.
      *
      * @param  string          $sql
+     * 
      * @throws \PDOException
      * @return \PDOStatement
      */
-    public static function sql($sql)
+    public static function sql(string $sql): PDOStatement
     {
-        $sth = self::dbh()->query($sql);
-        $sth->setFetchMode(\PDO::FETCH_CLASS, \get_called_class());
-
-        return $sth;
+        return self::dbh()->query($sql, \PDO::FETCH_CLASS, static::class);
     }
 
     /**
      * Ejecuta consulta sql.
      *
-     * @param  string               $sql
-     * @param  array                |      string $values valores
-     * @return bool|\PDOStatement
+     * @param  string        $sql
+     * @param  array         $values valores
+     * 
+     * @throws PDOException 
+     * @return bool|PDOStatement
      */
-    public static function query($sql, $values = null)
+    public static function query(string $sql, array $values = [])
     {
-        if (\func_num_args() === 1) {
+        if (empty($values)) {
             return self::sql($sql);
         }
 
         $sth = self::prepare($sql);
-        if ( ! \is_array($values)) {
-            $values = \array_slice(\func_get_args(), 1);
-        }
 
         return $sth->execute($values) ? $sth : \false;
     }
@@ -261,12 +266,12 @@ class BaseRecord
      * @param  string $pk valor para clave primaria
      * @return bool
      */
-    public static function exists($pk)
+    public static function exists($pk): bool
     {
         $source  = static::getSource();
         $pkField = static::getPK();
 
-        return self::query("SELECT COUNT(*) AS count FROM $source WHERE $pkField = ?", $pk)->fetch()->count > 0;
+        return self::query("SELECT COUNT(*) AS count FROM $source WHERE $pkField = ?", [$pk])->fetch()->count > 0;
     }
 
     /**
@@ -278,9 +283,9 @@ class BaseRecord
      * @param  array       $values  valores
      * @return Paginator
      */
-    public static function paginateQuery($sql, $page, $perPage, $values = [])
+    public static function paginateQuery(string $sql, int $page, int $perPage, array $values = []): Paginator
     {
-        return new Paginator(\get_called_class(), $sql, (int) $page, (int) $perPage, $values);
+        return new Paginator(static::class, $sql, $page, $perPage, $values);
     }
 
     /**
@@ -288,7 +293,7 @@ class BaseRecord
      *
      * @return string
      */
-    public static function getDriver()
+    public static function getDriver(): string
     {
         return self::dbh()->getAttribute(\PDO::ATTR_DRIVER_NAME);
     }
@@ -296,9 +301,10 @@ class BaseRecord
     /**
      * Comienza una trasacción.
      *
+     * @throws PDOException If there is already a transaction started or the driver does not support transactions
      * @return bool
      */
-    public static function begin()
+    public static function begin(): bool
     {
         return self::dbh()->beginTransaction();
     }
@@ -306,9 +312,10 @@ class BaseRecord
     /**
      * Da marcha atrás a una trasacción.
      *
+     * @throws PDOException if there is no active transaction.
      * @return bool
      */
-    public static function rollback()
+    public static function rollback(): bool
     {
         return self::dbh()->rollBack();
     }
@@ -316,9 +323,10 @@ class BaseRecord
     /**
      * Realiza el commit de  una trasacción.
      *
+     * @throws \PDOException if there is no active transaction.
      * @return bool
      */
-    public static function commit()
+    public static function commit(): bool
     {
         return self::dbh()->commit();
     }

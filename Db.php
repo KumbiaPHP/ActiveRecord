@@ -14,12 +14,12 @@
  *
  * @category   Kumbia
  *
- * @copyright  2005 - 2016  Kumbia Team (http://www.kumbiaphp.com)
+ * @copyright  2005 - 2020  Kumbia Team (http://www.kumbiaphp.com)
  * @license    http://wiki.kumbiaphp.com/Licencia     New BSD License
  */
 namespace Kumbia\ActiveRecord;
 
-use PDO;
+use \PDO;
 
 /**
  * Manejador de conexiones de base de datos.
@@ -29,7 +29,7 @@ abstract class Db
     /**
      * Pool de conexiones.
      *
-     * @var array
+     * @var PDO[]
      */
     private static $pool = [];
 
@@ -43,33 +43,24 @@ abstract class Db
     /**
      * Obtiene manejador de conexión a la base de datos.
      *
-     * @throw KumbiaException
      * @param  string $database base de datos a conectar
-     * @param  bool   $force    forzar nueva conexion PDO
+     * 
      * @return PDO
      */
-    public static function get($database = 'default', $force = \false)
+    public static function get(string $database = 'default'): PDO
     {
-        // Verifica el singleton
-        if ( ! $force && isset(self::$pool[$database])) {
-            return self::$pool[$database];
-        }
-
-        if ($force) {
-            return self::connect(self::getConfig($database));
-        }
-
-        return self::$pool[$database] = self::connect(self::getConfig($database));
+        return self::$pool[$database] ?? self::$pool[$database] = self::connect(self::getConfig($database));
     }
 
     /**
      * Conexión a la base de datos.
      *
      * @param  array               $config Config base de datos a conectar
+     * 
      * @throws \RuntimeException
      * @return PDO
      */
-    private static function connect($config)
+    private static function connect(array $config): PDO
     {
         try {
             return new PDO($config['dsn'], $config['username'], $config['password'], $config['params']);
@@ -84,10 +75,11 @@ abstract class Db
      * Obtiene manejador de conexión a la base de datos.
      *
      * @param  string              $database base de datos a conectar
+     * 
      * @throws \RuntimeException
      * @return array
      */
-    private static function getConfig($database)
+    private static function getConfig(string $database): array
     {
         if (empty(self::$config)) {
             // Leer la configuración de conexión
@@ -114,6 +106,6 @@ abstract class Db
      */
     public static function setConfig(array $value)
     {
-        self::$config = [] + self::$config + $value;
+        self::$config = [] + self::$config + $value; //TODO retornar PDO
     }
 }
