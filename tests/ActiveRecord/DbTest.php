@@ -38,10 +38,11 @@ class DbTest extends TestCase
 
     public function testGetWithBadCredentialsInConfig()
     {
-        //$this->expectException(RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         //$this->expectExceptionMessageRegExp('/No existen datos de conexión para la bd$/');
         
         $instance = Db::get('bad_credentials');
+    }
 
      public function testSetConfig()
     {
