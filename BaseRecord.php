@@ -30,7 +30,7 @@ use \KumbiaException;
 class BaseRecord
 {
     
-    const VERSION = '0.4.0';
+    public const VERSION = '0.5.2';
 
     /**
      * Database por defecto usa default.
