@@ -22,7 +22,7 @@ namespace Kumbia\ActiveRecord;
 /**
  * Implementación de patrón ActiveRecord sin ayudantes de consultas SQL.
  */
-class LiteRecord extends BaseRecord
+abstract class LiteRecord extends BaseRecord
 {
     /**
      * Obtener objeto por clave primaria, $var = Modelo($id).

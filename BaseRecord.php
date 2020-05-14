@@ -27,7 +27,7 @@ use \KumbiaException;
 /**
  * Base del ORM ActiveRecord.
  */
-class BaseRecord
+abstract class BaseRecord
 {
     
     public const VERSION = '0.5.2';
