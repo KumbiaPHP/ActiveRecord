@@ -22,15 +22,15 @@ namespace Kumbia\ActiveRecord;
 /**
  * Implementación de patrón ActiveRecord sin ayudantes de consultas SQL.
  */
-class LiteRecord extends BaseRecord
+abstract class LiteRecord extends BaseRecord
 {
     /**
      * Obtener objeto por clave primaria, $var = Modelo($id).
      *
      * @param  string $id valor para clave primaria
-     * @return self
+     * @return self|false
      */
-    public function __invoke($id): self
+    public function __invoke($id)
     {
         return self::get($id);
     }
@@ -40,7 +40,7 @@ class LiteRecord extends BaseRecord
      *
      * @param  string  $callback
      * 
-     * @return bool
+     * @return null|false
      */
     protected function callback(string $callback)
     {
@@ -105,7 +105,7 @@ class LiteRecord extends BaseRecord
         if ($this->callback('_beforeUpdate') === \false) {
             return \false;
         }
-        $this->hasPK();
+        //$this->hasPK();
         $values = [];
         $sql    = QueryGenerator::update($this, $values);
         //var_dump($values);var_dump($sql);die;
@@ -176,9 +176,9 @@ class LiteRecord extends BaseRecord
      * @param  string       $pk valor para clave primaria
      * @param  string       $fields campos que se desean obtener separados por coma
      * 
-     * @return self
+     * @return self|false
      */
-    public static function get($pk, $fields = '*'): self
+    public static function get($pk, $fields = '*')
     {
         $sql = "SELECT $fields FROM ".static::getSource().' WHERE '.static::$pk.' = ?';
 
@@ -208,7 +208,7 @@ class LiteRecord extends BaseRecord
      * @param  string       $sql
      * @param  array        $values
      * 
-     * @return static
+     * @return static|false
      */
     public static function first(string $sql, array $values = [])//: static in php 8
     {

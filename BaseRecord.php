@@ -27,10 +27,10 @@ use \KumbiaException;
 /**
  * Base del ORM ActiveRecord.
  */
-class BaseRecord
+abstract class BaseRecord
 {
     
-    public const VERSION = '0.5.2';
+    public const VERSION = '0.5.3';
 
     /**
      * Database por defecto usa default.
