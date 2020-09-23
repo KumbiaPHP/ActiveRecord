@@ -124,7 +124,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     /**
      * Verifica que la pagina sea válida.
      */
-    private function validPage()
+    private function validPage(): void
     {
         //Si la página o por página es menor de 1 (0 o negativo)
         if ($this->page < 1 || $this->perPage < 1) {
@@ -135,7 +135,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     /**
      * Valida que la página actual.
      */
-    private function validCurrent()
+    private function validCurrent(): void
     {
         if ($this->page > $this->totalPages) {
             throw new \RangeException("La página $this->page no existe", 404);
