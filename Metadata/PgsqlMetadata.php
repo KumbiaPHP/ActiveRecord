@@ -41,7 +41,7 @@ class PgsqlMetadata extends Metadata
         // Nota: Se excluyen claves compuestas
         $describe = $pdo->query(
             "SELECT
-                c.column_name AS Field,
+                c.column_name AS field,
                 c.udt_name AS type,
                 tc.constraint_type AS key,
                 c.column_default AS default,
@@ -76,14 +76,14 @@ class PgsqlMetadata extends Metadata
         $fields = [];
         // TODO mejorar este código
         foreach ($describe as $value) {
-            $fields[$value->Field] = [
+            $fields[$value->field] = [
                 'Type'    => $value->type,
                 'Null'    => $value->null !== 'NO',
                 'Default' => $value->default != '',
                 'Key'     => \substr($value->key, 0, 3),
                 'Auto'    => (bool) \preg_match('/^nextval\(/', $value->default)
             ];
-            $this->filterColumn($fields[$value->Field], $value->Field);
+            $this->filterColumn($fields[$value->field], $value->field);
         }
 
         return $fields;
