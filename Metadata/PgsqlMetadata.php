@@ -35,9 +35,8 @@ class PgsqlMetadata extends Metadata
      * 
      * @return array
      */
-    protected function queryFields(\PDO $pdo, string $table, string $schema = ''): array
+    protected function queryFields(\PDO $pdo, string $table, string $schema = 'public'): array
     {
-        $schema = $schema === '' ? 'public' : $schema; // default to public
         // Nota: Se excluyen claves compuestas
         $describe = $pdo->query(
             "SELECT
