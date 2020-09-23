@@ -16,10 +16,9 @@ return [
     ],
     //Conexión a sqlite ejemplo
     'database2' => [
-        'dsn'      => "sqlite:{APP_PATH}/temp/mydb.sq3",
+        'dsn'      => 'sqlite:'.APP_PATH.'/temp/mydb.sq3',
         'username' => \null,
         'password' => \null,
-        'params'   => [\PDO::ATTR_PERSISTENT => \true]
     ],
     //Conexión a ODBC ejemplo
     'database3' => [
