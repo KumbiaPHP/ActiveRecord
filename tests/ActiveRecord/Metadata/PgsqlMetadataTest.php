@@ -49,7 +49,7 @@ class PgsqlMetadataTest extends MetadataTest
     {
         Db::get('pgsql')->query('
                 CREATE TABLE IF NOT EXISTS test ( 
-                    id serial PRIMARY KEY, 
+                    id SERIAL PRIMARY KEY, 
                     nombre  varchar(50) NOT NULL , 
                     email varchar(100) NOT NULL , 
                     activo smallint NULL DEFAULT 1 

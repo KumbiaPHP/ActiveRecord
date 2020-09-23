@@ -167,7 +167,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      * @param string $sqlItem
      *
      * @return string
-     * @throw KumbiaException
+     * @throws \RuntimeException
      */
     public static function sqlItemSanitize($sqlItem)
     {

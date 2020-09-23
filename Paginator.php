@@ -90,7 +90,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      * @param int    $perPage cantidad de items por pagina
      * @param mixed  $values  valores
      */
-    public function __construct($model, $sql, int $page, int $perPage, $values = \null)
+    public function __construct(string $model, string $sql, int $page, int $perPage, $values = \null)
     {
         $this->perPage = $perPage;
         $this->page    = $page;
@@ -147,7 +147,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @see IteratorAggregate::getIterator()
      */
-    public function getIterator()
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->items);
     }
@@ -157,9 +157,10 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @param  string $model
      * @param  string $sql
+     * 
      * @return int    total de resultados
      */
-    protected function countQuery($model, $sql)
+    protected function countQuery(string $model, string $sql): int
     {
         $query = $model::query("SELECT COUNT(*) AS count FROM ($sql) AS t", $this->values)->fetch();
 
@@ -171,7 +172,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @return int
      */
-    public function totalItems()
+    public function totalItems(): int
     {
         return $this->count;
     }
@@ -181,7 +182,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @return int
      */
-    public function totalPages()
+    public function totalPages(): int
     {
         return $this->totalPages;
     }
@@ -191,7 +192,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @return int
      */
-    public function nextPage()
+    public function nextPage(): int
     {
         return $this->totalPages > $this->page ? $this->page + 1 : 0;
     }
@@ -201,7 +202,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @return int
      */
-    public function prevPage()
+    public function prevPage(): int
     {
         return $this->page > 1 ? $this->page - 1 : 0;
     }
@@ -213,7 +214,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
@@ -223,7 +224,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @return int
      */
-    public function page()
+    public function page(): int
     {
         return $this->page;
     }
@@ -231,9 +232,9 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     /**
      * Campos del objeto.
      *
-     * @return array
+     * @return string[]
      */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->items[0]->getFields();
     }
@@ -241,9 +242,9 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     /**
      * Alias de Campos del objeto.
      *
-     * @return array
+     * @return string[]
      */
-    public function getAlias()
+    public function getAlias(): array
     {
         return $this->items[0]->getAlias();
     }
