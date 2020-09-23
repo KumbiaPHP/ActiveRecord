@@ -70,7 +70,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     /**
      * Párametros de la consulta.
      *
-     * @var array|null
+     * @var array
      */
     protected $values;
 
@@ -90,7 +90,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      * @param int    $perPage cantidad de items por pagina
      * @param mixed  $values  valores
      */
-    public function __construct(string $model, string $sql, int $page, int $perPage, $values = \null)
+    public function __construct(string $model, string $sql, int $page, int $perPage, array $values = [])
     {
         $this->perPage = $perPage;
         $this->page    = $page;
@@ -101,8 +101,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
         $this->model = $model;
 
         // Valores para consulta
-        $this->values = ($values !== \null && ! \is_array($values)) ?
-                        \array_slice(\func_get_args(), 4) : $values;
+        $this->values = $values;
 
         $this->count      = $this->countQuery($model, $sql);
         $this->totalPages = (int) \max(1, \ceil($this->count / $this->perPage));
