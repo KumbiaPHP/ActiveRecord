@@ -190,10 +190,11 @@ abstract class BaseRecord
      */
     public static function metadata(): Metadata\Metadata
     {
-        return static::$metadata ?? Metadata\Metadata::get(
-            static::getDatabase(),
-            static::getTable(),
-            static::getSchema()
+        return static::$metadata ?? 
+                static::$metadata = Metadata\Metadata::get(
+                    static::getDatabase(),
+                    static::getTable(),
+                    static::getSchema()
         );
     }
 
