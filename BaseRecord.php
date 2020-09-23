@@ -142,7 +142,7 @@ abstract class BaseRecord
             return static::$table;
         }
         
-        $split = \explode('\\', \get_called_class());
+        $split = \explode('\\', static::class);
         $table = \preg_replace('/[A-Z]/', '_$0', \lcfirst(\end($split)));
 
         return static::$table = \strtolower($table);
