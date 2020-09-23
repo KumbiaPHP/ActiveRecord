@@ -27,13 +27,12 @@ namespace Kumbia\ActiveRecord\Query;
  * @param  int      $offset valor offset
  * @return string
  */
-function pgsql_limit($sql, int $limit = \null, int $offset = \null)
+function pgsql_limit(string $sql, int $limit, int $offset = 0): string
 {
-    if ($limit !== \null) {
-        $sql .= " LIMIT $limit";
-    }
+    $sql .= " LIMIT $limit";
+    
 
-    if ($offset !== \null) {
+    if ($offset) {
         $sql .= " OFFSET $offset";
     }
 

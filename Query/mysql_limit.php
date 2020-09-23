@@ -28,7 +28,7 @@ namespace Kumbia\ActiveRecord\Query;
  * @param  int      $offset valor offset
  * @return string
  */
-function mysql_limit($sql, int $limit, int $offset = 0)
+function mysql_limit(string $sql, int $limit, int $offset = 0): string
 {
     return $sql." LIMIT $offset, $limit";
 }
