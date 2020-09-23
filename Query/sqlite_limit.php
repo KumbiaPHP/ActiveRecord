@@ -28,7 +28,7 @@ namespace Kumbia\ActiveRecord\Query;
  * @param  int      $offset valor offset
  * @return string
  */
-function sqlite_limit($sql, int $limit, int $offset = 0)
+function sqlite_limit(string $sql, int $limit, int $offset = 0): string
 {
     return $sql." LIMIT $offset, $limit";
 }
