@@ -22,7 +22,6 @@ namespace Kumbia\ActiveRecord;
 use \PDO;
 use \PDOStatement;
 use \PDOException;
-use \KumbiaException;
 
 /**
  * Base del ORM ActiveRecord.
@@ -49,9 +48,16 @@ abstract class BaseRecord
     /**
      * PK por defecto, si no existe mira en metadata.
      *
-     * @var string
+     * @var string|null
      */
     protected static $pk = 'id';
+    
+    /**
+     * Metadata.
+     *
+     * @var Metadata\Metadata|null
+     */
+    protected static $metadata;
 
     /**
      * Constructor.
@@ -184,7 +190,7 @@ abstract class BaseRecord
      */
     public static function metadata(): Metadata\Metadata
     {
-        return Metadata\Metadata::get(
+        return static::$metadata ?? Metadata\Metadata::get(
             static::getDatabase(),
             static::getTable(),
             static::getSchema()
