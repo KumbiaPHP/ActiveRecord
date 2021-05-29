@@ -53,13 +53,6 @@ abstract class BaseRecord
     protected static $pk = 'id';
     
     /**
-     * Metadata.
-     *
-     * @var Metadata\Metadata|null
-     */
-    protected static $metadata;
-
-    /**
      * Constructor.
      *
      * @param array $data
@@ -190,8 +183,7 @@ abstract class BaseRecord
      */
     public static function metadata(): Metadata\Metadata
     {
-        return static::$metadata ?? 
-                static::$metadata = Metadata\Metadata::get(
+        return Metadata\Metadata::get(
                     static::getDatabase(),
                     static::getTable(),
                     static::getSchema()
