@@ -105,10 +105,10 @@ abstract class LiteRecord extends BaseRecord
         if ($this->callback('_beforeUpdate') === \false) {
             return \false;
         }
-        //$this->hasPK();
+
         $values = [];
         $sql    = QueryGenerator::update($this, $values);
-        //var_dump($values);var_dump($sql);die;
+
         if ( ! self::prepare($sql)->execute($values)) {
             return \false;
         }
@@ -152,7 +152,7 @@ abstract class LiteRecord extends BaseRecord
      */
     protected function saveMethod(): string
     {
-        return static::hasPK() ? 'create' : 'update';
+        return $this->hasPK() ? 'update' : 'create';
     }
 
     /**
