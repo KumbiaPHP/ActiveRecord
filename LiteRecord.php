@@ -152,7 +152,7 @@ abstract class LiteRecord extends BaseRecord
      */
     protected function saveMethod(): string
     {
-        return $this->hasPK() ? 'create' : 'update';
+        return $this->hasPK() ? 'update' : 'create';
     }
 
     /**
