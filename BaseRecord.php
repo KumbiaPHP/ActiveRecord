@@ -29,7 +29,7 @@ use \PDOException;
 abstract class BaseRecord
 {
     
-    public const VERSION = '0.5.6';
+    public const VERSION = '0.5.7';
 
     /**
      * Database por defecto usa default.
