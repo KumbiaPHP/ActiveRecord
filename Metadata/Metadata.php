@@ -97,6 +97,7 @@ abstract class Metadata
     {
         $key = "$database.$table.$schema";
         //TODO añadir cache propia
+
         if (\PRODUCTION && self::$instances[$key] = \unserialize(\Cache::driver()->get($key, 'ActiveRecord.Metadata'))) {
             return self::$instances[$key];
         }

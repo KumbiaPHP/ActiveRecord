@@ -2,9 +2,8 @@ language: php
 dist: bionic
 
 php:
-  - 7.2
-  - 7.3
   - 7.4
+  - 8.0
   - nightly
 
 matrix:
@@ -21,6 +20,9 @@ services:
   - mysql
   - postgresql
 
+install:
+  - composer install
+
 before_script:
   - "mysql -e 'DROP DATABASE IF EXISTS kumbia_test;'"
   - "mysql -e 'create database kumbia_test;'"
@@ -28,6 +30,7 @@ before_script:
   - "psql -c 'create database kumbia_test;' -U postgres"
                                             
 script: 
+  - phpunit --version
   - phpunit --configuration tests/phpunit.xml --coverage-text --colors --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
