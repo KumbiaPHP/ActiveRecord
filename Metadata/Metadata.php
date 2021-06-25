@@ -97,7 +97,7 @@ abstract class Metadata
     {
         $key = "$database.$table.$schema";
         //TODO añadir cache propia
-        if (\PRODUCTION && ! (self::$instances[$key] = \Cache::driver()->get($key, 'ActiveRecord.Metadata'))) {
+        if (\PRODUCTION && self::$instances[$key] = \unserialize(\Cache::driver()->get($key, 'ActiveRecord.Metadata'))) {
             return self::$instances[$key];
         }
         
@@ -110,7 +110,7 @@ abstract class Metadata
         // Cachea los metadatos
         if (\PRODUCTION) {
             \Cache::driver()->save(
-                self::$instances[$key],
+                \serialize(self::$instances[$key]),
                 \Config::get('config.application.metadata_lifetime'),
                 $key,
                 'ActiveRecord.Metadata'
