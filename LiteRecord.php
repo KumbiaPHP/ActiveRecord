@@ -214,4 +214,19 @@ abstract class LiteRecord extends BaseRecord
     {
         return static::query($sql, $values)->fetch();
     }
+
+    /**
+     * Filtra las consultas.
+     *
+     * @param  string       $sql
+     * @param  array        $values
+     * 
+     * @return array
+     */
+    public static function filter(string $sql, array $values = []): array
+    {
+        $sql = "SELECT * FROM ".static::getSource()." $sql";
+
+        return self::all($sql, $values);
+    }
 }
