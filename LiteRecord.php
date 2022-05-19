@@ -178,7 +178,7 @@ abstract class LiteRecord extends BaseRecord
      * 
      * @return self|false
      */
-    public static function get($pk, $fields = '*')
+    public static function get(string $pk, string $fields = '*')
     {
         $sql = "SELECT $fields FROM ".static::getSource().' WHERE '.static::$pk.' = ?';
 
