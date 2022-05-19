@@ -227,6 +227,6 @@ abstract class LiteRecord extends BaseRecord
     {
         $sql = "SELECT * FROM ".static::getSource()." $sql";
 
-        return self::all($sql, $values);
+        return static::all($sql, $values);
     }
 }
