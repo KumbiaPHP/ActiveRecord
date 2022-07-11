@@ -144,3 +144,73 @@ class PersonasController extends AppController {
     }
 }
 ```
+###Uso de métodos en LiteRecord
+
+####Filtrar datos
+
+```php
+    //obtener todos los registros como array
+    $filas = Personas::all();
+    echo $filas[0]->nombre;
+
+    //obtener un registro por su clave primaria
+    $fila = Personas::get($personaId);
+    echo $fila->nombre;
+
+    //obtener los registros como array según el filtro 
+    $filas = Personas::filter("WHERE nombre LIKE ?", [$nombrePersona]);
+    echo $filas[0]->nombre;
+
+    //obtener registro según sql
+    $fila = Personas::first("SELECT * FROM personas WHERE nombre = :nombre", [":nombre" => $nombrePersona]);
+    echo $fila->nombre;
+
+    //obtener array de registros según sql
+    $filas = Personas::all("SELECT * FROM personas WHERE fecha_contrato >= ?", [$fechaContrato]);
+    echo $filas[0]->nombre;
+```
+
+####DML / Crear, actualizar, borrar
+```php
+    //creando un nuevo registro
+    $personaObj = new Personas();
+    $personaObj->create([
+        'nombre' => 'Edgard Baptista',
+        'cargo' => 'Contador',
+        'fecha_contrato' => date('Y-m-d'),
+        'activo' => 1
+    ]); //retorna True o False si hay éxito o error respectivamente
+
+    //creando un nuevo registro //alternativa
+    $personaObj = new Personas();
+    $personaObj->save([
+        'nombre' => 'Edgard Baptista',
+        'cargo' => 'Contador',
+        'fecha_contrato' => date('Y-m-d'),
+        'activo' => 1
+    ]); //retorna True o False si hay éxito o error respectivamente
+
+
+    //actualizar un registro
+    //primero buscar el registro que se quiere actualizar
+    $personaObj = Personas::get($personaId);
+
+    $personaObj->update([
+        'nombre' => 'Edgard Baptista',
+        'activo' => 0
+    ]); //retorna True o False si hay éxito o error respectivamente
+
+    //actualizar un registro //alternativa
+    //primero buscar el registro que se quiere actualizar
+    $personaObj = Personas::get($personaId);
+
+    $personaObj->save([
+        'nombre' => 'Edgard Baptista',
+        'activo' => 0
+    ]); //retorna True o False si hay éxito o error respectivamente
+
+
+    //borrar un registro usando su clave primaria
+    Personas::delete($personaId);
+    
+```
