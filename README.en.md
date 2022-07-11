@@ -140,9 +140,9 @@ class PeopleController extends AppController {
 }
 ```
 
-###Using LiteRecord methods
+### Using LiteRecord methods
 
-####Filtering data
+#### Filtering data
 
 ```php
     //get all as array of records
@@ -166,7 +166,7 @@ class PeopleController extends AppController {
     echo $rows[0]->name;
 ```
 
-####DML / Insert, update, delete
+#### DML / Insert, update, delete
 ```php
     //adding a new record
     $peopleObj = new People();
