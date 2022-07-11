@@ -157,6 +157,10 @@ class PersonasController extends AppController {
     $fila = Personas::get($personaId);
     echo $fila->nombre;
 
+    //obtener un registro por su clave primaria //método abreviado
+    $fila = Personas($personaId);
+    echo $fila->nombre;
+
     //obtener los registros como array según el filtro 
     $filas = Personas::filter("WHERE nombre LIKE ?", [$nombrePersona]);
     echo $filas[0]->nombre;
@@ -182,6 +186,9 @@ class PersonasController extends AppController {
     ]); //retorna True o False si hay éxito o error respectivamente
 
     //creando un nuevo registro //alternativa
+    //por favor, prefiera este método por su simplicidad. 
+    //save ejecuta el método create cuando falta la clave primaria y 
+    //el de actualización cuando existe
     $personaObj = new Personas();
     $personaObj->save([
         'nombre' => 'Edgard Baptista',
@@ -190,6 +197,15 @@ class PersonasController extends AppController {
         'activo' => 1
     ]); //retorna True o False si hay éxito o error respectivamente
 
+    //creando un nuevo registro //alternativa //método abreviado
+    //pasamos los datos cuando se instancia la clase
+    $personaObj = new Personas([
+        'nombre' => 'Edgard Baptista',
+        'cargo' => 'Contador',
+        'fecha_contrato' => date('Y-m-d'),
+        'activo' => 1
+    ]);
+    $personaObj->save(); //retorna True o False si hay éxito o error respectivamente
 
     //actualizar un registro
     //primero buscar el registro que se quiere actualizar
