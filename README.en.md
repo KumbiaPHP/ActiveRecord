@@ -139,3 +139,74 @@ class PeopleController extends AppController {
     }
 }
 ```
+
+###Using LiteRecord methods
+
+####Filtering data
+
+```php
+    //get all as array of records
+    $rows = People::all();
+    echo $row[0]->name;
+
+    //get by primary key as record
+    $row = People::get($peopleId);
+    echo $row->name;
+
+    //filter as array of records
+    $rows = People::filter("WHERE name LIKE ?", [$peopleName]);
+    echo $rows[0]->name;
+
+    //filter by sql as record
+    $row = People::first("SELECT * FROM people WHERE name = :name", [":name" => $peopleName]);
+    echo $row->name;
+
+    //filter by sql as array of records
+    $rows = People::all("SELECT * FROM people WHERE hire_date >= ?", [$hireDate]);
+    echo $rows[0]->name;
+```
+
+####DML / Insert, update, delete
+```php
+    //adding a new record
+    $peopleObj = new People();
+    $peopleObj->create([
+        'name' => 'Edgard Baptista',
+        'job_title' => 'Accountant',
+        'hire_date' => date('Y-m-d'),
+        'active' => 1
+    ]); //returns True or False on success or fail
+
+    //adding a new record alternative
+    $peopleObj = new People();
+    $peopleObj->save([
+        'name' => 'Edgard Baptista',
+        'job_title' => 'Accountant',
+        'hire_date' => date('Y-m-d'),
+        'active' => 1
+    ]); //returns True or False on success or fail
+
+
+    //updating a record
+    //first find the record to update
+    $peopleObj = People::get($peopleId);
+
+    $peopleObj->update([
+        'name' => 'Edgard Baptista Jr',
+        'active' => 0
+    ]); //returns True or False on success or fail
+
+    //updating a record alternative
+    //first find the record to update
+    $peopleObj = People::get($peopleId);
+
+    $peopleObj->save([
+        'name' => 'Edgard Baptista Jr',
+        'active' => 0
+    ]); //returns True or False on success or fail
+
+
+    //deleting a record by primary key
+    People::delete($peopleId);
+    
+```
