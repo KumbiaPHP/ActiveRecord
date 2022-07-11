@@ -144,9 +144,9 @@ class PersonasController extends AppController {
     }
 }
 ```
-###Uso de métodos en LiteRecord
+### Uso de métodos en LiteRecord
 
-####Filtrar datos
+#### Filtrar datos
 
 ```php
     //obtener todos los registros como array
@@ -170,7 +170,7 @@ class PersonasController extends AppController {
     echo $filas[0]->nombre;
 ```
 
-####DML / Crear, actualizar, borrar
+#### DML / Crear, actualizar, borrar
 ```php
     //creando un nuevo registro
     $personaObj = new Personas();
