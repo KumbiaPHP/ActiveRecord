@@ -178,6 +178,9 @@ class PeopleController extends AppController {
     ]); //returns True or False on success or fail
 
     //adding a new record alternative
+    //please prefer this method by simplicity. 
+    //save executes create method when primary key is missing 
+    //and update ones when it exists
     $peopleObj = new People();
     $peopleObj->save([
         'name' => 'Edgard Baptista',
@@ -186,6 +189,15 @@ class PeopleController extends AppController {
         'active' => 1
     ]); //returns True or False on success or fail
 
+    //adding a new record alternative //shorthand method
+    //passing the data when instantiate the class
+    $peopleObj = new People([
+        'name' => 'Edgard Baptista',
+        'job_title' => 'Accountant',
+        'hire_date' => date('Y-m-d'),
+        'active' => 1
+    ]);
+    $peopleObj->save(); //returns True or False on success or fail
 
     //updating a record
     //first find the record to update
