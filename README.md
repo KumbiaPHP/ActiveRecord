@@ -157,10 +157,6 @@ class PersonasController extends AppController {
     $fila = Personas::get($personaId);
     echo $fila->nombre;
 
-    //obtener un registro por su clave primaria //método abreviado
-    $fila = Personas($personaId);
-    echo $fila->nombre;
-
     //obtener los registros como array según el filtro 
     $filas = Personas::filter("WHERE nombre LIKE ?", [$nombrePersona]);
     echo $filas[0]->nombre;

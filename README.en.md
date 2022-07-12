@@ -153,10 +153,6 @@ class PeopleController extends AppController {
     $row = People::get($peopleId);
     echo $row->name;
 
-    //get by primary key as record //alternative shorthand method
-    $row = People($peopleId);
-    echo $row->name;
-
     //filter as array of records
     $rows = People::filter("WHERE name LIKE ?", [$peopleName]);
     echo $rows[0]->name;
@@ -202,9 +198,6 @@ class PeopleController extends AppController {
         'active' => 1
     ]);
     $peopleObj->save(); //returns True or False on success or fail
-
-
-
 
     //updating a record
     //first find the record to update
