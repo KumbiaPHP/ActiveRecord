@@ -153,7 +153,7 @@ class PeopleController extends AppController {
     $row = People::get($peopleId);
     echo $row->name;
 
-    //get by primary key as record //alternative shortant method
+    //get by primary key as record //alternative shorthand method
     $row = People($peopleId);
     echo $row->name;
 
@@ -193,7 +193,7 @@ class PeopleController extends AppController {
         'active' => 1
     ]); //returns True or False on success or fail
 
-    //adding a new record alternative //shortant method
+    //adding a new record alternative //shorthand method
     //passing the data when instantiate the class
     $peopleObj = new People([
         'name' => 'Edgard Baptista',
