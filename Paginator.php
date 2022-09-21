@@ -253,7 +253,7 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
      *
      * @return int
      */
-    public function perPage(): int
+    public function getPerPage(): int
     {
         return $this->perPage;
     }
