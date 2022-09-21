@@ -247,4 +247,14 @@ class Paginator implements \IteratorAggregate, \Countable, \JsonSerializable
     {
         return $this->items[0]->getAlias();
     }
+    
+    /**
+     * Cantidad de items por página configurado.
+     *
+     * @return int
+     */
+    public function getPerPage(): int
+    {
+        return $this->perPage;
+    }
 }
