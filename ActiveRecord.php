@@ -293,7 +293,7 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
     protected static function getValues(array $array)
     {
         return isset($array[0]) ?
-        is_array($array[0]) ? $array[0] : [$array[0]] : $array;
+        (is_array($array[0]) ? $array[0] : [$array[0]]) : $array;
     }
 
     /**
