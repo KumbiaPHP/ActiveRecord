@@ -30,7 +30,7 @@ namespace Kumbia\ActiveRecord\Query;
  * @param  int   $offset valor offset
  * @return string
  */
-function sqlsrv_limit(string $sql, int $limit = \null, int $offset = \null): string
+function sqlsrv_limit(string $sql, ?int $limit = \null, ?int $offset = \null): string
 {
     if ($limit !== null) {
         $sql   = \preg_replace('/(DELETE|INSERT|SELECT|UPDATE)/i', '${1} TOP '.$limit, $sql);
