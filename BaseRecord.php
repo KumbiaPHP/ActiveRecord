@@ -26,6 +26,7 @@ use \PDOException;
 /**
  * Base del ORM ActiveRecord.
  */
+#[\AllowDynamicProperties]
 abstract class BaseRecord
 {
     
