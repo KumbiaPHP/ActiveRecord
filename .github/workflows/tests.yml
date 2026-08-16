@@ -37,6 +37,7 @@ jobs:
     name: MySQL integration (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         php: ['7.4', '8.0']
     env:
@@ -127,8 +128,9 @@ jobs:
         run: composer install
       - name: Run coverage tests
         run: vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite unit,integration-sqlite --coverage-clover coverage.clover
-      - name: Upload coverage to Scrutinizer
-        run: |
-          wget --https-only --output-document=ocular.phar https://scrutinizer-ci.com/ocular.phar
-          echo 'a0d0c87a7bfc8d9dacd26fe6375e3bd1efc9ebef04287b40c7ca48d5d1938c89  ocular.phar' | sha256sum --check
-          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage-clover-php-8.0
+          path: coverage.clover
+          if-no-files-found: error

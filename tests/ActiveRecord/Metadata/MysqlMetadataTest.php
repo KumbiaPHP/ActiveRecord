@@ -26,4 +26,17 @@ class MysqlMetadataTest extends MetadataTest
                     PRIMARY KEY (id) );'
                 );
     }
+
+    public function testGetFields()
+    {
+        $fields = $this->getMetadata()->getFields();
+        $expected = $this->expectedGetFields;
+
+        $fields['id']['Type'] = \preg_replace('/^int(?:\(\d+\))?$/', 'int', $fields['id']['Type']);
+        $fields['activo']['Type'] = \preg_replace('/^smallint(?:\(\d+\))?$/', 'smallint', $fields['activo']['Type']);
+        $expected['id']['Type'] = 'int';
+        $expected['activo']['Type'] = 'smallint';
+
+        $this->assertEquals($expected, $fields);
+    }
 }
