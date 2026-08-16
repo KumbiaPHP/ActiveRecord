@@ -1,0 +1,134 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  fast:
+    name: Fast tests (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.php == 'nightly' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', 'nightly']
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_sqlite
+          coverage: none
+      - name: Install dependencies
+        run: composer install
+      - name: Print PHPUnit version
+        run: vendor/bin/phpunit --version
+      - name: Run unit and SQLite integration tests
+        run: vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite unit,integration-sqlite
+
+  mysql:
+    name: MySQL integration (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.4', '8.0']
+    env:
+      MYSQL_DSN: mysql:host=127.0.0.1;port=3306;dbname=kumbia_test;charset=utf8
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ""
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: kumbia_test
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --host=127.0.0.1 --user=root --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_mysql
+          coverage: none
+      - name: Install dependencies
+        run: composer install
+      - name: Run MySQL integration tests
+        run: vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite integration-mysql
+
+  postgresql:
+    name: PostgreSQL integration (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['7.4', '8.0']
+    env:
+      PGSQL_DSN: pgsql:host=127.0.0.1;port=5432;dbname=kumbia_test
+      PGSQL_USER: postgres
+      PGSQL_PASSWORD: postgres
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: kumbia_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready --username=postgres --dbname=kumbia_test"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: pdo_pgsql
+          coverage: none
+      - name: Install dependencies
+        run: composer install
+      - name: Run PostgreSQL integration tests
+        run: vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite integration-pgsql
+
+  coverage:
+    name: Coverage (PHP 8.0)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up PHP with Xdebug
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.0'
+          extensions: pdo_sqlite
+          coverage: xdebug
+      - name: Install dependencies
+        run: composer install
+      - name: Run coverage tests
+        run: vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite unit,integration-sqlite --coverage-clover coverage.clover
+      - name: Upload coverage to Scrutinizer
+        run: |
+          wget --https-only --output-document=ocular.phar https://scrutinizer-ci.com/ocular.phar
+          echo 'a0d0c87a7bfc8d9dacd26fe6375e3bd1efc9ebef04287b40c7ca48d5d1938c89  ocular.phar' | sha256sum --check
+          php ocular.phar code-coverage:upload --format=php-clover coverage.clover
