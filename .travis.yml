@@ -17,21 +17,54 @@ notifications:
 #    email:
 #    - xxxxx@gmail.com
 
-services:
-  - mysql
-  - postgresql
-
 install:
   - composer install
 
-before_script:
-  - "mysql -e 'DROP DATABASE IF EXISTS kumbia_test;'"
-  - "mysql -e 'create database kumbia_test;'"
-  - "psql -c 'DROP DATABASE IF EXISTS kumbia_test;' -U postgres"
-  - "psql -c 'create database kumbia_test;' -U postgres"
-                                            
-script: 
-  - phpunit --version
-  - phpunit --configuration tests/phpunit.xml --coverage-text --colors --coverage-clover=coverage.clover
+script:
+  - vendor/bin/phpunit --version
+  - vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite unit,integration-sqlite --coverage-text --colors --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
+jobs:
+  include:
+    - name: MySQL integration (PHP 7.4)
+      php: 7.4
+      services:
+        - mysql
+      env: MYSQL_DSN="mysql:host=127.0.0.1;dbname=kumbia_test;charset=utf8" MYSQL_USER=root MYSQL_PASSWORD=""
+      before_script:
+        - "mysql -e 'DROP DATABASE IF EXISTS kumbia_test;'"
+        - "mysql -e 'CREATE DATABASE kumbia_test;'"
+      script:
+        - vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite integration-mysql
+    - name: MySQL integration (PHP 8.0)
+      php: 8.0
+      services:
+        - mysql
+      env: MYSQL_DSN="mysql:host=127.0.0.1;dbname=kumbia_test;charset=utf8" MYSQL_USER=root MYSQL_PASSWORD=""
+      before_script:
+        - "mysql -e 'DROP DATABASE IF EXISTS kumbia_test;'"
+        - "mysql -e 'CREATE DATABASE kumbia_test;'"
+      script:
+        - vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite integration-mysql
+    - name: PostgreSQL integration (PHP 7.4)
+      php: 7.4
+      services:
+        - postgresql
+      env: PGSQL_DSN="pgsql:dbname=kumbia_test" PGSQL_USER=postgres PGSQL_PASSWORD=""
+      before_script:
+        - "psql -c 'DROP DATABASE IF EXISTS kumbia_test;' -U postgres"
+        - "psql -c 'CREATE DATABASE kumbia_test;' -U postgres"
+      script:
+        - vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite integration-pgsql
+    - name: PostgreSQL integration (PHP 8.0)
+      php: 8.0
+      services:
+        - postgresql
+      env: PGSQL_DSN="pgsql:dbname=kumbia_test" PGSQL_USER=postgres PGSQL_PASSWORD=""
+      before_script:
+        - "psql -c 'DROP DATABASE IF EXISTS kumbia_test;' -U postgres"
+        - "psql -c 'CREATE DATABASE kumbia_test;' -U postgres"
+      script:
+        - vendor/bin/phpunit --configuration tests/phpunit.xml --testsuite integration-pgsql

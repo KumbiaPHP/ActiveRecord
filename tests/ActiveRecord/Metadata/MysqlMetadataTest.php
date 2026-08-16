@@ -2,6 +2,8 @@
 
 use Kumbia\ActiveRecord\Db;
 
+require_once __DIR__.'/MetadataTest.php';
+
 /**
  * @requires extension pdo_mysql
  */

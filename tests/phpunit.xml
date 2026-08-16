@@ -2,13 +2,25 @@
 
 <phpunit bootstrap="bootstrap.php" colors="true">
     <php>
-        <env name="metadata_table" value="test"/>
-        <env name="metadata_schema" value=""/>
+        <env name="METADATA_TABLE" value="test"/>
+        <env name="METADATA_SCHEMA" value=""/>
     </php>
 
     <testsuites>
-        <testsuite name="Kumbia ActiveRecord">
-            <directory>.</directory>
+        <testsuite name="unit">
+            <file>ActiveRecord/DbTest.php</file>
+        </testsuite>
+        <testsuite name="integration-sqlite">
+            <file>ActiveRecord/SqliteDbTest.php</file>
+            <file>ActiveRecord/Metadata/SqliteMetadataTest.php</file>
+        </testsuite>
+        <testsuite name="integration-mysql">
+            <file>ActiveRecord/MysqlDbTest.php</file>
+            <file>ActiveRecord/Metadata/MysqlMetadataTest.php</file>
+        </testsuite>
+        <testsuite name="integration-pgsql">
+            <file>ActiveRecord/PgsqlDbTest.php</file>
+            <file>ActiveRecord/Metadata/PgsqlMetadataTest.php</file>
         </testsuite>
     </testsuites>
 
