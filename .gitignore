@@ -1,0 +1,28 @@
+# PHP and Composer
+/vendor/
+/composer.phar
+/auth.json
+/.composer/
+
+# Tests
+/.phpunit.result.cache
+/coverage.clover
+
+# Editors
+/.idea/workspace.xml
+/.idea/shelf/
+*.sw[op]
+*~
+
+# OS metadata
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+
+# AI agents
+/.atl/
+/.claude/
+/.codegraph/
+/.codex/
+/.cursor/
