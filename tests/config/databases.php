@@ -1,45 +1,36 @@
 <?php
 
+$env = static function (string $name, string $default): string {
+    $value = getenv($name);
+
+    return false === $value ? $default : $value;
+};
+
 return [
-    //Mysql
     'mysql' => [
-        'dsn'      => 'mysql:host=127.0.0.1;dbname=kumbia_test;charset=utf8',
-        'username' => 'root',
-        'password' => '',
+        'dsn'      => $env('MYSQL_DSN', 'mysql:host=127.0.0.1;dbname=kumbia_test;charset=utf8'),
+        'username' => $env('MYSQL_USER', 'root'),
+        'password' => $env('MYSQL_PASSWORD', ''),
         'params'   => [
-            \PDO::ATTR_PERSISTENT => \true, //conexión persistente
+            \PDO::ATTR_PERSISTENT => \true,
             \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION
         ]
     ],
-    //Pgsql
     'pgsql' => [
-        'dsn'      => 'pgsql:dbname=kumbia_test;host=localhost',
-        'username' => 'postgres',
-        'password' => '414141',
+        'dsn'      => $env('PGSQL_DSN', 'pgsql:dbname=kumbia_test;host=127.0.0.1'),
+        'username' => $env('PGSQL_USER', 'postgres'),
+        'password' => $env('PGSQL_PASSWORD', ''),
         'params'   => [
-            \PDO::ATTR_PERSISTENT => \true, //conexión persistente
+            \PDO::ATTR_PERSISTENT => \true,
             \PDO::ATTR_ERRMODE    => \PDO::ERRMODE_EXCEPTION
-            ]
+        ]
     ],
-    //Sqlite
     'sqlite' => [
-        'dsn' => 'sqlite::memory:',
+        'dsn' => $env('SQLITE_DSN', 'sqlite::memory:'),
         'username' => '',
         'password' => '',
     ],
-
-    // bad connections to tests errors
-    'no_dsn' => [
-        'dsn' => ''
-    ],
     'no_password' => [
-        'dsn' => 'pgsql:dbname=no_exist;host=localhost'
+        'dsn' => $env('PGSQL_INVALID_DSN', 'pgsql:dbname=no_exist;host=127.0.0.1'),
     ],
-    'bad_credentials' => [
-        'dsn' => 'pgsql:dbname=no_exist;host=localhost',
-        'password' => 'as'
-    ]
-
-
-    //More connections
 ];

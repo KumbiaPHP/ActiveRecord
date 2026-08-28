@@ -47,8 +47,8 @@ abstract class MetadataTest extends TestCase
 
     public function setUp(): void
     {
-        $this->tableName  = getenv('metadata_table');
-        $this->schemaName = getenv('metadata_schema');
+        $this->tableName  = getenv('METADATA_TABLE');
+        $this->schemaName = getenv('METADATA_SCHEMA');
     }
 
     protected function getMetadata(): Metadata
