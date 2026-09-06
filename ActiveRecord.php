@@ -243,9 +243,9 @@ class ActiveRecord extends LiteRecord implements \JsonSerializable
      *                      offset: valor offset
      * @param array $values valores de busqueda
      *
-     * @return \PDOStatement
+     * @return array
      */
-    public static function all($params = [], $values = [])
+    public static function all($params = [], $values = []): array
     {
         $res = self::doQuery(func_get_args());
 
