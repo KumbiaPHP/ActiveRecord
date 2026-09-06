@@ -37,19 +37,21 @@ Requires KumbiaPHP > 0.9RC
 }
 ```
 
-* Execute command **composer install**
+* Execute command **composer install**. This installs ActiveRecord in ***vendor/kumbia/activerecord/*** and generates ***vendor/autoload.php***.
 
-* Continue with steps number 2 and 3 of the next section.
+* Make sure the KumbiaPHP application loads ***vendor/autoload.php*** before using ActiveRecord.
 
-## Install in KumbiaPHP
+* Continue with steps 1 and 2 of the next section.
+
+## Configure KumbiaPHP
 
 Requires KumbiaPHP > 0.9RC
 
-1. Copy folder ***lib/Kumbia*** in vendor. (vendor/Kumbia/ActiveRecord/..)
+The following steps configure the KumbiaPHP integration after Composer installation:
 
-2. Copy [config_databases.php](/config_databases.php) in ***app/config/databases.php*** and set configuration
+1. Copy [config/config_databases.php](config/config_databases.php) to ***app/config/databases.php*** and set configuration
 
-3. Add in ***app/libs/*** : [lite_record.php](#literecord) and/or [act_record.php](#actrecord)
+2. (Optional) Add in ***app/libs/*** : [lite_record.php](#literecord) and/or [act_record.php](#actrecord)
 
 
 ### LiteRecord
